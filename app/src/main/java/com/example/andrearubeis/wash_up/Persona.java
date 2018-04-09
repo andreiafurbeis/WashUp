@@ -23,7 +23,7 @@ public class Persona implements Parcelable {
     private Date nascita;
     private String id_home;
     private ArrayList<Stanza> stanze;
-    //private ArrayList<Compito> compiti;
+    private ArrayList<Compito> compiti;
 
 
 
@@ -39,6 +39,10 @@ public class Persona implements Parcelable {
         this.profile_image = profile_image;
         this.id_home = id;
         this.stanze = stanze;
+    }
+
+    public void setCompiti (ArrayList<Compito> new_compiti) {
+        this.compiti = new_compiti;
     }
 
     public String getNome() {
