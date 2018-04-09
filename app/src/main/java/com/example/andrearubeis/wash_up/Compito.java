@@ -6,6 +6,9 @@ package com.example.andrearubeis.wash_up;
 
 public class Compito {
 
+
+    private String id;
+
     public Compito(){
 
     }
