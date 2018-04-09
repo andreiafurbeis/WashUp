@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".OptionFragmentActivity">
+
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_view_color">
+
+        <Button
+            android:id="@+id/fragment_option_title_bar"
+            android:layout_width="187dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/title_bar_bottom_navigation"
+            android:fontFamily="@font/lovelo_black"
+            android:paddingLeft="16dp"
+            android:text="@string/Opzioni"
+            android:textAlignment="viewStart"
+            android:textColor="@android:color/white"
+
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/fragment_option_button_modifica_casa"
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@color/bottomNavigationColor"
+            android:drawableLeft="@drawable/home_icon"
+            android:drawablePadding="16dp"
+            android:paddingLeft="16dp"
+            android:text="@string/modifica_casa"
+            android:textAlignment="textStart"
+            android:textColor="@android:color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fragment_option_profile_image" />
+
+        <Button
+            android:id="@+id/fragment_option_button_aggiungi_inquilino"
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:background="@color/bottomNavigationColor"
+            android:drawableLeft="@drawable/men_icon"
+            android:drawablePadding="16dp"
+            android:paddingLeft="16dp"
+            android:text="@string/aggiungi_inquilino"
+            android:textAlignment="textStart"
+            android:textColor="@android:color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fragment_option_button_modifica_casa" />
+
+        <Button
+            android:id="@+id/fragment_option_button_about"
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+
+            android:background="@color/bottomNavigationColor"
+            android:drawablePadding="16dp"
+            android:paddingLeft="16dp"
+            android:text="@string/about"
+            android:textAlignment="textStart"
+            android:textColor="@android:color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fragment_option_button_aggiungi_inquilino" />
+
+        <Button
+            android:id="@+id/fragment_option_button_contact_us"
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="4dp"
+            android:background="@color/bottomNavigationColor"
+            android:drawablePadding="16dp"
+            android:paddingLeft="16dp"
+            android:text="@string/contact_us"
+            android:textAlignment="textStart"
+            android:textColor="@android:color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fragment_option_button_about" />
+
+        <Button
+            android:id="@+id/fragment_option_button_log_out_home"
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="4dp"
+            android:background="@android:color/holo_red_light"
+            android:drawableLeft="@drawable/exit_home_icon"
+            android:drawablePadding="16dp"
+            android:paddingLeft="16dp"
+            android:text="@string/abbandona_casa"
+            android:textAlignment="textStart"
+            android:textColor="@android:color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fragment_option_button_log_out" />
+
+        <Button
+            android:id="@+id/fragment_option_button_log_out"
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/logout_icon"
+            android:layout_marginTop="20dp"
+            android:background="@android:color/holo_red_dark"
+            android:drawablePadding="16dp"
+            android:paddingLeft="16dp"
+            android:text="@string/logout"
+            android:textAlignment="textStart"
+            android:textColor="@android:color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fragment_option_button_contact_us" />
+
+        <ImageView
+            android:id="@+id/fragment_option_profile_image"
+            android:layout_width="154dp"
+            android:layout_height="151dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/rubeis_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/fragment_option_title_bar"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/fragment_option_text_name"
+            android:layout_width="149dp"
+            android:layout_height="32dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:textSize="18sp"
+            android:textColor="@android:color/white"
+            android:text=""
+            android:fontFamily="@font/lovelo_black"
+            app:layout_constraintBottom_toTopOf="@+id/fragment_option_button_modifica_casa"
+            app:layout_constraintEnd_toStartOf="@+id/fragment_option_profile_image"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fragment_option_title_bar" />
+
+    </android.support.constraint.ConstraintLayout>
+
+
+</RelativeLayout>

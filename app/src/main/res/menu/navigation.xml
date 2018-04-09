@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/home_icon"
+        android:title="@string/title_home"
+        />
+    <item
+        android:id="@+id/navigation_ruoli"
+        android:icon="@drawable/men_icon"
+        android:title="@string/Ruoli" />
+
+    <item
+        android:id="@+id/navigation_options"
+        android:icon="@drawable/option_icon"
+        android:title="@string/Opzioni" />
+
+</menu>

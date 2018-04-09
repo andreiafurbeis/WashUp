@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/background_view_color"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RuoliInquilino">
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/nicol_ricci"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:background="@color/bottomNavigationColor"
+        android:paddingLeft="@dimen/padding_icona_sx"
+        android:drawableLeft="@drawable/nicolo_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_red_light"
+        android:text="@string/data_di_oggi"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button" />
+
+    <ScrollView
+        android:id="@+id/scrollView3"
+        android:layout_width="match_parent"
+        android:layout_height="315dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button3">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/ruoli_x_inquilino_bagno"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bagno"
+                android:text="@string/bagno"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"/>
+
+            <CheckedTextView
+                android:id="@+id/ruoli_x_inquilino_bagno_check_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checkMark="@android:drawable/checkbox_off_background"
+                android:checkMarkTint="@android:color/background_light"
+                android:text="@string/lavare_il_pavimento"
+                android:textSize="20sp"
+                android:textColor="@android:color/white"
+                android:paddingLeft="@dimen/padding_icona_sx"
+                android:background="@color/bottomNavigationColor"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_scroll" />
+
+            <CheckedTextView
+                android:id="@+id/ruoli_x_inquilino_bagno_check_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checkMark="@android:drawable/checkbox_off_background"
+                android:checkMarkTint="@android:color/background_light"
+                android:text="@string/pulire_i_vetri"
+                android:textSize="20sp"
+                android:textColor="@android:color/white"
+                android:paddingLeft="@dimen/padding_icona_sx"
+                android:background="@color/bottomNavigationColor"/>
+            <Button
+                android:id="@+id/ruoli_x_inquilino_cucina"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/cucina"
+                android:text="@string/cucina"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"/>
+
+            <CheckedTextView
+                android:id="@+id/ruoli_x_inquilino_cucina_check_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checkMark="@android:drawable/checkbox_off_background"
+                android:checkMarkTint="@android:color/background_light"
+                android:text="@string/lavare_il_pavimento"
+                android:textSize="20sp"
+                android:textColor="@android:color/white"
+                android:paddingLeft="@dimen/padding_icona_sx"
+                android:background="@color/bottomNavigationColor"/>
+
+            <Button
+                android:id="@+id/ruoli_x_inquilino_camera"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/camera"
+                android:text="@string/camera"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"/>
+
+            <CheckedTextView
+                android:id="@+id/ruoli_x_inquilino_camera_check_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checkMark="@android:drawable/checkbox_off_background"
+                android:checkMarkTint="@android:color/background_light"
+                android:text="@string/sbattere_i_tappeti"
+                android:textSize="20sp"
+                android:textColor="@android:color/white"
+                android:paddingLeft="@dimen/padding_icona_sx"
+                android:background="@color/bottomNavigationColor"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_scroll" />
+
+            <CheckedTextView
+                android:id="@+id/ruoli_x_inquilino_camera_check_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checkMark="@android:drawable/checkbox_off_background"
+                android:checkMarkTint="@android:color/background_light"
+                android:text="Lavare col Mastro Lindo"
+                android:textSize="20sp"
+                android:textColor="@android:color/white"
+                android:paddingLeft="@dimen/padding_icona_sx"
+                android:background="@color/bottomNavigationColor"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</android.support.constraint.ConstraintLayout>

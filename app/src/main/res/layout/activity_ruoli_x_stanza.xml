@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_view_color"
+    tools:context=".RuoliStanza">
+
+    <Button
+        android:id="@+id/ruoli_x_stanza_title_bar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bagno"
+        android:text="@string/bagno"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+         />
+
+    <TextView
+        android:id="@+id/ruoli_x_stanza_date_bar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_red_dark"
+        android:text="@string/data_di_oggi"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ruoli_x_stanza_title_bar" />
+
+    <ScrollView
+        android:id="@+id/ruoli_x_stanza_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ruoli_x_stanza_date_bar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/ruoli_x_stanza_attivita_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="200dp"
+                android:drawableLeft="@drawable/rubeis_icon"
+                android:paddingLeft="@dimen/padding_icona_sx"
+                android:text="Pulire la doccia"
+                android:background="@color/bottomNavigationColor"
+                android:textColor="@android:color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_editor_absoluteY="72dp" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_scroll" />
+
+            <Button
+                android:id="@+id/ruoli_x_stanza_attivita_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/rubeis_icon"
+                android:paddingLeft="@dimen/padding_icona_sx"
+                android:text="Pulire i vetri"
+                android:background="@color/bottomNavigationColor"
+                android:textColor="@android:color/white"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="316dp" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_scroll" />
+
+            <Button
+                android:id="@+id/ruoli_x_stanza_attivita_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/nicolo_icon"
+                android:paddingLeft="@dimen/padding_icona_sx"
+                android:text="Lavare il pavimento"
+                android:background="@color/bottomNavigationColor"
+                android:textColor="@android:color/white"
+                tools:layout_editor_absoluteX="39dp"
+                tools:layout_editor_absoluteY="435dp" />
+        </LinearLayout>
+    </ScrollView>
+
+
+</android.support.constraint.ConstraintLayout>

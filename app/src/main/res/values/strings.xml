@@ -1,0 +1,94 @@
+<resources>
+    <string name="app_name">provaDB</string>
+
+    <string name="no_registration"><u>Non sei ancora registrato ?</u></string>
+
+    <string name="title_activity_bottom_activity">bottom_activity</string>
+
+    <string name="title_home">Home</string>
+
+    <string name="title_dashboard">Dashboard</string>
+
+    <string name="title_notifications">Notifications</string>
+
+    <string name="ruoli">ruoli</string>
+
+    <string name="Ruoli">Ruoli</string>
+
+    <string name="Opzioni">Opzioni</string>
+
+    <string name="invito"><u>Stai attendendo un invito ?</u></string>
+
+    <string name="aggiungi_stanze">Ora aggiungi le stanze alla tua nuova casa</string>
+
+    <string name="creazione">Creazione nuova casa</string>
+
+    <string name="continua">Continua</string>
+
+    <string name="accedi">Accedi</string>
+
+    <string name="aggiungi">Aggiungi</string>
+
+    <string name="registrati">Registrati</string>
+
+    <string name="cambia_immagine">/tCambia immagine</string>
+
+    <string name="aggiungi_foto_profilo">Modifica Foto Profilo</string>
+
+    <string name="scatta_foto">Scatta Foto</string>
+
+    <string name="scegli_galleria">Scegli dalla Galleria</string>
+
+    <string name="annulla">Annulla</string>
+
+    <string name="modifica">Modifica</string>
+
+    <string name="lavare_il_pavimento">lavare il pavimento</string>
+
+    <string name="lavare_i_piatti">lavare i piatti</string>
+
+    <string name="lista_attivit">LISTA ATTIVITÁ</string>
+
+    <string name="modifica_lista">modifica lista</string>
+
+    <string name="aggiungi_un_attivit">aggiungi un\'attività</string>
+
+    <string name="cucina">CUCINA</string>
+
+    <string name="bagno">BAGNO</string>
+
+    <string name="nicol_ricci">Nicolò Ricci</string>
+
+    <string name="modifica_casa">Modifica Casa</string>
+
+    <string name="aggiungi_inquilino">Aggiungi inquilino</string>
+
+    <string name="about">about</string>
+
+    <string name="contact_us">Contact us</string>
+
+    <string name="logout">Logout</string>
+
+    <string name="abbandona_casa">Abbandona Casa</string>
+
+    <string name="data_di_oggi">Martedí 26 Dicembre</string>
+
+    <string name="pulire_i_vetri">Pulire i vetri</string>
+
+    <string name="camera">camera</string>
+
+    <string name="sbattere_i_tappeti">Sbattere i tappeti</string>
+
+    <string name="aggiungi_compito_giornaliero">Aggiungi compito giornaliero</string>
+
+    <string name="wash_up_name">Wash Up</string>
+
+    <string name="gestione_compiti">Gestione Compiti</string>
+
+    <string name="compiti">Compiti</string>
+
+    <string name="configurazione_stanze">Configurazione Stanze</string>
+
+    <string name="inserisci_mail_nuovo_inquilino">Inserisci la mail dell\'inquilino che vuoi invitare</string>
+
+</resources>
