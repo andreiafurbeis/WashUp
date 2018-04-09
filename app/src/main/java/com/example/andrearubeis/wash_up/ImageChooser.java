@@ -54,6 +54,24 @@ public class ImageChooser {
         builder.show();
     }
 
+    public void noImageSelected(int flag_image) {
+        final CharSequence[] items = { context.getString(R.string.ok)};
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(context.getString(R.string.attenzione));
+        if (flag_image == 0) {
+            builder.setMessage(R.string.manca_immagine);
+        }else{
+            builder.setMessage(R.string.no_campi_vuoti);
+        }
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.show();
+    }
+
 
 
     public void selectImageRoom() {

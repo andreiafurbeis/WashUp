@@ -91,4 +91,12 @@
 
     <string name="inserisci_mail_nuovo_inquilino">Inserisci la mail dell\'inquilino che vuoi invitare</string>
 
+    <string name="ok">Ok</string>
+
+    <string name="attenzione">Attenzione</string>
+
+    <string name="manca_immagine">Per registrarsi c\'è bisogno di scegliere un\'immagine</string>
+
+    <string name="no_campi_vuoti">Non si possono lascire campi vuoti</string>
+
 </resources>

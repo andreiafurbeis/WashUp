@@ -60,6 +60,7 @@ public class Registrazione extends AppCompatActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int PICK_IMAGE_REQUEST = 2;
     final Activity call = this;
+    int flag_new_image = 0;
 
 
     //private final String domain_url = "http://192.168.0.24/";   //dominio portatile
@@ -80,11 +81,13 @@ public class Registrazione extends AppCompatActivity {
 
 
 
-        username = (EditText) findViewById(R.id.registrazione_username);
-        password = (EditText) findViewById(R.id.registrazione_password);
-        email = (EditText) findViewById(R.id.registrazione_mail);
-        registrati = (Button) findViewById(R.id.registrazione_button_registrati);
-        foto_profilo = (ImageView) findViewById(R.id.profile_image);
+
+
+        username = findViewById(R.id.registrazione_username);
+        password = findViewById(R.id.registrazione_password);
+        email = findViewById(R.id.registrazione_mail);
+        registrati = findViewById(R.id.registrazione_button_registrati);
+        foto_profilo = findViewById(R.id.profile_image);
 
         //immagine profilo di default
         //imageBitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.mipmap.ic_launcher);
@@ -98,14 +101,26 @@ public class Registrazione extends AppCompatActivity {
                     //String pwd = md5(password.getText().toString()).trim();
                     String mail = email.getText().toString().trim();
 
-                    if(!usr.equals("") && !password.getText().toString().trim().equals("") && !mail.equals("")) {
+                    if(!usr.equals("") && !password.getText().toString().trim().equals("") && !mail.equals("") && flag_new_image!=0) {
 
                         //Invio richiesta di registrazione
                         registrationRequest();
 
 
                     }else{
-                        Toast.makeText(getApplicationContext(),"Non si possono lasciare campi vuoti",Toast.LENGTH_SHORT).show();
+                        ImageChooser dialog = new ImageChooser(Registrazione.this , call);
+                        if(flag_new_image == 1) {
+                            Toast.makeText(getApplicationContext(), "Non si possono lasciare campi vuoti", Toast.LENGTH_SHORT).show();
+
+
+                            dialog.noImageSelected(flag_new_image);
+
+                        }else{
+                            Toast.makeText(getApplicationContext() , "Devi impostare un immagine di profilo" , Toast.LENGTH_SHORT).show();
+
+                            dialog.noImageSelected(flag_new_image);
+
+                        }
                     }
                 }
             });
@@ -117,11 +132,17 @@ public class Registrazione extends AppCompatActivity {
                 //selectImage();
                 ImageChooser img = new ImageChooser(Registrazione.this , call);
                 img.selectImage();
+                photoFlag();
+
             }
         });
 
     }
 
+
+    public void photoFlag() {
+        flag_new_image = 1;
+    }
 
 
 
