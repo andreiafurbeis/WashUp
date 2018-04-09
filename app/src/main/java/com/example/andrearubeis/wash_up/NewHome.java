@@ -12,7 +12,12 @@ import android.widget.Toast;
 
 import com.example.andrearubeis.wash_up.R;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.concurrent.ExecutionException;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -48,21 +53,8 @@ public class NewHome extends AppCompatActivity {
                     main_activity_intent = getIntent();
                     temp_persona = main_activity_intent.getParcelableExtra("persona");
 
-                    creationNewHome();
-                    Thread.sleep(500);
-                    Globals g = Globals.getInstance();
-                    g.setIdString(id_home);
-                    temp_persona.setIdHome(id_home);
-                    Toast.makeText(getApplicationContext(), id_home, Toast.LENGTH_SHORT).show();
+                    creationNewHome(temp_persona.getMail());
 
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelable("persona" , temp_persona);
-                    if(temp_persona == null ) {
-                        Log.d("NewHome" , "L'oggetto Persona é NULL");
-                    }
-                    Intent intent = new Intent(NewHome.this, ConfigurazioneStanzaActivity.class);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
                 }
                 catch(Exception e) {
                     Log.d("NewHome" , "Eccezione catturata nell'OnCreate");
@@ -74,36 +66,80 @@ public class NewHome extends AppCompatActivity {
 
     }
 
-    private void creationNewHome() {
 
-        AsyncTask<Integer, Void, Void> asyncTask = new AsyncTask<Integer, Void, Void>() {
-            @Override
-            protected Void doInBackground(Integer... movieIds) {
+    private void creationNewHome(String mail) {
+        URL url=null;
+        Globals g = Globals.getInstance();
 
-                OkHttpClient client = new OkHttpClient();
-                Globals g = Globals.getInstance();
-                Request request = new Request.Builder()
-                        .url("http://washit.dek4.net/new_home_creation.php?usr=" + g.getMail())
-                        .build();
+        String temp_url = g.getDomain()+"new_home_creation.php";
+        try {
+            url = new URL(temp_url+"?usr="+mail);
+        } catch (IOException e) {
+            Toast.makeText(getApplicationContext(), "Creazione URL non riuscita", Toast.LENGTH_SHORT).show();
+        }
+
+
+        try {
+            new TaskAsincrono(getApplicationContext(), url, new TaskCompleted() {
+                @Override
+                public void onTaskComplete(Object resp) {
+                    String result = getStringFromInputStream((InputStream) resp);
+                    goToConfiguration(result);
+                }
+            }).execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+
+    private void goToConfiguration(String id) {
+        Globals g = Globals.getInstance();
+        g.setIdString(id);
+        temp_persona = getIntent().getParcelableExtra("persona");
+        temp_persona.setIdHome(id);
+        Toast.makeText(getApplicationContext(), id_home, Toast.LENGTH_SHORT).show();
+
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("persona" , temp_persona);
+        if(temp_persona == null ) {
+            Log.d("NewHome" , "L'oggetto Persona é NULL");
+        }
+        Intent intent = new Intent(NewHome.this, ConfigurazioneStanzaActivity.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+
+    private static String getStringFromInputStream(InputStream is) {
+
+        BufferedReader br = null;
+        StringBuilder sb = new StringBuilder();
+
+        String line;
+        try {
+
+            br = new BufferedReader(new InputStreamReader(is));
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
                 try {
-                    Response response = client.newCall(request).execute();
-
-
-                    NewHome.this.id_home = response.body().string();
-
-
+                    br.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                return null;
             }
+        }
 
-            @Override
-            protected void onPostExecute(Void aVoid) {
-
-            }
-        };
-
-        asyncTask.execute();
+        return sb.toString();
     }
 }

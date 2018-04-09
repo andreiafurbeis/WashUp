@@ -49,7 +49,8 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
     Button continua;
     LinearLayout configurazione_linear;
     Bitmap imageBitmap;
-    HashMap<String,Object> data;
+    //HashMap<String,Object> data;
+    String data;
     String stringaJSON;
     ArrayList<Stanza> vectorStanze;
     //URL url = null;
@@ -114,8 +115,11 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
                         bottom_activity.class);
                 startActivity(intent);*/
 
+                Intent new_home_intent = getIntent();
+
                 Globals g = Globals.getInstance();
-                temp_persona = g.getInfoUtente();
+                //temp_persona = g.getInfoUtente();
+                temp_persona = new_home_intent.getParcelableExtra("persona");
 
                 Log.w("INFORMATION" , "l'oggetto persona contiene : " + temp_persona.getNome() + " " + vectorStanze.toString());
 
@@ -162,95 +166,54 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
     protected void onResume() {
         super.onResume();
         Log.d("immagine_back" , "Sono nell'OnResume");
-        //inizializationInterface();
+        inizializationInterface();
     }
 
     private void inizializationNewHome(){
-        class inizializationNewHome extends AsyncTask<Bitmap,Void,String> {
-
-            ProgressDialog loading;
-            RequestHandler rh = new RequestHandler();
-
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                loading = ProgressDialog.show(ConfigurazioneStanzaActivity.this, "Creazione Stanze Base", "Attendi...",true,true);
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                loading.dismiss();
-            }
-
-            @Override
-            protected String doInBackground(Bitmap... params) {
-
-                Globals g = Globals.getInstance();
-                String result = rh.sendPostRequest(g.getDomain()+"starting_rooms.php",data);
-
-
-                return result;
-            }
-        }
 
         Globals g = Globals.getInstance();
 
-        inizializationNewHome ui = null;
+        //INIZIALIZZAZIONE BAGNO
+        Stanza bagno = new Stanza( "D " + R.drawable.bagno , "bagno" , g.getIdString());
 
-        Stanza temp = new Stanza( "D " + R.drawable.bagno , "bagno" , g.getIdString());
-
-        //inizializzazione bagno
-
-        data = setHashMap(temp);
-
-
-
-
-        ui = new inizializationNewHome();
-
-        try {
-            ui.execute().get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-
-
-
-
-        //inizializzazione cucina
-
-        temp = new Stanza( "D " + R.drawable.cucina , "cucina" , g.getIdString());
-
-        data = setHashMap(temp);
-
-
-
-        ui = new inizializationNewHome();
-
-        try {
-            ui.execute().get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-
-
+        //INIZIALIZZAZIONE CUCINA
+        Stanza cucina = new Stanza( "D " + R.drawable.cucina , "cucina" , g.getIdString());
 
         //INIZIALIZZAZIONE CAMERA
 
-        temp = new Stanza( "D " + R.drawable.camera , "camera" , g.getIdString());
+        Stanza camera = new Stanza( "D " + R.drawable.camera , "camera" , g.getIdString());
 
 
+        data = getURLData(bagno , cucina , camera);
 
-        data = setHashMap(temp);
 
-        ui = new inizializationNewHome();
+        addStanza(data);
+
+
+    }
+
+
+    private void addStanza(String data) {
+        URL url=null;
+        Globals g = Globals.getInstance();
+
+        String temp_url = g.getDomain()+"starting_rooms.php"+data;
+        Log.d("ConfigurazioneStanza", "Questo é l'URL per l'inizializzazione : " + temp_url);
         try {
-            ui.execute().get();
+            url = new URL(temp_url);
+        } catch (IOException e) {
+            Toast.makeText(getApplicationContext(), "Creazione URL non riuscita", Toast.LENGTH_SHORT).show();
+        }
+
+
+        try {
+            new TaskAsincrono(getApplicationContext(), url, new TaskCompleted() {
+                @Override
+                public void onTaskComplete(Object resp) {
+
+
+                }
+            }).execute().get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -260,12 +223,14 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
 
     }
 
-    public HashMap setHashMap (Stanza temp) {
-        HashMap data = new HashMap<>();
-        data.put("nome_stanza",temp.getNameStanza());
-        data.put("image",temp.getImageStanza());
-        data.put("home_id",temp.getIdCasa());
-        return data;
+
+
+    public String getURLData (Stanza temp1 , Stanza temp2 , Stanza temp3) {
+
+        temp_persona = getIntent().getParcelableExtra("persona");
+        String url_data = "?home_id="+temp_persona.getIdHome()+"&image1="+temp1.getImageStanza()+"&image2="+temp2.getImageStanza()+"&image3="+temp3.getImageStanza();
+        return url_data;
+
     }
 
 
@@ -274,9 +239,10 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
 
         URL url=null;
         Globals g = Globals.getInstance();
+        temp_persona = getIntent().getParcelableExtra("persona");
 
         try {
-            url = new URL(g.getDomain() + "get_stanze.php?home_id="+g.getIdString());
+            url = new URL(g.getDomain() + "get_stanze.php?home_id="+temp_persona.getIdHome());
         }catch(IOException e){
             Toast.makeText(getApplicationContext(),"Creazione URL non riuscita",Toast.LENGTH_SHORT).show();
         }
