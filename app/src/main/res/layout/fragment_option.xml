@@ -27,12 +27,26 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/fragment_option_text_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="21dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="2dp"
+            android:text="@string/modifica"
+            android:textColor="@android:color/holo_green_light"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.969"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fragment_option_profile_image" />
+
         <Button
             android:id="@+id/fragment_option_button_modifica_casa"
 
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="5dp"
             android:background="@color/bottomNavigationColor"
             android:drawableLeft="@drawable/home_icon"
             android:drawablePadding="16dp"
@@ -42,7 +56,7 @@
             android:textColor="@android:color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fragment_option_profile_image" />
+            app:layout_constraintTop_toBottomOf="@+id/fragment_option_text_photo" />
 
         <Button
             android:id="@+id/fragment_option_button_aggiungi_inquilino"
@@ -132,13 +146,14 @@
 
         <ImageView
             android:id="@+id/fragment_option_profile_image"
-            android:layout_width="154dp"
-            android:layout_height="151dp"
-            android:layout_marginEnd="8dp"
+            android:layout_width="131dp"
+            android:layout_height="119dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:src="@drawable/rubeis_icon"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/fragment_option_title_bar"
             app:layout_constraintTop_toTopOf="parent" />
 

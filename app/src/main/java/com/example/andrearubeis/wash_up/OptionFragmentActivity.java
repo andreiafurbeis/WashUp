@@ -5,13 +5,18 @@ package com.example.andrearubeis.wash_up;
  */
 
 
+        import android.app.Activity;
+        import android.app.ProgressDialog;
         import android.content.Context;
         import android.content.DialogInterface;
         import android.content.Intent;
         import android.graphics.Bitmap;
         import android.graphics.drawable.BitmapDrawable;
         import android.graphics.drawable.Drawable;
+        import android.net.Uri;
+        import android.os.AsyncTask;
         import android.os.Bundle;
+        import android.provider.MediaStore;
         import android.support.v4.app.Fragment;
         import android.support.v7.app.AlertDialog;
         import android.util.Log;
@@ -24,6 +29,11 @@ package com.example.andrearubeis.wash_up;
         import android.widget.Toast;
 
         import com.example.andrearubeis.wash_up.R;
+
+        import java.io.IOException;
+        import java.util.HashMap;
+
+        import static android.app.Activity.RESULT_OK;
 
 
 public class OptionFragmentActivity extends Fragment {
@@ -64,7 +74,7 @@ public class OptionFragmentActivity extends Fragment {
                              Bundle savedInstanceState) {
 
 
-
+        context = getActivity();
 
         vista = inflater.inflate(R.layout.fragment_option, container, false);
 
@@ -107,6 +117,21 @@ public class OptionFragmentActivity extends Fragment {
                 startActivity(intent);
             }
         });
+
+
+        profile_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //dispatchTakePictureIntent();
+                //selectImage();
+                ImageChooser img = new ImageChooser( context , OptionFragmentActivity.this.getActivity());
+                img.selectImage();
+
+            }
+        });
+
+
+
 
 
 
@@ -187,6 +212,17 @@ public class OptionFragmentActivity extends Fragment {
         });
         builder.show();
     }
+
+
+
+
+
+
+
+
+
+
+
 
 
     //sei sicuro di voler uscire??
