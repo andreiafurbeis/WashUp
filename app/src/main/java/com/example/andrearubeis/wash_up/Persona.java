@@ -45,6 +45,10 @@ public class Persona implements Parcelable {
         this.compiti = new_compiti;
     }
 
+    public ArrayList<Compito> getCompiti() {
+        return this.compiti;
+    }
+
     public String getNome() {
         return this.nome;
     }
