@@ -77,6 +77,7 @@ public class bottom_activity extends AppCompatActivity {
                                 intent = getIntent();
                                 args = new Bundle();
                                 temp_persona = intent.getParcelableExtra("persona");
+                                args.putParcelable("persona" , temp_persona);
                                 args.putString("mail" , temp_persona.getMail());
                                 args.putString("id" , temp_persona.getIdHome());
                                 args.putString("nome" , temp_persona.getNome());
@@ -206,6 +207,7 @@ public class bottom_activity extends AppCompatActivity {
         Bundle args = new Bundle();
         Persona temp_persona = intent.getParcelableExtra("persona");
         temp_persona.setProfileImage(new_profile_image);
+        args.putParcelable("persona" , temp_persona);
         args.putString("mail" , temp_persona.getMail());
         args.putString("id" , temp_persona.getIdHome());
         args.putString("nome" , temp_persona.getNome());

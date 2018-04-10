@@ -100,8 +100,11 @@ public class OptionFragmentActivity extends Fragment {
         modifica_casa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("persona" , getArguments().getParcelable("persona"));
                 Intent intent = new Intent(getActivity(),
                         ConfigurazioneStanzaActivity.class);
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });
@@ -113,7 +116,10 @@ public class OptionFragmentActivity extends Fragment {
         aggiungi_inquilino.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("persona" , getArguments().getParcelable("persona"));
                 Intent intent = new Intent(getActivity(), AggiungiInquilinoActivity.class);
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });
