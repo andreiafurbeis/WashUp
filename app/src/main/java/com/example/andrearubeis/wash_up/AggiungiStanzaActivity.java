@@ -106,7 +106,7 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
         SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
 
         Gson gson = new Gson();
-        String json = pref.getString("MyObject", "");
+        String json = pref.getString("persona", "");
         temp_persona = gson.fromJson(json, Persona.class);
 
         if(temp_persona == null) {
@@ -277,11 +277,9 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
 
                 SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
                 SharedPreferences.Editor editor = pref.edit();
-
-                editor.putBoolean("key_name1", true);           // Saving boolean - true/false
                 Gson gson = new Gson();
                 String json = gson.toJson(temp_persona);
-                editor.putString("MyObject", json);
+                editor.putString("persona", json);
 
 
                 // Save the changes in SharedPreferences

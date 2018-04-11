@@ -430,10 +430,9 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
             SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
             SharedPreferences.Editor editor = pref.edit();
 
-            editor.putBoolean("key_name1", true);           // Saving boolean - true/false
             Gson gson = new Gson();
             String json = gson.toJson(temp_persona);
-            editor.putString("MyObject", json);
+            editor.putString("persona", json);
 
 
             // Save the changes in SharedPreferences
