@@ -2,6 +2,7 @@ package com.example.andrearubeis.wash_up;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -23,6 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.andrearubeis.wash_up.R;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -82,6 +84,20 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
 
 
 
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+
+
+
+
+
+
+
+
+
+
+
+
+
         //INIZIALIZZAZIONE DATABASE CON STANZE STANDARD
         inizializationNewHome();
 
@@ -104,7 +120,10 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
                 Globals g = Globals.getInstance();
                 Intent intent = new Intent(ConfigurazioneStanzaActivity.this,
                         AggiungiStanzaActivity.class);
-                intent.putExtra("home_id",g.getIdString());
+                Bundle bundle = new Bundle();
+                bundle.putString("home_id" , g.getIdString());
+                bundle.putParcelable("persona" ,temp_persona);
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });
@@ -333,6 +352,8 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
         Globals g = Globals.getInstance();
         g.setStanze(vectorStanze);
 
+        temp_persona.setStanze(vectorStanze);
+
         creaInterfaccia();
 
 
@@ -394,16 +415,29 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
                     Globals g = Globals.getInstance();
                     Intent intent = new Intent(ConfigurazioneStanzaActivity.this,
                             AggiungiStanzaActivity.class);
-                    intent.putExtra("nome_stanza",stanzaCorrente.getNameStanza());
-                    intent.putExtra("home_id",g.getIdString());
-                    intent.putExtra("update",1);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("nome_stanza",stanzaCorrente.getNameStanza());
+                    bundle.putString("home_id",g.getIdString());
+                    bundle.putInt("update",1);
+                    bundle.putParcelable("persona" , temp_persona);
+                    intent.putExtras(bundle);
                     startActivity(intent);
                 }
             });
 
             //buttonStanza[i].setTypeface(Typeface.createFromAsset(getAssets(),loveloBlack));
             configurazione_linear.addView(buttonStanza[i],params);
+            SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+            SharedPreferences.Editor editor = pref.edit();
 
+            editor.putBoolean("key_name1", true);           // Saving boolean - true/false
+            Gson gson = new Gson();
+            String json = gson.toJson(temp_persona);
+            editor.putString("MyObject", json);
+
+
+            // Save the changes in SharedPreferences
+            editor.commit(); // commit changes
         }
 
     }

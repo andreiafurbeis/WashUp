@@ -1,6 +1,7 @@
 package com.example.andrearubeis.wash_up;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.andrearubeis.wash_up.R;
+import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -40,7 +42,9 @@ public class NewHome extends AppCompatActivity {
         setContentView(R.layout.activity_new_home);
         ActionBar barra = getSupportActionBar();
         barra.hide();
+        main_activity_intent = getIntent();
 
+        temp_persona = main_activity_intent.getParcelableExtra("persona");
 
 
 
@@ -50,10 +54,26 @@ public class NewHome extends AppCompatActivity {
             public void onClick(View view) {
                 try {
 
-                    main_activity_intent = getIntent();
-                    temp_persona = main_activity_intent.getParcelableExtra("persona");
+                    //ESEMPIO SharedPreference
+                    /*
+                    SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = pref.edit();
+
+                    editor.putBoolean("key_name1", true);           // Saving boolean - true/false
+                    Gson gson = new Gson();
+                    String json = gson.toJson(temp_persona);
+                    editor.putString("MyObject", json);
+
+
+                    // Save the changes in SharedPreferences
+                    editor.commit(); // commit changes */
+
 
                     creationNewHome(temp_persona.getMail());
+
+
+
+
 
                 }
                 catch(Exception e) {
@@ -97,10 +117,19 @@ public class NewHome extends AppCompatActivity {
     }
 
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+
+
+
+    }
+
     private void goToConfiguration(String id) {
         Globals g = Globals.getInstance();
         g.setIdString(id);
-        temp_persona = getIntent().getParcelableExtra("persona");
+        //temp_persona = getIntent().getParcelableExtra("persona");
         temp_persona.setIdHome(id);
         Toast.makeText(getApplicationContext(), id_home, Toast.LENGTH_SHORT).show();
 
