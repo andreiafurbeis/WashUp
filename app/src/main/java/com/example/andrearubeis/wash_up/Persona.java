@@ -24,6 +24,7 @@ public class Persona implements Parcelable {
     private String id_home;
     private ArrayList<Stanza> stanze;
     private ArrayList<Compito> compiti;
+    private ArrayList<Persona>
 
 
     public Persona(String mail, String password) {
@@ -108,6 +109,16 @@ public class Persona implements Parcelable {
     public ArrayList<Compito> getCompitiStanza(int indice) {
         Stanza stanza = this.getStanze().get(indice);
         return stanza.getCompiti();
+    }
+
+    public int getIndiceStanza(String name_stanza) {
+        int position = -1;
+        for(int i = 0 ; i < this.stanze.size() ; i++) {
+            if ( name_stanza.equals(this.stanze.get(i).getNameStanza()) ) {
+                position = i;
+            }
+        }
+        return position;
     }
 
 
