@@ -10,6 +10,7 @@ package com.example.andrearubeis.wash_up;
         import android.content.Context;
         import android.content.DialogInterface;
         import android.content.Intent;
+        import android.content.SharedPreferences;
         import android.graphics.Bitmap;
         import android.graphics.drawable.BitmapDrawable;
         import android.graphics.drawable.Drawable;
@@ -29,11 +30,13 @@ package com.example.andrearubeis.wash_up;
         import android.widget.Toast;
 
         import com.example.andrearubeis.wash_up.R;
+        import com.google.gson.Gson;
 
         import java.io.IOException;
         import java.util.HashMap;
 
         import static android.app.Activity.RESULT_OK;
+        import static android.content.Context.MODE_PRIVATE;
 
 
 public class OptionFragmentActivity extends Fragment {
@@ -49,6 +52,8 @@ public class OptionFragmentActivity extends Fragment {
     ImageView profile_image;
     Context context;
     View vista;
+    SharedPreferences pref;
+    Persona temp_persona;
 
 
 
@@ -84,7 +89,15 @@ public class OptionFragmentActivity extends Fragment {
 
         Log.d("OptionFragment" , nome + " " +  cognome + " " + image_profile);
 
+        pref = getActivity().getSharedPreferences("MyPref", MODE_PRIVATE);
 
+        Gson gson = new Gson();
+        String json = pref.getString("persona", "");
+        temp_persona = gson.fromJson(json, Persona.class);
+
+        if(temp_persona == null) {
+            Log.d("ConfigurazioneStanze" , "L'oggetto appena scaricato dalle SharedPreference é NULL");
+        }
         profile_image = (ImageView) vista.findViewById(R.id.fragment_option_profile_image);
 
         Drawable image_drawable = getDrawable(image_profile);
@@ -101,7 +114,7 @@ public class OptionFragmentActivity extends Fragment {
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
-                bundle.putParcelable("persona" , getArguments().getParcelable("persona"));
+                //bundle.putParcelable("persona" , getArguments().getParcelable("persona"));
                 Intent intent = new Intent(getActivity(),
                         ConfigurazioneStanzaActivity.class);
                 intent.putExtras(bundle);
@@ -117,7 +130,7 @@ public class OptionFragmentActivity extends Fragment {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putParcelable("persona" , getArguments().getParcelable("persona"));
+                //bundle.putParcelable("persona" , getArguments().getParcelable("persona"));
                 Intent intent = new Intent(getActivity(), AggiungiInquilinoActivity.class);
                 intent.putExtras(bundle);
                 startActivity(intent);

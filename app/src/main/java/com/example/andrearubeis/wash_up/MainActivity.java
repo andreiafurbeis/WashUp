@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity  {
     Button registrazione;
     InputStream in = null;
     URL url = null;
+    ArrayList<Persona> coinquilini_global;
 
     //private final String domain_url = "http://192.168.0.24/";   //dominio portatile
     //private final String domain_url = "http://192.168.1.100/";  //dominio fisso
@@ -117,6 +118,8 @@ public class MainActivity extends AppCompatActivity  {
                                     temp_persona.setStanze(home.getStanze());
                                     //g.setStanze(home.getVectorStanze());
 
+                                    getCoinquilini(temp_persona);
+                                    temp_persona.setCoinquilini(coinquilini_global);
 
 
 
@@ -200,6 +203,36 @@ public class MainActivity extends AppCompatActivity  {
 
     }
 
+    public void getCoinquilini(Persona persona) {
+
+        URL url=null;
+        Globals g = Globals.getInstance();
+
+        try {
+            url = new URL(g.getDomain() + "get_coinquilini.php?home_id="+persona.getIdHome()+"&mail="+persona.getMail());
+        }catch(IOException e){
+            Toast.makeText(getApplicationContext(),"Creazione URL non riuscita",Toast.LENGTH_SHORT).show();
+        }
+
+        new TaskAsincrono(getApplicationContext(), url , new TaskCompleted() {
+            @Override
+            public void onTaskComplete(Object resp) {
+
+                Globals g = Globals.getInstance();
+
+                String result = getStringFromInputStream((InputStream) resp);
+
+                Toast.makeText(getApplicationContext(),result,Toast.LENGTH_SHORT).show();
+
+                readJSONCoinquilini(result , g.getIdString());
+
+            }
+        }).execute();
+
+
+
+    }
+
 
 
     //Si occupa di leggere il file JSON di risposta
@@ -254,6 +287,49 @@ public class MainActivity extends AppCompatActivity  {
         }
 
     }
+
+
+
+    public void readJSONCoinquilini (String jsonString , String id_home ) {
+
+        //new_home_intent = this.getIntent();
+        //temp_persona = new_home_intent.getParcelableExtra("persona");
+
+        coinquilini_global= new ArrayList<Persona>();
+
+        try {
+
+
+            jsonString = "{\"coinquilini\":"+ jsonString + "}";
+            Log.w("INFORMATION", jsonString);
+            JSONObject jsonObj = new JSONObject(jsonString);
+            JSONArray stanze = jsonObj.getJSONArray("coinquilini");
+            for(int i = 0; i< stanze.length(); i++) {
+                JSONObject c = stanze.getJSONObject(i);
+
+
+
+                //Log.w("INFORMAIONE" , image_stanza);
+
+
+                Persona persona_temp = new Persona(c.getString("nome") , c.getString("cognome") , c.getString("mail") , c.getString("profile_image") , id_home , null );
+                //Stanza stanza = new Stanza(c.getString("stanza_image"),c.getString("nome_stanza"));
+                coinquilini_global.add(persona_temp);
+
+            }
+
+        }catch (Exception e){
+            Log.d("ConfigurazioneStanze" , "Eccezione catturata nel ReadJSON");
+        }
+
+        //Globals g = Globals.getInstance();
+        //g.setStanze(vectorStanze);
+
+
+
+
+    }
+
 
 
     private static String getStringFromInputStream(InputStream is) {

@@ -61,6 +61,8 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
 
     Button buttonStanza[];
 
+    SharedPreferences pref;
+
     //String loveloBlack = "R.font.lovelo_black;
 
 
@@ -80,11 +82,21 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
 
         new_home_intent = getIntent();
 
-        temp_persona = new_home_intent.getParcelableExtra("persona");
+        pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+
+        Gson gson = new Gson();
+        String json = pref.getString("persona", "");
+        temp_persona = gson.fromJson(json, Persona.class);
+
+        if(temp_persona == null) {
+            Log.d("ConfigurazioneStanze" , "L'oggetto appena scaricato dalle SharedPreference é NULL");
+        }
+
+        //temp_persona = new_home_intent.getParcelableExtra("persona");
 
 
 
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        //SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
 
 
 
@@ -138,25 +150,25 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
 
                 Globals g = Globals.getInstance();
                 //temp_persona = g.getInfoUtente();
-                temp_persona = new_home_intent.getParcelableExtra("persona");
+                //temp_persona = new_home_intent.getParcelableExtra("persona");
 
                 Log.w("INFORMATION" , "l'oggetto persona contiene : " + temp_persona.getNome() + " " + vectorStanze.toString());
 
                 LoadHome home = new LoadHome(temp_persona.getIdHome(), g.getDomain() , getApplicationContext());
                 home.setStanze(vectorStanze);
-                temp_persona.setStanze(vectorStanze);
+                //temp_persona.setStanze(vectorStanze);
                 //g.setStanze(home.getVectorStanze());
 
 
 
-                Bundle bundle = new Bundle();
+                //Bundle bundle = new Bundle();
                 Intent intent = new Intent(ConfigurazioneStanzaActivity.this, bottom_activity.class);
                 //bundle.putString("id" , temp_persona.getIdHome());
-                bundle.putParcelable("persona" , temp_persona);
+                //bundle.putParcelable("persona" , temp_persona);
 
                 Log.w("INFORMATION" , "l'oggetto persona contiene : " + temp_persona.getNome() + " " + temp_persona.getStanze().get(0).getNameStanza() + " " + temp_persona.getStanze().get(0).getImageStanza());
 
-                intent.putExtras(bundle);
+                //intent.putExtras(bundle);
 
                 //intent.putExtra("stanze" , parts[2]);
 
@@ -246,7 +258,7 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
 
     public String getURLData (Stanza temp1 , Stanza temp2 , Stanza temp3) {
 
-        temp_persona = getIntent().getParcelableExtra("persona");
+        //temp_persona = getIntent().getParcelableExtra("persona");
         String url_data = "?home_id="+temp_persona.getIdHome()+"&image1="+temp1.getImageStanza()+"&image2="+temp2.getImageStanza()+"&image3="+temp3.getImageStanza();
         return url_data;
 
@@ -258,7 +270,7 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
 
         URL url=null;
         Globals g = Globals.getInstance();
-        temp_persona = getIntent().getParcelableExtra("persona");
+        //temp_persona = getIntent().getParcelableExtra("persona");
 
         try {
             url = new URL(g.getDomain() + "get_stanze.php?home_id="+temp_persona.getIdHome());
@@ -365,6 +377,18 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
     public void creaInterfaccia(){
 
         configurazione_linear = (LinearLayout) findViewById(R.id.configurazione_linear);
+
+        pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+
+        Gson gson = new Gson();
+        String json = gson.toJson(temp_persona);
+        editor.putString("persona", json);
+
+
+        // Save the changes in SharedPreferences
+        editor.commit(); // commit changes
+
         if(configurazione_linear.getChildCount() > 0) {
             configurazione_linear.removeAllViews();
         }
@@ -427,16 +451,7 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
 
             //buttonStanza[i].setTypeface(Typeface.createFromAsset(getAssets(),loveloBlack));
             configurazione_linear.addView(buttonStanza[i],params);
-            SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
-            SharedPreferences.Editor editor = pref.edit();
 
-            Gson gson = new Gson();
-            String json = gson.toJson(temp_persona);
-            editor.putString("persona", json);
-
-
-            // Save the changes in SharedPreferences
-            editor.commit(); // commit changes
         }
 
     }

@@ -24,7 +24,7 @@ public class Persona implements Parcelable {
     private String id_home;
     private ArrayList<Stanza> stanze;
     private ArrayList<Compito> compiti;
-    private ArrayList<Persona>
+    private ArrayList<Persona> coinquilini;
 
 
     public Persona(String mail, String password) {
@@ -48,6 +48,16 @@ public class Persona implements Parcelable {
     public ArrayList<Compito> getCompiti() {
         return this.compiti;
     }
+
+
+    public void setCoinquilini(ArrayList<Persona> new_coinquilini) {
+        this.coinquilini = new_coinquilini;
+    }
+
+    public ArrayList<Persona> getCoinquilini() {
+        return this.coinquilini;
+    }
+
 
     public String getNome() {
         return this.nome;
@@ -101,7 +111,7 @@ public class Persona implements Parcelable {
         return this.getNome() + " " + this.getCognome();
     }
 
-    public void setCompitiStanza(int indice , ArrayList<Compito> compiti) {
+    public void setCompitiStanza(int indice, ArrayList<Compito> compiti) {
         Stanza stanza = this.getStanze().get(indice);
         stanza.setCompiti(compiti);
     }
@@ -113,8 +123,8 @@ public class Persona implements Parcelable {
 
     public int getIndiceStanza(String name_stanza) {
         int position = -1;
-        for(int i = 0 ; i < this.stanze.size() ; i++) {
-            if ( name_stanza.equals(this.stanze.get(i).getNameStanza()) ) {
+        for (int i = 0; i < this.stanze.size(); i++) {
+            if (name_stanza.equals(this.stanze.get(i).getNameStanza())) {
                 position = i;
             }
         }
@@ -143,6 +153,12 @@ public class Persona implements Parcelable {
         } else {
             compiti = null;
         }
+        if (in.readByte() == 0x01) {
+            coinquilini = new ArrayList<Persona>();
+            in.readList(coinquilini, Persona.class.getClassLoader());
+        } else {
+            coinquilini = null;
+        }
     }
 
     @Override
@@ -170,6 +186,12 @@ public class Persona implements Parcelable {
         } else {
             dest.writeByte((byte) (0x01));
             dest.writeList(compiti);
+        }
+        if (coinquilini == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(coinquilini);
         }
     }
 

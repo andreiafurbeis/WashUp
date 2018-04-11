@@ -3,6 +3,7 @@ package com.example.andrearubeis.wash_up;
 
         import android.content.Context;
         import android.content.Intent;
+        import android.content.SharedPreferences;
         import android.graphics.Bitmap;
         import android.graphics.drawable.BitmapDrawable;
         import android.graphics.drawable.Drawable;
@@ -22,8 +23,11 @@ package com.example.andrearubeis.wash_up;
 
         import android.widget.Button;
         import com.example.andrearubeis.wash_up.R;
+        import com.google.gson.Gson;
 
         import java.util.ArrayList;
+
+        import static android.content.Context.MODE_PRIVATE;
 
 public class RuoliFragmentActivity extends Fragment {
 
@@ -35,6 +39,8 @@ public class RuoliFragmentActivity extends Fragment {
     ListView list_view;
     ArrayList<Persona> vettorepersona;
     Button title_bar;
+    SharedPreferences pref;
+    Persona temp_persona;
 
 
     public static RuoliFragmentActivity newInstance() {
@@ -53,12 +59,22 @@ public class RuoliFragmentActivity extends Fragment {
         vista = inflater.inflate(R.layout.fragment_ruoli, container, false);
 
 
-        Persona persona = getArguments().getParcelable("persona");
+        //Persona persona = getArguments().getParcelable("persona");
+
+        pref = getActivity().getSharedPreferences("MyPref", MODE_PRIVATE);
+
+        Gson gson = new Gson();
+        String json = pref.getString("persona", "");
+        temp_persona = gson.fromJson(json, Persona.class);
+
+        if(temp_persona == null) {
+            Log.d("ConfigurazioneStanze" , "L'oggetto appena scaricato dalle SharedPreference é NULL");
+        }
 
         //View view = getView();
 
 
-        String var1 ;
+        /*String var1 ;
         var1 = persona.getNome();
 
         // title_bar = vista.findViewById(R.id.fragment_ruoli_title_bar);
@@ -77,7 +93,7 @@ public class RuoliFragmentActivity extends Fragment {
         vettorepersona.add(persona);
 
 
-
+        */
 
 
         //DEVE ARRIVARE UN ARRAYLIST DI PERSONE
@@ -88,7 +104,11 @@ public class RuoliFragmentActivity extends Fragment {
 
 
         list_view = (ListView) vista.findViewById(R.id.fragment_ruoli_list_view);
-        AdapterRuoli adapter = new AdapterRuoli(getActivity(),vettorepersona);
+        ArrayList<Persona> coinquilini = temp_persona.getCoinquilini();
+        coinquilini.add(new Persona(temp_persona.getNome() , temp_persona.getCognome() , temp_persona.getMail() , temp_persona.getProfileImage() , temp_persona.getIdHome() , null));
+
+
+        AdapterRuoli adapter = new AdapterRuoli(getActivity(),coinquilini);
 
         list_view.setAdapter(adapter);
 
