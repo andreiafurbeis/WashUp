@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+
+    <Button
+        android:id="@+id/compiti_dialog_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="@drawable/title_bar_bottom_navigation"
+        android:fontFamily="@font/lovelo_black"
+        android:paddingLeft="16dp"
+        android:text="@string/aggiungi_compito"
+        android:textAlignment="viewStart"
+
+        android:textColor="@android:color/white"
+        android:textSize="18sp"/>
+
+
+    <EditText
+        android:id="@+id/compiti_dialog_descrizione"
+        android:inputType="text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="4dp"
+        android:hint="@string/aggiungi_descrizione_compito" />
+
+</LinearLayout>

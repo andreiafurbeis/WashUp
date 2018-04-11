@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
 /**
  * Created by andrearubeis on 28/12/17.
  */
@@ -47,17 +49,20 @@ public class Stanza implements Parcelable {
     private String nome;
     private String stanza_image;
     private String id_casa;
+    private ArrayList<Compito> compiti;
 
 
     public Stanza(String image , String nome) {
         this.nome=nome;
         this.stanza_image=image;
+        this.compiti = new ArrayList<Compito>();
     }
 
     public Stanza(String image , String nome , String id) {
         this.id_casa = id;
         this.nome = nome;
         this.stanza_image = image;
+        this.compiti = new ArrayList<Compito>();
     }
 
     public String getIdCasa() {
@@ -82,6 +87,14 @@ public class Stanza implements Parcelable {
 
     public String getImageStanza() {
         return this.stanza_image;
+    }
+
+    public ArrayList<Compito> getCompiti() {
+        return this.compiti;
+    }
+
+    public void setCompiti(ArrayList<Compito> new_compiti) {
+        this.compiti = new_compiti;
     }
 
     public String toString() {

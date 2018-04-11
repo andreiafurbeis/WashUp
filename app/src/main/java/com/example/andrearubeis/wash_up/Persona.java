@@ -26,13 +26,12 @@ public class Persona implements Parcelable {
     private ArrayList<Compito> compiti;
 
 
-
-    public Persona(String mail , String password) {
+    public Persona(String mail, String password) {
         this.mail = mail;
         this.password = password;
     }
 
-    public Persona(String nome , String cognome , String mail , String profile_image , String id , ArrayList<Stanza> stanze) {
+    public Persona(String nome, String cognome, String mail, String profile_image, String id, ArrayList<Stanza> stanze) {
         this.nome = nome;
         this.cognome = cognome;
         this.mail = mail;
@@ -41,7 +40,7 @@ public class Persona implements Parcelable {
         this.stanze = stanze;
     }
 
-    public void setCompiti (ArrayList<Compito> new_compiti) {
+    public void setCompiti(ArrayList<Compito> new_compiti) {
         this.compiti = new_compiti;
     }
 
@@ -101,6 +100,16 @@ public class Persona implements Parcelable {
         return this.getNome() + " " + this.getCognome();
     }
 
+    public void setCompitiStanza(int indice , ArrayList<Compito> compiti) {
+        Stanza stanza = this.getStanze().get(indice);
+        stanza.setCompiti(compiti);
+    }
+
+    public ArrayList<Compito> getCompitiStanza(int indice) {
+        Stanza stanza = this.getStanze().get(indice);
+        return stanza.getCompiti();
+    }
+
 
     protected Persona(Parcel in) {
         nome = in.readString();
@@ -116,6 +125,12 @@ public class Persona implements Parcelable {
             in.readList(stanze, Stanza.class.getClassLoader());
         } else {
             stanze = null;
+        }
+        if (in.readByte() == 0x01) {
+            compiti = new ArrayList<Compito>();
+            in.readList(compiti, Compito.class.getClassLoader());
+        } else {
+            compiti = null;
         }
     }
 
@@ -138,6 +153,12 @@ public class Persona implements Parcelable {
         } else {
             dest.writeByte((byte) (0x01));
             dest.writeList(stanze);
+        }
+        if (compiti == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(compiti);
         }
     }
 

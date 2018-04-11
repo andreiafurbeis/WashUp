@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -27,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.andrearubeis.wash_up.R;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -43,6 +45,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
@@ -50,6 +53,9 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
 
 
     ImageView stanza_image;
+
+
+
     Button title_bar;
     Button aggiungi;
     Button gestisci_compiti;
@@ -66,6 +72,7 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
     String fileName;
     private URL url;
     String image_real_path;
+    Persona temp_persona;
 
 
     @Override
@@ -84,6 +91,32 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
         intent = getIntent();
 
 
+        /*if(intent.hasExtra("persona")) {
+            temp_persona = intent.getParcelableExtra("persona");
+        }else{
+            temp_persona = intent.getParcelableExtra("persona2");
+            Log.d("AggiungiStanza", "sto assegnando persona2 ");
+            if(temp_persona == null ) {
+                Log.d("AggiungiStanza", "tempPersona NULL ");
+
+            }
+
+        }*/
+
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+
+        Gson gson = new Gson();
+        String json = pref.getString("MyObject", "");
+        temp_persona = gson.fromJson(json, Persona.class);
+
+        if(temp_persona == null) {
+            Log.d("ConfigurazioneStanze" , "L'oggetto appena scaricato dalle SharedPreference é NULL");
+        }
+
+        ControllaCampi(temp_persona);
+
+
+
         if(intent.hasExtra("update")) {
             aggiungi.setText("Modifica");
             title_bar.setText("Modifica Stanza");
@@ -91,6 +124,25 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
         }else{
             title_bar.setText("Aggiungi Stanza");
         }
+
+        if(intent.hasExtra("compiti")) {
+            temp_persona.setCompitiStanza(intent.getIntExtra("indice_stanza", -2),intent.<Compito>getParcelableArrayListExtra("compiti"));
+            ArrayList<Compito> compiti = intent.<Compito>getParcelableArrayListExtra("compiti");
+            //Log.d("AggiungiStanza", "Il vettore compiti é lungo : " + compiti.size());
+
+        }
+
+        if(intent.hasExtra("indice_stanza")) {
+            int indice = intent.getIntExtra("indice_stanza", -2);
+            if(temp_persona.getCompitiStanza(indice) == null) {
+                Log.d("AggiungiStanza", "Il vettore compiti é NULL e l'indice é : " + indice);
+
+            }
+        }
+
+
+
+
 
 
 
@@ -109,7 +161,8 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
 
                     /*String home_id = intent.getStringExtra("home_id");
                     String nome_stanza = intent.getStringExtra("nome_stanza");*/
-                    Stanza temp = new Stanza(null,intent.getStringExtra("nome_stanza"),intent.getStringExtra("home_id"));
+
+                    Stanza temp = new Stanza(null,intent.getStringExtra("nome_stanza"),temp_persona.getIdHome());
                     //String temp_url = g.getDomain() + "update_room.php?home_id=" + home_id + "&nuovo_nome_stanza=" + edit_nome_stanza.getText() + "&nome_stanza=" + nome_stanza + "";
                     String temp_url = g.getDomain() + "update_room.php?home_id=" + temp.getIdCasa() + "&nuovo_nome_stanza=" + edit_nome_stanza.getText() + "&nome_stanza=" + temp.getNameStanza() + "";
                     //Log.d("immagine_click", "il path dell'immagine é : " + filePath.toString());
@@ -156,7 +209,7 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
                     //MODALITÁ DI AGGIUNTA , LA STANZA DEVE ANCORA ESSERE AGGIUNTA AL DB
 
                     //String home_id = intent.getStringExtra("home_id");
-                    Stanza temp = new Stanza(null,null,intent.getStringExtra("home_id"));
+                    Stanza temp = new Stanza(null,null,temp_persona.getIdHome());
                     if(flag_new_image == 1) {
                         filePath = manager_image.getImagePath();
                         fileName = manager_image.getImageName();
@@ -218,10 +271,36 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
 
                 Intent intent_compiti = new Intent(AggiungiStanzaActivity.this,
                         ModificaCompitiActivity.class);
-                intent_compiti.putExtra("nome_stanza",intent.getStringExtra("nome_stanza"));
+                Bundle bundle = new Bundle();
+                bundle.putString("nome_stanza" , edit_nome_stanza.getText().toString());
+
+
+                SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+                SharedPreferences.Editor editor = pref.edit();
+
+                editor.putBoolean("key_name1", true);           // Saving boolean - true/false
+                Gson gson = new Gson();
+                String json = gson.toJson(temp_persona);
+                editor.putString("MyObject", json);
+
+
+                // Save the changes in SharedPreferences
+                editor.commit();
+
+
+                //temp_persona = getIntent().getParcelableExtra("persona");
+
+
+
+                //bundle.putParcelable("persona" , temp_persona);
                 //intent.putExtra("home_id",g.getIdString());
                 //intent.putExtra("update",1);
+                intent_compiti.putExtras(bundle);
+                if(temp_persona == null) {
+                    Log.d("AggiungiStanza" , "La persona é NULL" );
+                }
                 startActivity(intent_compiti);
+                finish();
 
 
 
@@ -233,6 +312,26 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
 
 
     }
+
+
+
+    private void ControllaCampi(Persona temp_persona) {
+        if(temp_persona.getStanze() == null) {
+            Log.d("AggiungiStanza","Stanze NULL");
+        }
+        if(temp_persona.getIdHome() == null) {
+            Log.d("AggiungiStanza","Stanze NULL");
+        }
+        if(temp_persona.getCompiti() == null) {
+            Log.d("AggiungiStanza" , "Compiti NULL");
+        }
+        int indice = intent.getIntExtra("indice_stanza",-2);
+        /*if(temp_persona.getCompitiStanza(indice) == null) {
+            Log.d("AggiungiStanza" , "Compiti Stanza selezionata NULL");
+
+        }*/
+    }
+
 
 
 
@@ -320,7 +419,8 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
 
     public void inizializzazione() {
         Intent intent = getIntent();
-        String home_id = intent.getStringExtra("home_id");
+        //String home_id = intent.getStringExtra("home_id");
+        String home_id = temp_persona.getIdHome();
         String nome_stanza = intent.getStringExtra("nome_stanza");
 
         flag_new_image = 0; //l'immagine non é stata cambiata
@@ -436,6 +536,15 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
     }
 
 
+
+
+    /*@Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("AggiungiStanzaActivity" , "Sono nell'OnResume");
+        Intent intent = getIntent();
+        temp_persona = intent.getParcelableExtra("persona");
+    }*/
 
 
 
