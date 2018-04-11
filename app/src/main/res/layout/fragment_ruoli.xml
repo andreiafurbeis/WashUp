@@ -32,75 +32,33 @@
         <ScrollView
             android:id="@+id/fragment_ruoli_scroll"
             android:layout_width="match_parent"
-            android:layout_height="440dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fragment_ruoli_title_bar">
+            app:layout_constraintTop_toBottomOf="@+id/fragment_ruoli_title_bar"
+            app:layout_constraintVertical_bias="0.6">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:descendantFocusability="blocksDescendants">
 
-                <Space
+                <ListView
+                    android:id="@+id/fragment_ruoli_list_view"
                     android:layout_width="match_parent"
-                    android:layout_height="5dp" />
+                    android:layout_height="438dp"
+                    android:clickable="true">
 
-                <Button
-                    android:id="@+id/fragment_ruoli_rubeis"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/bottomNavigationColor"
-                    android:drawableLeft="@drawable/rubeis_icon"
-                    android:drawableRight="@drawable/bell_icon"
-                    android:elevation="20dp"
-                    android:paddingLeft="@dimen/padding_icona_sx"
-                    android:text="Andrea"
-
-
-                    android:textColor="@android:color/white" />
-
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="5dp" />
-
-                <Button
-                    android:id="@+id/fragment_ruoli_nicolo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/bottomNavigationColor"
-                    android:drawableLeft="@drawable/nicolo_icon"
-                    android:drawableRight="@drawable/bell_icon"
-                    android:elevation="20dp"
-                    android:paddingLeft="@dimen/padding_icona_sx"
-
-
-                    android:text="Nicolò"
-                    android:textColor="@android:color/white" />
+                </ListView>
             </LinearLayout>
 
 
         </ScrollView>
 
-        <Button
-            android:id="@+id/fragment_ruoli_aggiungi_compito"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="8dp"
-            android:text="Aggiungi compito"
-            android:textSize="20sp"
-            android:textAppearance="@font/lovelo_black"
-            android:textAlignment="inherit"
-            android:textColor="@android:color/white"
-            android:background="@drawable/button"
-            app:layout_constraintBottom_toBottomOf="@+id/fragment_ruoli_scroll"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/fragment_ruoli_scroll" />
-
 
     </android.support.constraint.ConstraintLayout>
+
 </RelativeLayout>

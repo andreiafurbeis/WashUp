@@ -32,6 +32,7 @@
         <activity android:name="com.example.andrearubeis.wash_up.RuoliStanza"></activity>
         <activity android:name="com.example.andrearubeis.wash_up.ModificaCompitiActivity"></activity>
         <activity android:name="com.example.andrearubeis.wash_up.AggiungiInquilinoActivity"></activity>
+        <activity android:name="com.example.andrearubeis.wash_up.RuoliInquilino"></activity>
 
     </application>
 
