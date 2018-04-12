@@ -83,13 +83,10 @@ public class OptionFragmentActivity extends Fragment {
 
         vista = inflater.inflate(R.layout.fragment_option, container, false);
 
-        String nome = getArguments().getString("nome");
-        String cognome = getArguments().getString("cognome");
-        String image_profile = getArguments().getString("profile_image");
 
-        Log.d("OptionFragment" , nome + " " +  cognome + " " + image_profile);
 
-        pref = getActivity().getSharedPreferences("MyPref", MODE_PRIVATE);
+
+        pref = getActivity().getSharedPreferences("persona", MODE_PRIVATE);
 
         Gson gson = new Gson();
         String json = pref.getString("persona", "");
@@ -98,15 +95,17 @@ public class OptionFragmentActivity extends Fragment {
         if(temp_persona == null) {
             Log.d("ConfigurazioneStanze" , "L'oggetto appena scaricato dalle SharedPreference é NULL");
         }
+
+        Log.d("OptionFragment" , temp_persona.getNome() + " " +  temp_persona.getCognome() + " " + temp_persona.getProfileImage());
         profile_image = (ImageView) vista.findViewById(R.id.fragment_option_profile_image);
 
-        Drawable image_drawable = getDrawable(image_profile);
+        Drawable image_drawable = getDrawable(temp_persona.getProfileImage());
 
         profile_image.setImageDrawable(image_drawable);
 
 
         nome_persona = (TextView) vista.findViewById(R.id.fragment_option_text_name);
-        nome_persona.setText(nome + " " + cognome);
+        nome_persona.setText(temp_persona.getNome() + " " + temp_persona.getCognome());
 
         //azione pulsante modifica_casa
         modifica_casa = (Button) vista.findViewById(R.id.fragment_option_button_modifica_casa);

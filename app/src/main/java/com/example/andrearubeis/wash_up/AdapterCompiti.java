@@ -44,7 +44,7 @@ public class AdapterCompiti extends ArrayAdapter<Compito>{
         public View getView(int position, View convertView, ViewGroup parent) {
             View vi = convertView;
             if (vi == null){
-                vi = inflater.inflate(R.layout.row_compito, null);
+                vi = inflater.inflate(R.layout.row_compito, parent ,false);
             }
             //TextView text = (TextView) vi.findViewById(R.id.text);
             Button row = (Button) vi.findViewById(R.id.row_compito_descrizione);

@@ -11,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.Button;
@@ -39,13 +40,14 @@ public class ModificaCompitiActivity extends AppCompatActivity{
     Button button_aggiungi;
     LinearLayout linear;
     Persona temp_persona;
-    //ListView listview;
+    ListView listview;
     Stanza temp;
     ArrayList<Compito> compiti_global;
     int indice_stanza;
     ArrayList<Compito> compiti=null;
-    SwipeMenuListView listView;
+
     AdapterCompiti adapter;
+
 
 
 
@@ -66,9 +68,9 @@ public class ModificaCompitiActivity extends AppCompatActivity{
         title_bar = (Button) findViewById(R.id.modifica_compiti_title_bar);
         linear = findViewById(R.id.modifica_compiti_linear);
 
-        //listview = (ListView) findViewById(R.id.modifica_compiti_listview);
+        listview = (ListView) findViewById(R.id.modifica_compiti_listview);
 
-        listView = (SwipeMenuListView) findViewById(R.id.listView);
+
 
 
 
@@ -99,7 +101,14 @@ public class ModificaCompitiActivity extends AppCompatActivity{
 
         //Log.d("ModificaCompiti" , "ci sono : " + compiti.size() + "compiti in questa stanza ");
 
-        addCompiti(compiti,temp_persona);
+
+        addCompiti(compiti);
+
+
+
+
+
+
 
 
 
@@ -111,63 +120,6 @@ public class ModificaCompitiActivity extends AppCompatActivity{
             }
         });
 
-        SwipeMenuCreator creator = new SwipeMenuCreator() {
-
-            @Override
-            public void create(SwipeMenu menu) {
-                //create an action that will be showed on swiping an item in the list
-                SwipeMenuItem item1 = new SwipeMenuItem(
-                        getApplicationContext());
-                item1.setBackground(new ColorDrawable(Color.DKGRAY));
-                // set width of an option (px)
-                item1.setWidth(200);
-                item1.setTitle("Action 1");
-                item1.setTitleSize(18);
-                item1.setTitleColor(Color.WHITE);
-                menu.addMenuItem(item1);
-
-                SwipeMenuItem item2 = new SwipeMenuItem(
-                        getApplicationContext());
-                // set item background
-                item2.setBackground(new ColorDrawable(Color.RED));
-                item2.setWidth(200);
-                item2.setTitle("Action 2");
-                item2.setTitleSize(18);
-                item2.setTitleColor(Color.WHITE);
-                menu.addMenuItem(item2);
-            }
-        };
-        //set MenuCreator
-        listView.setMenuCreator(creator);
-        // set SwipeListener
-        listView.setOnSwipeListener(new SwipeMenuListView.OnSwipeListener() {
-
-            @Override
-            public void onSwipeStart(int position) {
-                // swipe start
-            }
-
-            @Override
-            public void onSwipeEnd(int position) {
-                // swipe end
-            }
-        });
-
-        listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
-
-            @Override
-            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
-                Compito value = adapter.getItem(position);
-                switch (index) {
-                    case 0:
-                        Toast.makeText(getApplicationContext(), "Action 1 for "+ value.getDescrizione() , Toast.LENGTH_SHORT).show();
-                        break;
-                    case 1:
-                        Toast.makeText(getApplicationContext(), "Action 2 for "+ value.getDescrizione() , Toast.LENGTH_SHORT).show();
-                        break;
-                }
-                return false;
-            }});
 
 
 
@@ -184,7 +136,7 @@ public class ModificaCompitiActivity extends AppCompatActivity{
 
     private void createDialog() {
 
-        Log.d("RuoliFragment" , "Sono denro alla crezione della Dialog");
+        Log.d("ModificaCompiti" , "Sono denro alla crezione della Dialog");
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         // Get the layout inflater
@@ -221,7 +173,7 @@ public class ModificaCompitiActivity extends AppCompatActivity{
                         compiti.add(compito);
                         //temp_persona.setCompiti(compiti);
                         //temp_persona.setCompitiStanza(indice_stanza,compiti);
-                        addCompiti(compiti,temp_persona);
+                        addCompiti(compiti);
                     }
                 })
                 .setNegativeButton(R.string.annulla, new DialogInterface.OnClickListener() {
@@ -276,12 +228,15 @@ public class ModificaCompitiActivity extends AppCompatActivity{
 
 
 
-    private void addCompiti(ArrayList<Compito> compiti , Persona utente) {
+
+    private void addCompiti(ArrayList<Compito> compiti) {
         Log.d("ModificaCompiti" , "imposto nuovo Adapter" );
 
         adapter = new AdapterCompiti(this , compiti);
-        listView.setAdapter(adapter);
+        listview.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+
+
 
 
 

@@ -105,6 +105,14 @@ public class MainActivity extends AppCompatActivity  {
 
                                 temp_persona = new Persona(null , null , username.getText().toString() , null , null , null);
 
+
+
+                                String JSON_id = readJSON(parts[1]);
+
+
+
+                                readJSONPersona(parts[3]);
+
                                 pref = getApplicationContext().getSharedPreferences("persona", MODE_PRIVATE);
                                 SharedPreferences.Editor editor = pref.edit();
                                 editor.remove("persona");
@@ -118,12 +126,6 @@ public class MainActivity extends AppCompatActivity  {
                                 // Save the changes in SharedPreferences
                                 editor.commit(); // commit changes
 
-
-                                String JSON_id = readJSON(parts[1]);
-
-
-
-                                readJSONPersona(parts[3]);
 
                                 Toast.makeText(getApplicationContext(),g.getIdString(),Toast.LENGTH_SHORT).show();
 
