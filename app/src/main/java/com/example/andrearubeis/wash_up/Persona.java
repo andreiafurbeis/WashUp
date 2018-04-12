@@ -39,7 +39,10 @@ public class Persona implements Parcelable {
         this.profile_image = profile_image;
         this.id_home = id;
         this.stanze = stanze;
+        this.coinquilini=new ArrayList<Persona>();
     }
+
+
 
     public void setCompiti(ArrayList<Compito> new_compiti) {
         this.compiti = new_compiti;

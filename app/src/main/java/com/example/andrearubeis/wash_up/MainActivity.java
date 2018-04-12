@@ -1,6 +1,7 @@
 package com.example.andrearubeis.wash_up;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.andrearubeis.wash_up.R;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -39,6 +41,8 @@ public class MainActivity extends AppCompatActivity  {
     InputStream in = null;
     URL url = null;
     ArrayList<Persona> coinquilini_global;
+    SharedPreferences pref;
+    Persona temp_persona;
 
     //private final String domain_url = "http://192.168.0.24/";   //dominio portatile
     //private final String domain_url = "http://192.168.1.100/";  //dominio fisso
@@ -99,13 +103,27 @@ public class MainActivity extends AppCompatActivity  {
 
                             if(parts[0].equals("1")) {
 
-                                Persona temp_persona = new Persona(null , null , username.getText().toString() , null , null , null);
+                                temp_persona = new Persona(null , null , username.getText().toString() , null , null , null);
+
+                                pref = getApplicationContext().getSharedPreferences("persona", MODE_PRIVATE);
+                                SharedPreferences.Editor editor = pref.edit();
+                                editor.remove("persona");
+                                editor.apply();
+
+                                Gson gson = new Gson();
+                                String json = gson.toJson(temp_persona);
+                                editor.putString("persona", json);
+
+
+                                // Save the changes in SharedPreferences
+                                editor.commit(); // commit changes
+
 
                                 String JSON_id = readJSON(parts[1]);
 
 
 
-                                readJSONPersona(parts[3] , temp_persona);
+                                readJSONPersona(parts[3]);
 
                                 Toast.makeText(getApplicationContext(),g.getIdString(),Toast.LENGTH_SHORT).show();
 
@@ -119,14 +137,31 @@ public class MainActivity extends AppCompatActivity  {
                                     //g.setStanze(home.getVectorStanze());
 
                                     getCoinquilini(temp_persona);
-                                    temp_persona.setCoinquilini(coinquilini_global);
+                                    //Log.d("MainActivity" , "vivi con : " + coinquilini_global.size() + "coinquilini");
+
+                                    /*temp_persona.setCoinquilini(coinquilini_global);
+
+                                    pref = getApplicationContext().getSharedPreferences("persona", MODE_PRIVATE);
+                                    editor = pref.edit();
+                                    editor.remove("persona");
+                                    editor.apply();
+                                    gson = new Gson();
+                                    json = gson.toJson(temp_persona);
+                                    Log.d("MainActivity" , "La persona si chiama " + temp_persona.getNome());
+
+                                    editor.putString("persona", json);
+
+
+
+                                    // Save the changes in SharedPreferences
+                                    editor.commit(); // commit changes
 
 
 
                                     Intent intent = new Intent(MainActivity.this, bottom_activity.class);
-                                    Bundle bundle = new Bundle();
-                                    bundle.putParcelable("persona" , temp_persona);
-                                    bundle.putString("id" , JSON_id);
+                                    //Bundle bundle = new Bundle();
+                                    //bundle.putParcelable("persona" , temp_persona);
+                                    //bundle.putString("id" , JSON_id);
 
                                     //intent.putExtra("id" , JSON_id);
 
@@ -136,7 +171,7 @@ public class MainActivity extends AppCompatActivity  {
 
                                     //intent.putParcelableArrayListExtra("stanze" , home.getStanze());
 
-                                    intent.putExtras(bundle);
+                                    //intent.putExtras(bundle);
 
                                     if(home.getStanze() == null) {
                                         Toast.makeText(getApplicationContext(),"MainActivity : il vettore è NULL ",Toast.LENGTH_SHORT).show();
@@ -145,7 +180,7 @@ public class MainActivity extends AppCompatActivity  {
                                         Log.d("MainActivity-LoadHome" , "Il vettore tornato è : " + home.getStanze().toString());
                                     }
 
-                                    startActivity(intent);
+                                    startActivity(intent);*/
 
                                     /*Bundle args = new Bundle();
                                     //args.putParcelable("stanze", home.getVectorStanze());
@@ -166,12 +201,12 @@ public class MainActivity extends AppCompatActivity  {
 
                                     Toast.makeText(getApplicationContext(),g.getIdString(),Toast.LENGTH_SHORT).show();
 
-                                    Bundle bundle = new Bundle();
-                                    bundle.putParcelable("persona" , temp_persona);
+                                    //Bundle bundle = new Bundle();
+                                    //bundle.putParcelable("persona" , temp_persona);
 
 
                                     Intent intent = new Intent(MainActivity.this, NewHome.class);
-                                    intent.putExtras(bundle);
+                                    //intent.putExtras(bundle);
                                     startActivity(intent);
                                 }
 
@@ -261,7 +296,7 @@ public class MainActivity extends AppCompatActivity  {
 
     }
 
-    public void readJSONPersona (String jsonString , Persona temp) {
+    public void readJSONPersona (String jsonString) {
 
         String nome=null;
         String cognome=null;
@@ -277,9 +312,9 @@ public class MainActivity extends AppCompatActivity  {
             //nome = c.getString("nome");
             //cognome = c.getString("cognome");
             //profile_image = c.getString("profile_image");
-            temp.setCognome(c.getString("cognome"));
-            temp.setNome(c.getString("nome"));
-            temp.setProfileImage(c.getString("profile_image"));
+            temp_persona.setCognome(c.getString("cognome"));
+            temp_persona.setNome(c.getString("nome"));
+            temp_persona.setProfileImage(c.getString("profile_image"));
 
 
         }catch (Exception e){
@@ -326,8 +361,53 @@ public class MainActivity extends AppCompatActivity  {
         //g.setStanze(vectorStanze);
 
 
+        getLogged();
+
+    }
+
+    private void getLogged() {
+        temp_persona.setCoinquilini(coinquilini_global);
+
+        pref = getApplicationContext().getSharedPreferences("persona", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.remove("persona");
+        editor.apply();
+        Gson gson = new Gson();
+        String json = gson.toJson(temp_persona);
+        Log.d("MainActivity" , "La persona si chiama " + temp_persona.getNome());
+
+        editor.putString("persona", json);
 
 
+
+        // Save the changes in SharedPreferences
+        editor.commit(); // commit changes
+
+
+
+        Intent intent = new Intent(MainActivity.this, bottom_activity.class);
+        //Bundle bundle = new Bundle();
+        //bundle.putParcelable("persona" , temp_persona);
+        //bundle.putString("id" , JSON_id);
+
+        //intent.putExtra("id" , JSON_id);
+
+
+        //intent.putExtra("stanze" , parts[2]);
+
+
+        //intent.putParcelableArrayListExtra("stanze" , home.getStanze());
+
+        //intent.putExtras(bundle);
+
+        /*if(home.getStanze() == null) {
+            Toast.makeText(getApplicationContext(),"MainActivity : il vettore è NULL ",Toast.LENGTH_SHORT).show();
+            Log.d("MainActivity-LoadHome" , "Il vettore tornato è NULL");
+        }else{
+            Log.d("MainActivity-LoadHome" , "Il vettore tornato è : " + home.getStanze().toString());
+        }*/
+
+        startActivity(intent);
     }
 
 

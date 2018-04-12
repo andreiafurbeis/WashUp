@@ -34,6 +34,7 @@ public class NewHome extends AppCompatActivity {
     private String id_home;
     Intent main_activity_intent;
     Persona temp_persona;
+    SharedPreferences pref;
 
 
     @Override
@@ -42,10 +43,21 @@ public class NewHome extends AppCompatActivity {
         setContentView(R.layout.activity_new_home);
         ActionBar barra = getSupportActionBar();
         barra.hide();
-        main_activity_intent = getIntent();
+        //main_activity_intent = getIntent();
 
-        temp_persona = main_activity_intent.getParcelableExtra("persona");
+        //temp_persona = main_activity_intent.getParcelableExtra("persona");
 
+
+        pref = getApplicationContext().getSharedPreferences("persona", MODE_PRIVATE);
+
+        Gson gson = new Gson();
+        String json = pref.getString("persona", "");
+        temp_persona = gson.fromJson(json, Persona.class);
+        Log.d("NewHome" , "La persona si chiama " + temp_persona.getNome() + " con mail : " + temp_persona.getMail());
+
+        if(temp_persona == null) {
+            Log.d("NewHome" , "L'oggetto appena scaricato dalle SharedPreference é NULL");
+        }
 
 
         continua = (Button) findViewById(R.id.new_home_button_continua);
@@ -131,15 +143,28 @@ public class NewHome extends AppCompatActivity {
         g.setIdString(id);
         //temp_persona = getIntent().getParcelableExtra("persona");
         temp_persona.setIdHome(id);
+
+        pref = getApplicationContext().getSharedPreferences("persona", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.remove("persona");
+        editor.apply();
+        Gson gson = new Gson();
+        String json = gson.toJson(temp_persona);
+        editor.putString("persona", json);
+
+
+        // Save the changes in SharedPreferences
+        editor.commit(); // commit changes
+
         Toast.makeText(getApplicationContext(), id_home, Toast.LENGTH_SHORT).show();
 
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("persona" , temp_persona);
+        //Bundle bundle = new Bundle();
+        //bundle.putParcelable("persona" , temp_persona);
         if(temp_persona == null ) {
             Log.d("NewHome" , "L'oggetto Persona é NULL");
         }
         Intent intent = new Intent(NewHome.this, ConfigurazioneStanzaActivity.class);
-        intent.putExtras(bundle);
+        //intent.putExtras(bundle);
         startActivity(intent);
     }
 

@@ -82,15 +82,19 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
 
         new_home_intent = getIntent();
 
-        pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        pref = getApplicationContext().getSharedPreferences("persona", MODE_PRIVATE);
 
         Gson gson = new Gson();
         String json = pref.getString("persona", "");
         temp_persona = gson.fromJson(json, Persona.class);
+        Log.d("ConfigurazioneStanze" , "La persona si chiama " + temp_persona.getNome() + temp_persona.getMail() + temp_persona.getProfileImage());
 
         if(temp_persona == null) {
             Log.d("ConfigurazioneStanze" , "L'oggetto appena scaricato dalle SharedPreference é NULL");
         }
+        /*if(temp_persona.getCompitiStanza(1) != null) {
+            Log.d("ConfigurazioneStanze", "ci sono : " + temp_persona.getCompitiStanza(1).size() + "compiti in questa stanza ");
+        }*/
 
         //temp_persona = new_home_intent.getParcelableExtra("persona");
 
@@ -113,7 +117,9 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
         //INIZIALIZZAZIONE DATABASE CON STANZE STANDARD
         inizializationNewHome();
 
-
+        /*if(temp_persona.getCompitiStanza(1) != null) {
+            Log.d("ConfigurazioneStanze", "Dopo InizializationNewHome :  ci sono : " + temp_persona.getCompitiStanza(1).size() + "compiti in questa stanza ");
+        }*/
         Log.w("INFORMATION" , "sto per entrare nella configurazione della nuova classe");
         //INIZIALIZZAZIONE INTERFACCIA DINAMICA
         inizializationInterface();
@@ -134,7 +140,7 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
                         AggiungiStanzaActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("home_id" , g.getIdString());
-                bundle.putParcelable("persona" ,temp_persona);
+                //bundle.putParcelable("persona" ,temp_persona);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -272,6 +278,10 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
         Globals g = Globals.getInstance();
         //temp_persona = getIntent().getParcelableExtra("persona");
 
+        /*if(temp_persona.getCompitiStanza(1) != null) {
+            Log.d("ConfigurazioneStanze", "Dentro InizializationInterface :  ci sono : " + temp_persona.getCompitiStanza(1).size() + "compiti in questa stanza ");
+        }*/
+
         try {
             url = new URL(g.getDomain() + "get_stanze.php?home_id="+temp_persona.getIdHome());
         }catch(IOException e){
@@ -334,6 +344,10 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
         //new_home_intent = this.getIntent();
         //temp_persona = new_home_intent.getParcelableExtra("persona");
 
+        /*if(temp_persona.getCompitiStanza(1) != null) {
+            Log.d("ConfigurazioneStanze", "All'inizio di ReadJSON :  ci sono : " + temp_persona.getCompitiStanza(1).size() + "compiti in questa stanza ");
+        }*/
+
         vectorStanze= new ArrayList<Stanza>();
 
         try {
@@ -353,6 +367,7 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
 
 
                 Stanza stanza = new Stanza(c.getString("stanza_image"),c.getString("nome_stanza"));
+                stanza.setCompiti(readJSONCompiti(c.getString("compiti")));
                 vectorStanze.add(stanza);
 
             }
@@ -366,8 +381,61 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
 
         temp_persona.setStanze(vectorStanze);
 
+        /*if(temp_persona.getCompitiStanza(1) != null) {
+            Log.d("ConfigurazioneStanze", "readJson : ci sono : " + temp_persona.getCompitiStanza(1).size() + "compiti in questa stanza ");
+        }*/
+
         creaInterfaccia();
 
+
+    }
+
+
+    public ArrayList<Compito> readJSONCompiti(String jsonString) {
+        /*if(temp_persona.getCompitiStanza(1) != null) {
+            Log.d("ConfigurazioneStanze", "All'inizio di ReadJSON :  ci sono : " + temp_persona.getCompitiStanza(1).size() + "compiti in questa stanza ");
+        }*/
+
+        ArrayList <Compito> vectorCompiti= new ArrayList<Compito>();
+
+
+        try {
+
+
+            jsonString = "{\"compiti\":"+ jsonString + "}";
+            //jsonString = "{" + jsonString + "}";
+            Log.w("INFORMATION", jsonString);
+            JSONObject jsonObj = new JSONObject(jsonString);
+            JSONArray compiti = jsonObj.getJSONArray("compiti");
+            for(int i = 0; i< compiti.length(); i++) {
+                JSONObject c = compiti.getJSONObject(i);
+
+
+
+                //Log.w("INFORMAIONE" , image_stanza);
+
+
+
+                //Stanza stanza = new Stanza(c.getString("stanza_image"),c.getString("nome_stanza"));
+                Compito compito = new Compito(c.getString("id_compito") , c.getString("descrizione") , c.getString("stanza") , c.getString("id_casa"));
+                vectorCompiti.add(compito);
+
+            }
+
+        }catch (Exception e){
+            Log.d("ConfigurazioneStanze" , "Eccezione catturata nel ReadJSONCompiti");
+        }
+
+        Globals g = Globals.getInstance();
+        //g.setStanze(vectorStanze);
+
+        //temp_persona.setStanze(vectorStanze);
+
+        /*if(temp_persona.getCompitiStanza(1) != null) {
+            Log.d("ConfigurazioneStanze", "readJson : ci sono : " + temp_persona.getCompitiStanza(1).size() + "compiti in questa stanza ");
+        }*/
+
+        return vectorCompiti;
 
     }
 
@@ -378,9 +446,10 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
 
         configurazione_linear = (LinearLayout) findViewById(R.id.configurazione_linear);
 
-        pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        pref = getApplicationContext().getSharedPreferences("persona", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
-
+        editor.remove("persona");
+        editor.apply();
         Gson gson = new Gson();
         String json = gson.toJson(temp_persona);
         editor.putString("persona", json);
@@ -440,12 +509,16 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
                     Intent intent = new Intent(ConfigurazioneStanzaActivity.this,
                             AggiungiStanzaActivity.class);
                     Bundle bundle = new Bundle();
+                    /*if(temp_persona.getCompitiStanza(1) != null) {
+                        Log.d("ConfigurazioneStanze", "Button : ci sono : " + temp_persona.getCompitiStanza(1).size() + "compiti in questa stanza ");
+                    }*/
                     bundle.putString("nome_stanza",stanzaCorrente.getNameStanza());
                     bundle.putString("home_id",g.getIdString());
                     bundle.putInt("update",1);
-                    bundle.putParcelable("persona" , temp_persona);
+                    //bundle.putParcelable("persona" , temp_persona);
                     intent.putExtras(bundle);
                     startActivity(intent);
+                    finish();
                 }
             });
 

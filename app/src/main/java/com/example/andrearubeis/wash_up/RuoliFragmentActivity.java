@@ -61,14 +61,14 @@ public class RuoliFragmentActivity extends Fragment {
 
         //Persona persona = getArguments().getParcelable("persona");
 
-        pref = getActivity().getSharedPreferences("MyPref", MODE_PRIVATE);
+        pref = getActivity().getSharedPreferences("persona", MODE_PRIVATE);
 
         Gson gson = new Gson();
         String json = pref.getString("persona", "");
         temp_persona = gson.fromJson(json, Persona.class);
 
         if(temp_persona == null) {
-            Log.d("ConfigurazioneStanze" , "L'oggetto appena scaricato dalle SharedPreference é NULL");
+            Log.d("RuoliFragment" , "L'oggetto appena scaricato dalle SharedPreference é NULL");
         }
 
         //View view = getView();
@@ -105,6 +105,11 @@ public class RuoliFragmentActivity extends Fragment {
 
         list_view = (ListView) vista.findViewById(R.id.fragment_ruoli_list_view);
         ArrayList<Persona> coinquilini = temp_persona.getCoinquilini();
+        if(coinquilini == null) {
+            coinquilini = new ArrayList<Persona>();
+            Log.d("RuoliFragment" , "Il vettore coinquilini é null");
+
+        }
         coinquilini.add(new Persona(temp_persona.getNome() , temp_persona.getCognome() , temp_persona.getMail() , temp_persona.getProfileImage() , temp_persona.getIdHome() , null));
 
 

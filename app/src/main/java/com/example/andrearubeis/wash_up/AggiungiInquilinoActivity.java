@@ -1,13 +1,17 @@
 package com.example.andrearubeis.wash_up;
 
 import android.app.Fragment;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,6 +25,7 @@ public class AggiungiInquilinoActivity extends AppCompatActivity {
     Button aggiungi_inquilino;
     EditText mail_new_inquilino;
     Persona temp_persona;
+    SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +34,18 @@ public class AggiungiInquilinoActivity extends AppCompatActivity {
 
         aggiungi_inquilino = findViewById(R.id.aggiungi_inquilino_button_aggiungi);
         mail_new_inquilino  = findViewById(R.id.aggiungi_inquilino_plain_text_mail);
-        temp_persona = getIntent().getParcelableExtra("persona");
+        //temp_persona = getIntent().getParcelableExtra("persona");
+
+        pref = getApplicationContext().getSharedPreferences("persona", MODE_PRIVATE);
+
+        Gson gson = new Gson();
+        String json = pref.getString("persona", "");
+        temp_persona = gson.fromJson(json, Persona.class);
+        Log.d("NewHome" , "La persona si chiama " + temp_persona.getNome() + " con mail : " + temp_persona.getMail());
+
+        if(temp_persona == null) {
+            Log.d("NewHome" , "L'oggetto appena scaricato dalle SharedPreference é NULL");
+        }
 
 
         aggiungi_inquilino.setOnClickListener(new View.OnClickListener() {

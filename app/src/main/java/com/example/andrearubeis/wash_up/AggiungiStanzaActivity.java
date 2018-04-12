@@ -73,6 +73,7 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
     private URL url;
     String image_real_path;
     Persona temp_persona;
+    SharedPreferences pref;
 
 
     @Override
@@ -103,7 +104,7 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
 
         }*/
 
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        pref = getApplicationContext().getSharedPreferences("persona", MODE_PRIVATE);
 
         Gson gson = new Gson();
         String json = pref.getString("persona", "");
@@ -112,6 +113,10 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
         if(temp_persona == null) {
             Log.d("ConfigurazioneStanze" , "L'oggetto appena scaricato dalle SharedPreference é NULL");
         }
+
+        /*if(temp_persona.getCompitiStanza(1) != null) {
+            Log.d("AggiungiStanza", "ci sono : " + temp_persona.getCompitiStanza(1).size() + "compiti in questa stanza ");
+        }*/
 
         ControllaCampi(temp_persona);
 
@@ -125,12 +130,12 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
             title_bar.setText("Aggiungi Stanza");
         }
 
-        if(intent.hasExtra("compiti")) {
+        /*if(intent.hasExtra("compiti")) {
             temp_persona.setCompitiStanza(intent.getIntExtra("indice_stanza", -2),intent.<Compito>getParcelableArrayListExtra("compiti"));
             ArrayList<Compito> compiti = intent.<Compito>getParcelableArrayListExtra("compiti");
             //Log.d("AggiungiStanza", "Il vettore compiti é lungo : " + compiti.size());
 
-        }
+        }*/
 
         if(intent.hasExtra("indice_stanza")) {
             int indice = intent.getIntExtra("indice_stanza", -2);
@@ -139,6 +144,7 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
 
             }
         }
+
 
 
 
@@ -275,15 +281,7 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
                 bundle.putString("nome_stanza" , edit_nome_stanza.getText().toString());
 
 
-                SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
-                SharedPreferences.Editor editor = pref.edit();
-                Gson gson = new Gson();
-                String json = gson.toJson(temp_persona);
-                editor.putString("persona", json);
 
-
-                // Save the changes in SharedPreferences
-                editor.commit();
 
 
                 //temp_persona = getIntent().getParcelableExtra("persona");
@@ -544,8 +542,10 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
         temp_persona = intent.getParcelableExtra("persona");
     }*/
 
-
-
-
-
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(AggiungiStanzaActivity.this , ConfigurazioneStanzaActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }

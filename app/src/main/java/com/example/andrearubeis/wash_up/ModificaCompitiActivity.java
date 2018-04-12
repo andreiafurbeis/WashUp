@@ -3,6 +3,8 @@ package com.example.andrearubeis.wash_up;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -17,6 +19,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuItem;
+import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -33,11 +39,14 @@ public class ModificaCompitiActivity extends AppCompatActivity{
     Button button_aggiungi;
     LinearLayout linear;
     Persona temp_persona;
-    ListView listview;
+    //ListView listview;
     Stanza temp;
     ArrayList<Compito> compiti_global;
     int indice_stanza;
     ArrayList<Compito> compiti=null;
+    SwipeMenuListView listView;
+    AdapterCompiti adapter;
+
 
 
     SharedPreferences pref;
@@ -57,7 +66,10 @@ public class ModificaCompitiActivity extends AppCompatActivity{
         title_bar = (Button) findViewById(R.id.modifica_compiti_title_bar);
         linear = findViewById(R.id.modifica_compiti_linear);
 
-        listview = (ListView) findViewById(R.id.modifica_compiti_listview);
+        //listview = (ListView) findViewById(R.id.modifica_compiti_listview);
+
+        listView = (SwipeMenuListView) findViewById(R.id.listView);
+
 
 
 
@@ -69,7 +81,7 @@ public class ModificaCompitiActivity extends AppCompatActivity{
 
         //temp_persona = getIntent().getParcelableExtra("persona");
 
-        pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        pref = getApplicationContext().getSharedPreferences("persona", MODE_PRIVATE);
 
         Gson gson = new Gson();
         String json = pref.getString("persona", "");
@@ -80,10 +92,16 @@ public class ModificaCompitiActivity extends AppCompatActivity{
         }
 
         title_bar.setText(title_bar.getText() + " " + temp.getNameStanza());
-        indice_stanza = getIndiceStanza(temp_persona.getStanze() , getIntent().getStringExtra("nome_stanza"));
+        //indice_stanza = getIndiceStanza(temp_persona.getStanze() , getIntent().getStringExtra("nome_stanza"));
+        indice_stanza = temp_persona.getIndiceStanza(getIntent().getStringExtra("nome_stanza"));
 
         compiti = temp_persona.getCompitiStanza(indice_stanza);
+
+        //Log.d("ModificaCompiti" , "ci sono : " + compiti.size() + "compiti in questa stanza ");
+
         addCompiti(compiti,temp_persona);
+
+
 
         button_aggiungi.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,6 +110,64 @@ public class ModificaCompitiActivity extends AppCompatActivity{
 
             }
         });
+
+        SwipeMenuCreator creator = new SwipeMenuCreator() {
+
+            @Override
+            public void create(SwipeMenu menu) {
+                //create an action that will be showed on swiping an item in the list
+                SwipeMenuItem item1 = new SwipeMenuItem(
+                        getApplicationContext());
+                item1.setBackground(new ColorDrawable(Color.DKGRAY));
+                // set width of an option (px)
+                item1.setWidth(200);
+                item1.setTitle("Action 1");
+                item1.setTitleSize(18);
+                item1.setTitleColor(Color.WHITE);
+                menu.addMenuItem(item1);
+
+                SwipeMenuItem item2 = new SwipeMenuItem(
+                        getApplicationContext());
+                // set item background
+                item2.setBackground(new ColorDrawable(Color.RED));
+                item2.setWidth(200);
+                item2.setTitle("Action 2");
+                item2.setTitleSize(18);
+                item2.setTitleColor(Color.WHITE);
+                menu.addMenuItem(item2);
+            }
+        };
+        //set MenuCreator
+        listView.setMenuCreator(creator);
+        // set SwipeListener
+        listView.setOnSwipeListener(new SwipeMenuListView.OnSwipeListener() {
+
+            @Override
+            public void onSwipeStart(int position) {
+                // swipe start
+            }
+
+            @Override
+            public void onSwipeEnd(int position) {
+                // swipe end
+            }
+        });
+
+        listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+                Compito value = adapter.getItem(position);
+                switch (index) {
+                    case 0:
+                        Toast.makeText(getApplicationContext(), "Action 1 for "+ value.getDescrizione() , Toast.LENGTH_SHORT).show();
+                        break;
+                    case 1:
+                        Toast.makeText(getApplicationContext(), "Action 2 for "+ value.getDescrizione() , Toast.LENGTH_SHORT).show();
+                        break;
+                }
+                return false;
+            }});
 
 
 
@@ -168,8 +244,11 @@ public class ModificaCompitiActivity extends AppCompatActivity{
         Bundle bundle = new Bundle();
         //bundle.putParcelable("persona" , temp_persona);
 
-        SharedPreferences.Editor editor = pref.edit();
+        temp_persona.setCompitiStanza(indice_stanza,compiti_global);
 
+        SharedPreferences.Editor editor = pref.edit();
+        editor.remove("persona");
+        editor.apply();
         Gson gson = new Gson();
         String json = gson.toJson(temp_persona);
         editor.putString("persona", json);
@@ -181,7 +260,7 @@ public class ModificaCompitiActivity extends AppCompatActivity{
 
 
 
-        bundle.putParcelableArrayList("compiti" , compiti_global);
+        //bundle.putParcelableArrayList("compiti" , compiti_global);
         if(compiti_global == null) {
             Log.d("ModificaCompiti" , "I compiti sono NULL");
         }else{
@@ -200,8 +279,8 @@ public class ModificaCompitiActivity extends AppCompatActivity{
     private void addCompiti(ArrayList<Compito> compiti , Persona utente) {
         Log.d("ModificaCompiti" , "imposto nuovo Adapter" );
 
-        AdapterCompiti adapter = new AdapterCompiti(this , compiti);
-        listview.setAdapter(adapter);
+        adapter = new AdapterCompiti(this , compiti);
+        listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
 
@@ -211,7 +290,7 @@ public class ModificaCompitiActivity extends AppCompatActivity{
         //Aggiornare dati locali
 
         compiti_global = compiti;
-        temp_persona = utente;
+
     }
 
 

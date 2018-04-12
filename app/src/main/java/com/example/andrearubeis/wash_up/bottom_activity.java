@@ -1,5 +1,6 @@
 package com.example.andrearubeis.wash_up;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
@@ -8,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -20,6 +22,7 @@ public class bottom_activity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     SharedPreferences pref;
     Persona temp_persona;
+    Fragment selectedFragment = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +42,7 @@ public class bottom_activity extends AppCompatActivity {
 
         //Persona temp_persona = intent.getParcelableExtra("persona");
 
-        pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        pref = getApplicationContext().getSharedPreferences("persona", MODE_PRIVATE);
 
         Gson gson = new Gson();
         String json = pref.getString("persona", "");
@@ -71,7 +74,6 @@ public class bottom_activity extends AppCompatActivity {
                 (new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        Fragment selectedFragment = null;
                         //Intent intent;
                         //Persona temp_persona;
                         Bundle args;
@@ -133,4 +135,41 @@ public class bottom_activity extends AppCompatActivity {
                     }
                 });
     }
+
+    @Override
+    public void onBackPressed() {
+        logOut();
+    }
+
+    public void logOut() {
+
+        final CharSequence[] items = { "si",  selectedFragment.getContext().getString(R.string.annulla) };
+        AlertDialog.Builder builder = new AlertDialog.Builder(selectedFragment.getContext());
+        builder.setTitle("Sei sicuro di voler tornare al login ?");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+
+                if(items[item].equals("si")) {
+
+                    //Toast.makeText(context, "hai cliccato si, ora ti mando al login", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(selectedFragment.getContext(), MainActivity.class);
+                    startActivity(intent);
+
+                }
+
+
+
+                if (items[item].equals(selectedFragment.getContext().getString(R.string.annulla))) {
+                    dialog.dismiss();
+                    //Toast.makeText(context, "hai cliccato annulla, torna sul fragment option", Toast.LENGTH_SHORT).show();
+
+
+                }
+                //Toast.makeText(getApplicationContext(), "hai cliccato su un elemento del dialog", Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.show();
+    }
+
 }
