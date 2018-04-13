@@ -1,7 +1,10 @@
 package com.example.andrearubeis.wash_up;
 
+import android.app.ProgressDialog;
+import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -20,15 +23,28 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.Provider;
 import java.util.ArrayList;
 import java.util.Vector;
 import java.util.concurrent.ExecutionException;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity  {
 
@@ -43,6 +59,7 @@ public class MainActivity extends AppCompatActivity  {
     ArrayList<Persona> coinquilini_global;
     SharedPreferences pref;
     Persona temp_persona;
+    View parentView;
 
     //private final String domain_url = "http://192.168.0.24/";   //dominio portatile
     //private final String domain_url = "http://192.168.1.100/";  //dominio fisso
@@ -65,6 +82,7 @@ public class MainActivity extends AppCompatActivity  {
         registrazione = (Button) findViewById(R.id.login_button_registrazione);
         //log = (TextView) findViewById(R.id.testo);
 
+        parentView = (View) findViewById(R.id.login_parent_view);
 
         invia.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,6 +125,8 @@ public class MainActivity extends AppCompatActivity  {
 
 
 
+
+
                                 String JSON_id = readJSON(parts[1]);
 
 
@@ -125,7 +145,7 @@ public class MainActivity extends AppCompatActivity  {
 
                                 // Save the changes in SharedPreferences
                                 editor.commit(); // commit changes
-
+                                uploadImage();
 
                                 Toast.makeText(getApplicationContext(),g.getIdString(),Toast.LENGTH_SHORT).show();
 
@@ -318,6 +338,8 @@ public class MainActivity extends AppCompatActivity  {
             temp_persona.setNome(c.getString("nome"));
             temp_persona.setProfileImage(c.getString("profile_image"));
 
+            Log.d("MainActivity", "ProfileImage é : " + temp_persona.getProfileImage());
+
 
         }catch (Exception e){
             Log.w("Exception" , "Eccezione durante lettura JSON Login");
@@ -465,6 +487,98 @@ public class MainActivity extends AppCompatActivity  {
             e.printStackTrace(); }
         return null;
     }
+
+
+
+
+    /*private void uploadInfoUser() {
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+
+        // Change base URL to your upload server URL.
+
+        ApiService service = (ApiService) new Retrofit.Builder().baseUrl("http://192.168.0.234:3000").client(client).build().create(Service.class);
+
+
+        File file = new File(temp_persona.getProfileImage());
+
+        RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("upload", file.getName(), reqFile);
+        RequestBody name = RequestBody.create(MediaType.parse("text/plain"), "upload_test");
+
+        retrofit2.Call<okhttp3.ResponseBody> req = service.postImage(body, name);
+        req.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                // Do Something
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }*/
+
+    private void uploadImage() {
+
+        /**
+         * Progressbar to Display if you need
+         */
+        final ProgressDialog progressDialog;
+        progressDialog = new ProgressDialog(MainActivity.this);
+        progressDialog.setMessage(getString(R.string.caricamento_dati));
+        progressDialog.show();
+
+        //Create Upload Server Client
+        ApiService service = RetroClient.getApiService();
+
+        //File creating from selected URL
+        File file = new File(temp_persona.getProfileImage());
+
+        // create RequestBody instance from file
+        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+
+        // MultipartBody.Part is used to send also the actual file name
+        MultipartBody.Part body =
+                MultipartBody.Part.createFormData("uploaded_file", file.getName(), requestFile);
+
+        Call<Result> resultCall = service.uploadImage(body);
+        Log.d("MainActivity","Sto provando a fare l'upload");
+        // finally, execute the request
+        resultCall.enqueue(new Callback<Result>() {
+            @Override
+            public void onResponse(Call<Result> call, Response<Result> response) {
+
+                progressDialog.dismiss();
+
+                // Response Success or Fail
+                if (response.isSuccessful()) {
+                    if (response.body().getResult().equals("success"))
+                        Snackbar.make(parentView,"Upload Success", Snackbar.LENGTH_LONG).show();
+                    else
+                        Snackbar.make(parentView, "Upload Fail", Snackbar.LENGTH_LONG).show();
+
+                } else {
+                    Snackbar.make(parentView, "Upload Fail", Snackbar.LENGTH_LONG).show();
+                }
+
+                /**
+                 * Update Views
+                 */
+                //imagePath = "";
+                //textView.setVisibility(View.VISIBLE);
+                //imageView.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onFailure(Call<Result> call, Throwable t) {
+                progressDialog.dismiss();
+            }
+        });
+    }
+
 
 
 

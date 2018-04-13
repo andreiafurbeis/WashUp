@@ -74,7 +74,6 @@ public class ModificaCompitiActivity extends AppCompatActivity{
 
 
 
-
         ActionBar barra = getSupportActionBar();
         barra.hide();
         Intent intent = getIntent();
