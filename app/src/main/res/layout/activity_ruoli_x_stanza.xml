@@ -8,20 +8,31 @@
     android:background="@color/background_view_color"
     tools:context=".RuoliStanza">
 
-    <Button
-        android:id="@+id/ruoli_x_stanza_title_bar"
-        android:layout_width="0dp"
+
+    <ImageView
+        android:id="@+id/ruoli_x_stanza_image"
+        android:layout_width="355dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:background="@drawable/bagno"
-        android:text="@string/bagno"
-        android:textColor="@android:color/white"
-        android:textSize="20sp"
-
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-         />
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/ruoli_x_stanza_name"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fontFamily="@font/lovelo_black"
+        android:gravity="center"
+        android:text="NOME"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ruoli_x_stanza_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/ruoli_x_stanza_image"
+        app:layout_constraintTop_toTopOf="@+id/ruoli_x_stanza_image" />
 
     <TextView
         android:id="@+id/ruoli_x_stanza_date_bar"
@@ -34,7 +45,7 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ruoli_x_stanza_title_bar" />
+        app:layout_constraintTop_toBottomOf="@+id/ruoli_x_stanza_image" />
 
     <ScrollView
         android:id="@+id/ruoli_x_stanza_scroll_view"

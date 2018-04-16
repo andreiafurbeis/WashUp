@@ -2,6 +2,7 @@ package com.example.andrearubeis.wash_up;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -36,6 +37,7 @@ public class TaskAsincrono extends AsyncTask {
     }
 
 
+
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
@@ -68,7 +70,7 @@ public class TaskAsincrono extends AsyncTask {
         URL url = this.url;
         HttpURLConnection urlConnection = null;
         InputStream in = null;
-
+        Log.d("AsyncTask" , "Sono dentro al doInBackground");
         try {
             //url = new URL(domain_url + "login.php?usr=" + this.search.getMail() + "&psw=" + this.search.getPassword());
             urlConnection = (HttpURLConnection) url.openConnection();

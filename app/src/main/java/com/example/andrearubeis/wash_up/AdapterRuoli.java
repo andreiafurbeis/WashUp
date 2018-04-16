@@ -13,8 +13,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -63,12 +66,30 @@ public class AdapterRuoli extends ArrayAdapter<Persona> {
             rowView = inflater.inflate(R.layout.item_persona, parent, false);
 
         }
-
+        ImageView image_inquilino = (ImageView) rowView.findViewById(R.id.item_persona_imageview);
         Button campanella = (Button) rowView.findViewById(R.id.item_persona_button_bell);
-        TextView row_inquilino = (TextView) rowView.findViewById(R.id.item_persona_text_view_nome);
+        TextView name_inquilino = (TextView) rowView.findViewById(R.id.item_persona_text_view_nome);
         //row_inquilino.setCompoundDrawablesRelativeWithIntrinsicBounds(getDrawable(data[position].getProfileImage()),null,null,null);
-        row_inquilino.setText(data.get(position).getNome());
-        row_inquilino.setCompoundDrawablesWithIntrinsicBounds( getDrawable(data.get(position).getProfileImage()), null, null, null);
+        name_inquilino.setText(data.get(position).getNome());
+        //row_inquilino.setCompoundDrawablesWithIntrinsicBounds( getDrawable(data.get(position).getProfileImage()), null, null, null);
+
+        Log.d("AdapterRuoli","il link dell'immagine é : " + data.get(position).getProfileImage());
+
+
+        Picasso.get().load(data.get(position).getProfileImage()).into(image_inquilino,new com.squareup.picasso.Callback() {
+            @Override
+            public void onSuccess() {
+
+
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+
+        });
+
 
         campanella.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -31,9 +31,18 @@ package com.example.andrearubeis.wash_up;
 
         import com.example.andrearubeis.wash_up.R;
         import com.google.gson.Gson;
+        import com.squareup.picasso.Picasso;
 
+        import java.io.File;
         import java.io.IOException;
         import java.util.HashMap;
+
+        import okhttp3.MediaType;
+        import okhttp3.MultipartBody;
+        import okhttp3.RequestBody;
+        import retrofit2.Call;
+        import retrofit2.Callback;
+        import retrofit2.Response;
 
         import static android.app.Activity.RESULT_OK;
         import static android.content.Context.MODE_PRIVATE;
@@ -50,12 +59,15 @@ public class OptionFragmentActivity extends Fragment {
     Button abbandona_casa;
     TextView nome_persona;
     ImageView profile_image;
+    ImageManager manager_image;
     Context context;
     View vista;
     SharedPreferences pref;
     Persona temp_persona;
+    int flag_new_image;
 
-
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int PICK_IMAGE_REQUEST = 2;
 
     Drawable img_profilo;
     CharSequence nome_profilo;
@@ -99,9 +111,23 @@ public class OptionFragmentActivity extends Fragment {
         Log.d("OptionFragment" , temp_persona.getNome() + " " +  temp_persona.getCognome() + " " + temp_persona.getProfileImage());
         profile_image = (ImageView) vista.findViewById(R.id.fragment_option_profile_image);
 
-        Drawable image_drawable = getDrawable(temp_persona.getProfileImage());
+        /*Drawable image_drawable = getDrawable(temp_persona.getProfileImage());
 
-        profile_image.setImageDrawable(image_drawable);
+        profile_image.setImageDrawable(image_drawable);*/
+
+        Picasso.get().load(temp_persona.getProfileImage()).into(profile_image,new com.squareup.picasso.Callback() {
+            @Override
+            public void onSuccess() {
+
+
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+
+        });
 
 
         nome_persona = (TextView) vista.findViewById(R.id.fragment_option_text_name);
@@ -230,6 +256,13 @@ public class OptionFragmentActivity extends Fragment {
         });
         builder.show();
     }
+
+
+
+
+
+
+
 
 
 

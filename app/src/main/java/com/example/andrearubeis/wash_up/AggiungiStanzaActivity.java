@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.example.andrearubeis.wash_up.R;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -48,6 +49,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AggiungiStanzaActivity extends AppCompatActivity {
 
@@ -175,7 +183,8 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
                     if (flag_new_image == 1) {
                         filePath = manager_image.getImagePath();
                         fileName = manager_image.getImageName();
-                        temp_url = temp_url + "&image_stanza=P " + filePath + " " + fileName;
+                        temp_url = temp_url + "&image_stanza=P " + g.getDomain() + fileName;
+                        uploadImage();
                     }
 
 
@@ -220,7 +229,9 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
                         filePath = manager_image.getImagePath();
                         fileName = manager_image.getImageName();
 
-                        String temp_url = g.getDomain() + "update_room.php?home_id=" + temp.getIdCasa() + "&nuovo_nome_stanza=" + edit_nome_stanza.getText() + "&image_stanza=P " + filePath + " " + fileName;
+                        String temp_url = g.getDomain() + "update_room.php?home_id=" + temp.getIdCasa() + "&nuovo_nome_stanza=" + edit_nome_stanza.getText() + "&image_stanza=" + g.getDomain() +  fileName;
+
+                        uploadImage();
 
                         try {
                             url = new URL(temp_url);
@@ -326,6 +337,81 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
             Log.d("AggiungiStanza" , "Compiti Stanza selezionata NULL");
 
         }*/
+    }
+
+
+
+
+    private void uploadImage() {
+
+        /**
+         * Progressbar to Display if you need
+         */
+        /*final ProgressDialog progressDialog;
+        progressDialog = new ProgressDialog(getApplicationContext());
+        progressDialog.setMessage(getString(R.string.caricamento_dati));
+        progressDialog.show();*/
+
+        //Create Upload Server Client
+        ApiService service = RetroClient.getApiService();
+
+        //File creating from selected URL
+
+        String imageString = manager_image.getImagePath()+"/"+manager_image.getImageName();
+
+        Log.d("AggiungiStanzaUpload" , "il path dell' immagine è : " + imageString);
+
+        File file = new File(imageString);
+
+        // create RequestBody instance from file
+        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+
+        // MultipartBody.Part is used to send also the actual file name
+        MultipartBody.Part body =
+                MultipartBody.Part.createFormData("uploaded_file", file.getName(), requestFile);
+
+        Call<Result> resultCall = service.uploadImage(body);
+        Log.d("MainActivity","Sto provando a fare l'upload");
+        // finally, execute the request
+        resultCall.enqueue(new Callback<Result>() {
+            @Override
+            public void onResponse(Call<Result> call, Response<Result> response) {
+
+                //progressDialog.dismiss();
+
+                // Response Success or Fail
+                if (response.isSuccessful()) {
+                    if (response.body().getResult().equals("success")) {
+                        //Snackbar.make(parentView,"Upload Success", Snackbar.LENGTH_LONG).show();
+                        Log.d("RegistrazioneUpload", "Upload Success , il path sul server è : " + response.body().getValue());
+                        //setImagePicasso();
+
+                    }else {
+                        //Snackbar.make(parentView, "Upload Fail", Snackbar.LENGTH_LONG).show();
+                        Log.d("RegistrazioneUpload", "Upload Fail");
+
+                    }
+                } else {
+                    //Snackbar.make(parentView, "Upload Fail", Snackbar.LENGTH_LONG).show();
+                    Log.d("RegistrazioneUpload" , "Upload Fail");
+
+                }
+
+
+
+
+                //Update Views
+
+                //imagePath = "";
+                //textView.setVisibility(View.VISIBLE);
+                //imageView.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onFailure(Call<Result> call, Throwable t) {
+                //progressDialog.dismiss();
+            }
+        });
     }
 
 
@@ -443,24 +529,22 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
 
                 if(JSON_image_stanza != null) {
 
-                    //mettere immagine stanza DB
-
-                    String[] path = JSON_image_stanza.split(" ");
-
-                    if(path[0].equals("D")) {
-                        image_drawable = getResources().getDrawable(Integer.parseInt(path[1]));
-                    }else{
-
-                        ImageManager manager = new ImageManager(getApplicationContext());
-                        Bitmap image_bitmap = manager.loadImageFromStorage(path[1],path[2]);
-                        image_drawable = new BitmapDrawable(getResources(), image_bitmap);
-
-                    }
-
-
-
                     ImageView view_stanza_image = (ImageView) findViewById(R.id.aggiungi_stanza_profile_image);
-                    view_stanza_image.setImageDrawable(image_drawable);
+
+
+                    Picasso.get().load(JSON_image_stanza).into(view_stanza_image,new com.squareup.picasso.Callback() {
+                        @Override
+                        public void onSuccess() {
+
+
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+
+                        }
+
+                    });
 
 
                 }else{

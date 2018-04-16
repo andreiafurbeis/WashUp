@@ -11,26 +11,36 @@
         android:id="@+id/configurazione_scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="76dp"
         android:background="@color/background_view_color"
+        app:layout_constraintBottom_toTopOf="@+id/configurazione_button_continua"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/configurazione_title_bar">
+
+    </ScrollView>
+
+
+    <LinearLayout
+        android:id="@+id/configurazione_linear"
+        android:layout_width="match_parent"
+        android:layout_height="440dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/background_view_color"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/configurazione_title_bar"
         tools:layout_editor_absoluteX="0dp">
 
-        <LinearLayout
+
+        <ListView
+            android:id="@+id/configurazione_listview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/background_view_color"
-            android:orientation="vertical"
-            android:id="@+id/configurazione_linear">
-
-
-
-
-        </LinearLayout>
-
-    </ScrollView>
-
+            android:layout_height="match_parent" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/configurazione_button_continua"

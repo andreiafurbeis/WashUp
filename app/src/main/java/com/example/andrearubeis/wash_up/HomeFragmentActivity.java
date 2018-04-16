@@ -14,6 +14,7 @@ package com.example.andrearubeis.wash_up;
         import android.view.ViewGroup;
         import android.widget.Button;
         import android.widget.LinearLayout;
+        import android.widget.ListView;
         import android.widget.Toast;
 
         import com.example.andrearubeis.wash_up.R;
@@ -40,7 +41,7 @@ public class HomeFragmentActivity extends Fragment {
     Button buttonStanza[];
     View rootView;
     LinearLayout linear;
-
+    ListView listview;
 
 
 
@@ -78,7 +79,7 @@ public class HomeFragmentActivity extends Fragment {
 
         rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
-
+        listview = (ListView) rootView.findViewById(R.id.fragment_home_listview);
 
         //Find the layout with the id you gave in on the xml
         linear = (LinearLayout) rootView.findViewById(R.id.fragment_home_linear);
@@ -207,9 +208,6 @@ public class HomeFragmentActivity extends Fragment {
         public void creaInterfaccia(ArrayList<Stanza> vectorStanze){
 
 
-        if(linear.getChildCount() > 0) {
-            linear.removeAllViews();
-        }
 
 
 
@@ -221,6 +219,27 @@ public class HomeFragmentActivity extends Fragment {
                 Toast.makeText(getActivity(),"Home Fragment : Il vettore delle stanze è NULL" ,Toast.LENGTH_SHORT).show();
 
             }
+
+
+            if(vectorStanze != null ) {
+                Log.d("ConfigurazioneStanze" , "Il vector ha : " + vectorStanze.size() + " elementi");
+            }else{
+                Log.d("ConfigurazioneStanze" , "Il vector é NULL");
+            }
+
+
+            AdapterStanze adapter = new AdapterStanze(getActivity(), vectorStanze);
+
+
+            if(adapter == null ) {
+                Log.d("ConfigurazioneStanze" , "L'adapter é NULL");
+            }
+
+            listview.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+
+
+            /*
 
             buttonStanza = new Button[vectorStanze.size()];
             Drawable image_drawable = null;
@@ -288,7 +307,7 @@ public class HomeFragmentActivity extends Fragment {
                 linear.addView(buttonStanza[i], params);
 
 
-            }
+            }*/
 
 
 

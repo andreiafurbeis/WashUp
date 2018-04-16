@@ -230,15 +230,12 @@ public class Registrazione extends AppCompatActivity {
 
             @Override
             protected String doInBackground(Bitmap... params) {
-
+                Globals g = Globals.getInstance();
                 HashMap<String,Object> data = new HashMap<>();
-                data.put(UPLOAD_KEY_IMAGE, manager_image.getImagePath() + " " + manager_image.getImageName());
+                data.put(UPLOAD_KEY_IMAGE,  g.getDomain() + manager_image.getImageName());
                 data.put(UPLOAD_KEY_PASS,md5(password.getText().toString()));
                 data.put(UPLOAD_KEY_MAIL,email.getText().toString());
                 data.put(UPLOAD_KEY_USER,username.getText().toString());
-
-
-                Globals g = Globals.getInstance();
 
 
                 String result = rh.sendPostRequest(g.getDomain()+"registrazione.php",data);

@@ -10,9 +10,8 @@
 
     <TextView
         android:id="@+id/item_persona_text_view_nome"
-        android:layout_width="291dp"
+        android:layout_width="167dp"
         android:layout_height="93dp"
-        android:drawableLeft="@drawable/rubeis_icon"
         android:fontFamily="@font/lovelo_black"
         android:gravity="center"
         android:paddingLeft="@dimen/padding_icona_sx"
@@ -20,7 +19,7 @@
         android:textAlignment="center"
         android:textColor="@android:color/white"
         android:textSize="30dp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/item_persona_button_bell"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
@@ -31,4 +30,13 @@
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/item_persona_imageview"
+        android:layout_width="116dp"
+        android:layout_height="92dp"
+        app:layout_constraintEnd_toStartOf="@+id/item_persona_text_view_nome"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/rubeis_icon" />
 </android.support.constraint.ConstraintLayout>

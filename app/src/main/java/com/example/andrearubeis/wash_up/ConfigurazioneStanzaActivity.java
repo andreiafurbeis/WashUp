@@ -10,6 +10,8 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -17,14 +19,18 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.andrearubeis.wash_up.R;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -49,6 +55,7 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
 
     Button add;
     Button continua;
+    ListView listview;
     LinearLayout configurazione_linear;
     Bitmap imageBitmap;
     //HashMap<String,Object> data;
@@ -58,6 +65,10 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
     //URL url = null;
     Intent new_home_intent;
     Persona temp_persona;
+    int i;
+    Target target;
+    String image;
+    Drawable image_drawable = null;
 
     Button buttonStanza[];
 
@@ -75,6 +86,8 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
         //Nascondi AppBar
         ActionBar barra = getSupportActionBar();
         barra.hide();
+
+        listview = (ListView) findViewById(R.id.configurazione_listview);
 
         add = (Button) findViewById(R.id.configurazione_button_add);
         continua = (Button) findViewById(R.id.configurazione_button_continua);
@@ -211,14 +224,17 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
         Globals g = Globals.getInstance();
 
         //INIZIALIZZAZIONE BAGNO
-        Stanza bagno = new Stanza( "D " + R.drawable.bagno , "bagno" , g.getIdString());
+        //Stanza bagno = new Stanza( "D " + R.drawable.bagno , "bagno" , g.getIdString());
+        Stanza bagno = new Stanza( g.getDomain()+"bagno.png", "bagno" , g.getIdString());
 
         //INIZIALIZZAZIONE CUCINA
-        Stanza cucina = new Stanza( "D " + R.drawable.cucina , "cucina" , g.getIdString());
+        //Stanza cucina = new Stanza( "D " + R.drawable.cucina , "cucina" , g.getIdString());
+        Stanza cucina = new Stanza( g.getDomain()+"cucina.png", "cucina" , g.getIdString());
 
         //INIZIALIZZAZIONE CAMERA
 
-        Stanza camera = new Stanza( "D " + R.drawable.camera , "camera" , g.getIdString());
+        //Stanza camera = new Stanza( "D " + R.drawable.camera , "camera" , g.getIdString());
+        Stanza camera = new Stanza( g.getDomain()+"camera.png", "camera" , g.getIdString());
 
 
         data = getURLData(bagno , cucina , camera);
@@ -444,7 +460,6 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
     //CREAZIONE DI TUTTI I BUTTON IN MODO DINAMICO , CON ANCHE L'ASSEGNAMENTO DEGLI ONCLICK
     public void creaInterfaccia(){
 
-        configurazione_linear = (LinearLayout) findViewById(R.id.configurazione_linear);
 
         pref = getApplicationContext().getSharedPreferences("persona", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
@@ -458,20 +473,50 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
         // Save the changes in SharedPreferences
         editor.commit(); // commit changes
 
-        if(configurazione_linear.getChildCount() > 0) {
-            configurazione_linear.removeAllViews();
+
+
+
+
+        if(vectorStanze != null ) {
+            Log.d("ConfigurazioneStanze" , "Il vector ha : " + vectorStanze.size() + " elementi");
+        }else{
+            Log.d("ConfigurazioneStanze" , "Il vector é NULL");
         }
+
+
+        AdapterStanze adapter = new AdapterStanze(getApplicationContext() , vectorStanze);
+
+
+        if(adapter == null ) {
+            Log.d("ConfigurazioneStanze" , "L'adapter é NULL");
+        }
+
+        listview.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
+
+
+
+
+
+
+
+        /*
+
         buttonStanza = new  Button[vectorStanze.size()];
-        Drawable image_drawable = null;
 
 
 
-        for( int i=0; i < vectorStanze.size(); i++){
+
+
+
+        for(i=0; i < vectorStanze.size(); i++){
+
             buttonStanza[i] = new Button(getApplicationContext());
             final Stanza stanzaCorrente = vectorStanze.get(i);
             buttonStanza[i].setText(stanzaCorrente.getNameStanza());
             //BitmapDrawable drawableCorrente = new BitmapDrawable(getApplicationContext().getResources(),stanzaCorrente.getImage());
-            String image = stanzaCorrente.getImageStanza();
+            image = stanzaCorrente.getImageStanza();
             String [] image_path = image.split(" ");
 
             Log.d("immagine","La stringa dell'immagine é : " + image);
@@ -494,6 +539,7 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
 
             buttonStanza[i].setBackground(image_drawable);
 
+            Log.d("ConfigStanze","Dopo Picasso");
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,getResources().getDisplayMetrics().heightPixels/6);
 
@@ -509,9 +555,7 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
                     Intent intent = new Intent(ConfigurazioneStanzaActivity.this,
                             AggiungiStanzaActivity.class);
                     Bundle bundle = new Bundle();
-                    /*if(temp_persona.getCompitiStanza(1) != null) {
-                        Log.d("ConfigurazioneStanze", "Button : ci sono : " + temp_persona.getCompitiStanza(1).size() + "compiti in questa stanza ");
-                    }*/
+
                     bundle.putString("nome_stanza",stanzaCorrente.getNameStanza());
                     bundle.putString("home_id",g.getIdString());
                     bundle.putInt("update",1);
@@ -525,7 +569,9 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
             //buttonStanza[i].setTypeface(Typeface.createFromAsset(getAssets(),loveloBlack));
             configurazione_linear.addView(buttonStanza[i],params);
 
-        }
+
+
+        }*/
 
     }
 

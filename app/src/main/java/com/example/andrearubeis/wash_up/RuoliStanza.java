@@ -9,7 +9,10 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -21,7 +24,9 @@ import java.util.GregorianCalendar;
 public class RuoliStanza extends AppCompatActivity {
 
     TextView text_data;
-    Button button_immagine;
+    //Button button_immagine;
+    ImageView image_stanza;
+    TextView nome_stanza;
     Stanza temp;
 
     //String image_stanza;
@@ -37,7 +42,8 @@ public class RuoliStanza extends AppCompatActivity {
         barra.hide();
 
         text_data = (TextView) findViewById(R.id.ruoli_x_stanza_date_bar);
-        button_immagine = (Button) findViewById(R.id.ruoli_x_stanza_title_bar);
+        image_stanza = (ImageView) findViewById(R.id.ruoli_x_stanza_image);
+        nome_stanza = (TextView) findViewById(R.id.ruoli_x_stanza_name);
 
         Intent intent = getIntent();
 
@@ -76,7 +82,8 @@ public class RuoliStanza extends AppCompatActivity {
 
         Log.d("immagine","RuoliStanza : La stringa dell'immagine é : " + temp.getImageStanza());
 
-        if(image_path[0].equals("D")){
+
+        /*if(image_path[0].equals("D")){
 
             image_drawable = getResources().getDrawable(Integer.parseInt(image_path[1]));
 
@@ -90,11 +97,25 @@ public class RuoliStanza extends AppCompatActivity {
             //Bitmap image_bitmap_scaled = Bitmap.createScaledBitmap(image_bitmap , ViewGroup.LayoutParams.MATCH_PARENT , getResources().getDisplayMetrics().heightPixels/6,true);
             image_drawable = new BitmapDrawable(getResources() , image_bitmap);
 
-        }
+        }*/
+
+        nome_stanza.setText(temp.getNameStanza());
+        Picasso.get().load(temp.getImageStanza()).into(image_stanza,new com.squareup.picasso.Callback() {
+            @Override
+            public void onSuccess() {
 
 
-        button_immagine.setText(temp.getNameStanza());
-        button_immagine.setBackground(image_drawable);
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+
+        });
+
+        //button_immagine.setText(temp.getNameStanza());
+        //button_immagine.setBackground(image_drawable);
 
 
     }
