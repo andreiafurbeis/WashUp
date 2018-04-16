@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -25,6 +26,7 @@ public class ImageManager {
     private String image_path;
     private String image_name;
     private Bitmap image;
+    private Uri image_uri;
 
     public ImageManager(Context ctx) {
 
@@ -100,6 +102,14 @@ public class ImageManager {
             }
         }
         return directory.getAbsolutePath();
+    }
+
+    public Uri getImageUri() {
+        return this.image_uri;
+    }
+
+    public void setImageUri(Uri new_image_uri) {
+        this.image_uri = new_image_uri;
     }
 
     public String getImagePath() {

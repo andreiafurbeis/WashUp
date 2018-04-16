@@ -5,9 +5,23 @@ import com.google.gson.annotations.SerializedName;
 
 public class Result {
 
+
     @SerializedName("result")
     @Expose
     private String result;
+
+    @SerializedName("value")
+    @Expose
+    private String value;
+
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
 
     /**
      * @return The result

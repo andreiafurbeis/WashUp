@@ -145,7 +145,9 @@ public class MainActivity extends AppCompatActivity  {
 
                                 // Save the changes in SharedPreferences
                                 editor.commit(); // commit changes
-                                uploadImage();
+
+
+                                //uploadImage(); //Retrofit
 
                                 Toast.makeText(getApplicationContext(),g.getIdString(),Toast.LENGTH_SHORT).show();
 
@@ -535,6 +537,7 @@ public class MainActivity extends AppCompatActivity  {
         ApiService service = RetroClient.getApiService();
 
         //File creating from selected URL
+
         File file = new File(temp_persona.getProfileImage());
 
         // create RequestBody instance from file
@@ -578,6 +581,7 @@ public class MainActivity extends AppCompatActivity  {
             }
         });
     }
+
 
 
 

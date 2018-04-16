@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.andrearubeis.wash_up.R;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -38,6 +40,13 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Registrazione extends AppCompatActivity {
 
@@ -104,7 +113,8 @@ public class Registrazione extends AppCompatActivity {
                     if(!usr.equals("") && !password.getText().toString().trim().equals("") && !mail.equals("") && flag_new_image!=0) {
 
                         //Invio richiesta di registrazione
-                        registrationRequest();
+                        uploadImage();
+                        //registrationRequest();
 
 
                     }else{
@@ -158,7 +168,11 @@ public class Registrazione extends AppCompatActivity {
         if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             bitmap_image = (Bitmap) data.getExtras().get("data");
 
+
+
             manager_image = new ImageManager(getApplicationContext());
+
+            manager_image.setImageUri(data.getData());
 
             manager_image.imageManager(bitmap_image);
 
@@ -175,6 +189,7 @@ public class Registrazione extends AppCompatActivity {
                 manager_image = new ImageManager(getApplicationContext());
 
                 manager_image.imageManager(bitmap_image);
+                manager_image.setImageUri(filePath);
 
                 //Log.d("Immagine" , "il path dell' immmagine è : " + manager.getImagePath());
 
@@ -256,4 +271,86 @@ public class Registrazione extends AppCompatActivity {
             e.printStackTrace(); }
         return null;
     }
+
+
+
+    private void uploadImage() {
+
+        /**
+         * Progressbar to Display if you need
+         */
+        /*final ProgressDialog progressDialog;
+        progressDialog = new ProgressDialog(getApplicationContext());
+        progressDialog.setMessage(getString(R.string.caricamento_dati));
+        progressDialog.show();*/
+
+        //Create Upload Server Client
+        ApiService service = RetroClient.getApiService();
+
+        //File creating from selected URL
+
+        String imageString = manager_image.getImagePath()+"/"+manager_image.getImageName();
+
+        Log.d("RegistrazioneUpload" , "il path dell' immagine è : " + imageString);
+
+        File file = new File(imageString);
+
+        // create RequestBody instance from file
+        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+
+        // MultipartBody.Part is used to send also the actual file name
+        MultipartBody.Part body =
+                MultipartBody.Part.createFormData("uploaded_file", file.getName(), requestFile);
+
+        Call<Result> resultCall = service.uploadImage(body);
+        Log.d("MainActivity","Sto provando a fare l'upload");
+        // finally, execute the request
+        resultCall.enqueue(new Callback<Result>() {
+            @Override
+            public void onResponse(Call<Result> call, Response<Result> response) {
+
+                //progressDialog.dismiss();
+
+                // Response Success or Fail
+                if (response.isSuccessful()) {
+                    if (response.body().getResult().equals("success")) {
+                        //Snackbar.make(parentView,"Upload Success", Snackbar.LENGTH_LONG).show();
+                        Log.d("RegistrazioneUpload", "Upload Success , il path sul server è : " + response.body().getValue());
+                        registrationRequest();
+                        //setImagePicasso();
+
+                    }else {
+                        //Snackbar.make(parentView, "Upload Fail", Snackbar.LENGTH_LONG).show();
+                        Log.d("RegistrazioneUpload", "Upload Fail");
+
+                    }
+                } else {
+                    //Snackbar.make(parentView, "Upload Fail", Snackbar.LENGTH_LONG).show();
+                    Log.d("RegistrazioneUpload" , "Upload Fail");
+
+                }
+
+
+
+
+                 //Update Views
+
+                //imagePath = "";
+                //textView.setVisibility(View.VISIBLE);
+                //imageView.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onFailure(Call<Result> call, Throwable t) {
+                //progressDialog.dismiss();
+            }
+        });
+    }
+
+
+
+    public void setImagePicasso() {
+        Picasso.get().load("http://washit.dek4.net/photo_20180416_09_06_48.jpg").into(foto_profilo);
+    }
+
 }
