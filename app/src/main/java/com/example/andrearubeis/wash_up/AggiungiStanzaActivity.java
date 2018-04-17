@@ -63,13 +63,12 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
     ImageView stanza_image;
 
 
-
+    ImageView view_stanza_image;
     Button title_bar;
     Button aggiungi;
     Button gestisci_compiti;
     EditText edit_nome_stanza;
     final Activity call = this;
-    Bitmap imageBitmap;
     int flag_new_image;
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -82,6 +81,7 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
     String image_real_path;
     Persona temp_persona;
     SharedPreferences pref;
+    JSONReader reader_json;
 
 
     @Override
@@ -97,36 +97,19 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
         aggiungi = (Button) findViewById(R.id.aggiungi_stanza_button_aggiungi);
         edit_nome_stanza = (EditText)findViewById(R.id.aggiungi_stanza_nome_stanza);
         gestisci_compiti = (Button) findViewById(R.id.aggiungi_stanza_button_compiti);
+        view_stanza_image = (ImageView) findViewById(R.id.aggiungi_stanza_profile_image);
+
+        reader_json = new JSONReader(getApplicationContext());
+
         intent = getIntent();
 
 
-        /*if(intent.hasExtra("persona")) {
-            temp_persona = intent.getParcelableExtra("persona");
-        }else{
-            temp_persona = intent.getParcelableExtra("persona2");
-            Log.d("AggiungiStanza", "sto assegnando persona2 ");
-            if(temp_persona == null ) {
-                Log.d("AggiungiStanza", "tempPersona NULL ");
-
-            }
-
-        }*/
-
+        //SharedPreferences
         pref = getApplicationContext().getSharedPreferences("persona", MODE_PRIVATE);
-
         Gson gson = new Gson();
         String json = pref.getString("persona", "");
         temp_persona = gson.fromJson(json, Persona.class);
 
-        if(temp_persona == null) {
-            Log.d("ConfigurazioneStanze" , "L'oggetto appena scaricato dalle SharedPreference é NULL");
-        }
-
-        /*if(temp_persona.getCompitiStanza(1) != null) {
-            Log.d("AggiungiStanza", "ci sono : " + temp_persona.getCompitiStanza(1).size() + "compiti in questa stanza ");
-        }*/
-
-        ControllaCampi(temp_persona);
 
 
 
@@ -138,12 +121,7 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
             title_bar.setText("Aggiungi Stanza");
         }
 
-        /*if(intent.hasExtra("compiti")) {
-            temp_persona.setCompitiStanza(intent.getIntExtra("indice_stanza", -2),intent.<Compito>getParcelableArrayListExtra("compiti"));
-            ArrayList<Compito> compiti = intent.<Compito>getParcelableArrayListExtra("compiti");
-            //Log.d("AggiungiStanza", "Il vettore compiti é lungo : " + compiti.size());
 
-        }*/
 
         if(intent.hasExtra("indice_stanza")) {
             int indice = intent.getIntExtra("indice_stanza", -2);
@@ -165,108 +143,7 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Globals g = Globals.getInstance();
-
-
-
-                if(intent.hasExtra("update")) {
-
-                    //MODALITÁ DI MODIFICA , IN QUESTO CASO LA STANZA É GIÁ STATA CREATA , MA VUOLE ESSERE MODIFICATA
-
-                    /*String home_id = intent.getStringExtra("home_id");
-                    String nome_stanza = intent.getStringExtra("nome_stanza");*/
-
-                    Stanza temp = new Stanza(null,intent.getStringExtra("nome_stanza"),temp_persona.getIdHome());
-                    //String temp_url = g.getDomain() + "update_room.php?home_id=" + home_id + "&nuovo_nome_stanza=" + edit_nome_stanza.getText() + "&nome_stanza=" + nome_stanza + "";
-                    String temp_url = g.getDomain() + "update_room.php?home_id=" + temp.getIdCasa() + "&nuovo_nome_stanza=" + edit_nome_stanza.getText() + "&nome_stanza=" + temp.getNameStanza() + "";
-                    //Log.d("immagine_click", "il path dell'immagine é : " + filePath.toString());
-                    if (flag_new_image == 1) {
-                        filePath = manager_image.getImagePath();
-                        fileName = manager_image.getImageName();
-                        temp_url = temp_url + "&image_stanza=P " + g.getDomain() + fileName;
-                        uploadImage();
-                    }
-
-
-                    try {
-                        url = new URL(temp_url);
-                    } catch (IOException e) {
-                        Toast.makeText(getApplicationContext(), "Creazione URL non riuscita", Toast.LENGTH_SHORT).show();
-                    }
-
-
-                    try {
-                        new TaskAsincrono(getApplicationContext(), url, new TaskCompleted() {
-                            @Override
-                            public void onTaskComplete(Object resp) {
-
-
-                                String result = getStringFromInputStream((InputStream) resp);
-
-                                if (flag_new_image == 1) {   //DA MODIFICARE IN QUANTO NON É DETTO CHE VENGA CAMBIATA PER FORZA L'IMMAGINA , PUÓ ESSERE CAMBI ANCHE SOLO IL NOME
-                                    Toast.makeText(getApplicationContext(), "Stanza aggiornata con successo", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(getApplicationContext(), "Stanza aggiunta con successo", Toast.LENGTH_SHORT).show();
-                                }
-
-                                onBackPressed();
-
-
-                            }
-                        }).execute().get();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    } catch (ExecutionException e) {
-                        e.printStackTrace();
-                    }
-                }else{
-
-                    //MODALITÁ DI AGGIUNTA , LA STANZA DEVE ANCORA ESSERE AGGIUNTA AL DB
-
-                    //String home_id = intent.getStringExtra("home_id");
-                    Stanza temp = new Stanza(null,null,temp_persona.getIdHome());
-                    if(flag_new_image == 1) {
-                        filePath = manager_image.getImagePath();
-                        fileName = manager_image.getImageName();
-
-                        String temp_url = g.getDomain() + "update_room.php?home_id=" + temp.getIdCasa() + "&nuovo_nome_stanza=" + edit_nome_stanza.getText() + "&image_stanza=" + g.getDomain() +  fileName;
-
-                        uploadImage();
-
-                        try {
-                            url = new URL(temp_url);
-                        } catch (IOException e) {
-                            Toast.makeText(getApplicationContext(), "Creazione URL non riuscita", Toast.LENGTH_SHORT).show();
-                        }
-
-                        try {
-                            new TaskAsincrono(getApplicationContext(), url , new TaskCompleted() {
-                                @Override
-                                public void onTaskComplete(Object resp) {
-
-
-                                    String result = getStringFromInputStream((InputStream) resp);
-
-
-                                    Toast.makeText(getApplicationContext(), "Stanza aggiunta con successo", Toast.LENGTH_SHORT).show();
-
-
-                                    onBackPressed();
-
-
-                                }
-                            }).execute().get();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        } catch (ExecutionException e) {
-                            e.printStackTrace();
-                        }
-
-
-                    }else{
-                        Toast.makeText(getApplicationContext(), "Devi scegliere un immagine prima di aggiungere la Stanza", Toast.LENGTH_SHORT).show();
-                    }
-                }
+                aggiungiStanza();
 
             }
         });
@@ -276,9 +153,11 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
         stanza_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 ImageChooser image_chooser = new ImageChooser(AggiungiStanzaActivity.this , call);
                 //image_chooser.selectImageRoom();
                 image_chooser.selectImage();
+
             }
         });
 
@@ -291,17 +170,6 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
                 Bundle bundle = new Bundle();
                 bundle.putString("nome_stanza" , edit_nome_stanza.getText().toString());
 
-
-
-
-
-                //temp_persona = getIntent().getParcelableExtra("persona");
-
-
-
-                //bundle.putParcelable("persona" , temp_persona);
-                //intent.putExtra("home_id",g.getIdString());
-                //intent.putExtra("update",1);
                 intent_compiti.putExtras(bundle);
                 if(temp_persona == null) {
                     Log.d("AggiungiStanza" , "La persona é NULL" );
@@ -309,37 +177,123 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
                 startActivity(intent_compiti);
                 finish();
 
-
-
             }
         });
 
-
-
-
-
     }
 
 
 
-    private void ControllaCampi(Persona temp_persona) {
-        if(temp_persona.getStanze() == null) {
-            Log.d("AggiungiStanza","Stanze NULL");
-        }
-        if(temp_persona.getIdHome() == null) {
-            Log.d("AggiungiStanza","Stanze NULL");
-        }
-        if(temp_persona.getCompiti() == null) {
-            Log.d("AggiungiStanza" , "Compiti NULL");
-        }
-        int indice = intent.getIntExtra("indice_stanza",-2);
-        /*if(temp_persona.getCompitiStanza(indice) == null) {
-            Log.d("AggiungiStanza" , "Compiti Stanza selezionata NULL");
+    public void aggiungiStanza() {
 
-        }*/
+        Globals g = Globals.getInstance();
+
+        if(intent.hasExtra("update")) {
+
+            //MODALITÁ DI MODIFICA , IN QUESTO CASO LA STANZA É GIÁ STATA CREATA , MA VUOLE ESSERE MODIFICATA
+            Stanza temp = new Stanza(null,intent.getStringExtra("nome_stanza"),temp_persona.getIdHome());
+            String temp_url = g.getDomain() + "update_room.php?home_id=" + temp.getIdCasa() + "&nuovo_nome_stanza=" + edit_nome_stanza.getText() + "&nome_stanza=" + temp.getNameStanza() + "";
+
+            //Log.d("immagine_click", "il path dell'immagine é : " + filePath.toString());
+
+            if (flag_new_image == 1) {
+
+                filePath = manager_image.getImagePath();
+                fileName = manager_image.getImageName();
+                temp_url = temp_url + "&image_stanza=P " + g.getDomain() + fileName;
+                uploadImage();
+
+            }
+
+            try {
+
+                url = new URL(temp_url);
+
+            } catch (IOException e) {
+
+                Toast.makeText(getApplicationContext(), "Creazione URL non riuscita", Toast.LENGTH_SHORT).show();
+
+            }
+
+
+            try {
+
+                new TaskAsincrono(getApplicationContext(), url, new TaskCompleted() {
+                    @Override
+                    public void onTaskComplete(Object resp) {
+
+                        String result = reader_json.getStringFromInputStream((InputStream) resp);
+
+                        if (flag_new_image == 1) {   //DA MODIFICARE IN QUANTO NON É DETTO CHE VENGA CAMBIATA PER FORZA L'IMMAGINA , PUÓ ESSERE CAMBI ANCHE SOLO IL NOME
+
+                            Toast.makeText(getApplicationContext(), "Stanza aggiornata con successo", Toast.LENGTH_SHORT).show();
+
+                        } else {
+
+                            Toast.makeText(getApplicationContext(), "Stanza aggiunta con successo", Toast.LENGTH_SHORT).show();
+
+                        }
+
+                        onBackPressed();
+
+
+                    }
+                }).execute().get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }else{
+
+            //MODALITÁ DI AGGIUNTA , LA STANZA DEVE ANCORA ESSERE AGGIUNTA AL DB
+
+            //String home_id = intent.getStringExtra("home_id");
+            Stanza temp = new Stanza(null,null,temp_persona.getIdHome());
+
+            if(flag_new_image == 1) {
+
+                filePath = manager_image.getImagePath();
+                fileName = manager_image.getImageName();
+                String temp_url = g.getDomain() + "update_room.php?home_id=" + temp.getIdCasa() + "&nuovo_nome_stanza=" + edit_nome_stanza.getText() + "&image_stanza=" + g.getDomain() +  fileName;
+                uploadImage();
+
+                try {
+
+                    url = new URL(temp_url);
+
+                } catch (IOException e) {
+
+                    Toast.makeText(getApplicationContext(), "Creazione URL non riuscita", Toast.LENGTH_SHORT).show();
+
+                }
+
+                try {
+
+                    new TaskAsincrono(getApplicationContext(), url , new TaskCompleted() {
+                        @Override
+                        public void onTaskComplete(Object resp) {
+
+                            String result = reader_json.getStringFromInputStream((InputStream) resp);
+                            Toast.makeText(getApplicationContext(), "Stanza aggiunta con successo", Toast.LENGTH_SHORT).show();
+                            onBackPressed();
+
+                        }
+                    }).execute().get();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+
+
+            }else{
+
+                Toast.makeText(getApplicationContext(), "Devi scegliere un immagine prima di aggiungere la Stanza", Toast.LENGTH_SHORT).show();
+
+            }
+        }
     }
-
-
 
 
     private void uploadImage() {
@@ -416,44 +370,6 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
 
 
 
-
-    //GESTISCE L'ALERT DIALOG DELLA SCELTA DELL'IMMAGINE , IN QUESTO CASO PUÓ ESSERE SOLAMENTE SCELTA DALLA GALLERIA
-    /*@Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data.getData()!=null) {
-            filePath = data.getData();
-
-            Log.d("Immagine_chooser","il path reale dell'immagine é : " + image_real_path);
-            try {
-                imageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                Log.d("Immagine_chooser","il path dell'immagine é : " + filePath);
-                stanza_image.setImageBitmap(imageBitmap);
-                flag_new_image = 1;             //L'IMMAGINE É STATA MODIFICATA
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }*/
-
-
-    /*@Override
-    public void onActivityResult(int requestCode , int resultCode , Intent data) {
-        super.onActivityResult(requestCode,resultCode,data);
-        if(requestCode == 20 && resultCode == RESULT_OK) {
-            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-            String partFileName = currentDateFormat();
-            storeCameraPhotoInSDCard(bitmap , partFileName);
-
-            flag_new_image = 1;
-
-            String storeFileName = "photo_" + partFileName + ".jpg";
-            Bitmap mBitmap = getImageFileFromSDCard(storeFileName);
-
-            stanza_image.setImageBitmap(mBitmap);
-
-        }
-    }*/
-
     @Override
     public void onActivityResult(int requestCode , int resultCode , Intent data) {
         super.onActivityResult(requestCode,resultCode,data);
@@ -461,12 +377,11 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
         Bitmap bitmap_image;
 
         if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+
             bitmap_image = (Bitmap) data.getExtras().get("data");
             flag_new_image = 1;
             manager_image = new ImageManager(getApplicationContext());
-
             manager_image.imageManager(bitmap_image);
-
             stanza_image.setImageBitmap(manager_image.getImageBitmap());
 
         }
@@ -474,19 +389,13 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
         if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data.getData()!=null) {
             Uri URIfilePath = data.getData();
             try {
+
                 bitmap_image = MediaStore.Images.Media.getBitmap(getContentResolver(), URIfilePath);
-                //imageManager(imageBitmap);
-
                 flag_new_image = 1;
-
                 manager_image = new ImageManager(getApplicationContext());
-
                 manager_image.imageManager(bitmap_image);
-
-                //Log.d("Immagine" , "il path dell' immmagine è : " + manager.getImagePath());
-
-
                 stanza_image.setImageBitmap(manager_image.getImageBitmap());
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -500,13 +409,11 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
 
 
     public void inizializzazione() {
+
         Intent intent = getIntent();
-        //String home_id = intent.getStringExtra("home_id");
         String home_id = temp_persona.getIdHome();
         String nome_stanza = intent.getStringExtra("nome_stanza");
-
         flag_new_image = 0; //l'immagine non é stata cambiata
-
         edit_nome_stanza.setText(nome_stanza);
 
         Globals g = Globals.getInstance();
@@ -522,14 +429,15 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
             @Override
             public void onTaskComplete(Object resp) {
 
-                String result = getStringFromInputStream((InputStream) resp);
+                //String result = getStringFromInputStream((InputStream) resp);
+                String result = reader_json.getStringFromInputStream((InputStream) resp);
 
-                String JSON_image_stanza = readJSON(result);
-                Drawable image_drawable = null;
+                //String JSON_image_stanza = readJSON(result);
+                String JSON_image_stanza = reader_json.readJSONStanzaImage(result);
+                //Drawable image_drawable = null;
 
                 if(JSON_image_stanza != null) {
 
-                    ImageView view_stanza_image = (ImageView) findViewById(R.id.aggiungi_stanza_profile_image);
 
 
                     Picasso.get().load(JSON_image_stanza).into(view_stanza_image,new com.squareup.picasso.Callback() {
@@ -559,72 +467,6 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
 
     }
 
-    private static String getStringFromInputStream(InputStream is) {
-
-        BufferedReader br = null;
-        StringBuilder sb = new StringBuilder();
-
-        String line;
-        try {
-
-            br = new BufferedReader(new InputStreamReader(is));
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        return sb.toString();
-    }
-
-    public String readJSON (String jsonString) {
-
-        String id=null;
-
-        try {
-
-
-            jsonString = "{\"info\":"+ jsonString + "}";
-            Log.w("INFORMATION", jsonString);
-            JSONObject jsonObj = new JSONObject(jsonString);
-            JSONArray info = jsonObj.getJSONArray("info");
-            JSONObject c = info.getJSONObject(0);
-            id = c.getString("stanza_image");
-
-            //Log.w("INFORMAIONE" , image_stanza);
-
-            //Bitmap immagine = stringToBitmap(image_stanza);
-
-
-
-        }catch (Exception e){
-
-        }
-
-        return id;
-
-    }
-
-
-
-
-    /*@Override
-    protected void onResume() {
-        super.onResume();
-        Log.d("AggiungiStanzaActivity" , "Sono nell'OnResume");
-        Intent intent = getIntent();
-        temp_persona = intent.getParcelableExtra("persona");
-    }*/
 
     @Override
     public void onBackPressed() {

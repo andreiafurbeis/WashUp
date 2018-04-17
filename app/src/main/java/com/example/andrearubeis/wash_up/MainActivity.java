@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity  {
                     public void onTaskComplete(Object resp) {
 
 
-                        String result = getStringFromInputStream((InputStream) resp);
+                        String result = json_reader.getStringFromInputStream((InputStream) resp);
 
                         Toast.makeText(getApplicationContext(),result,Toast.LENGTH_SHORT).show();
 
@@ -255,7 +255,7 @@ public class MainActivity extends AppCompatActivity  {
 
                 Globals g = Globals.getInstance();
 
-                String result = getStringFromInputStream((InputStream) resp);
+                String result = json_reader.getStringFromInputStream((InputStream) resp);
 
                 Toast.makeText(getApplicationContext(),result,Toast.LENGTH_SHORT).show();
 
@@ -293,38 +293,6 @@ public class MainActivity extends AppCompatActivity  {
     }
 
 
-    /**
-     *
-     * @param is
-     * @return trasforma l'InputStream in Stringa
-     */
-    private static String getStringFromInputStream(InputStream is) {
-
-        BufferedReader br = null;
-        StringBuilder sb = new StringBuilder();
-
-        String line;
-        try {
-
-            br = new BufferedReader(new InputStreamReader(is));
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        return sb.toString();
-    }
 
 
     /**

@@ -29,12 +29,10 @@ public class NewHome extends AppCompatActivity {
 
 
 
-    private Button continua;
-
-    private String id_home;
-    Intent main_activity_intent;
+    Button continua;
     Persona temp_persona;
     SharedPreferences pref;
+    JSONReader reader_json;
 
 
     @Override
@@ -43,6 +41,8 @@ public class NewHome extends AppCompatActivity {
         setContentView(R.layout.activity_new_home);
         ActionBar barra = getSupportActionBar();
         barra.hide();
+
+        reader_json = new JSONReader(getApplicationContext());
 
 
         pref = getApplicationContext().getSharedPreferences("persona", MODE_PRIVATE);
@@ -97,7 +97,7 @@ public class NewHome extends AppCompatActivity {
             new TaskAsincrono(getApplicationContext(), url, new TaskCompleted() {
                 @Override
                 public void onTaskComplete(Object resp) {
-                    String result = getStringFromInputStream((InputStream) resp);
+                    String result = reader_json.getStringFromInputStream((InputStream) resp);
                     goToConfiguration(result);
                 }
             }).execute().get();
@@ -142,7 +142,7 @@ public class NewHome extends AppCompatActivity {
         // Save the changes in SharedPreferences
         editor.commit(); // commit changes
 
-        Toast.makeText(getApplicationContext(), id_home, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), id_home, Toast.LENGTH_SHORT).show();
 
 
         if(temp_persona == null ) {
@@ -154,36 +154,5 @@ public class NewHome extends AppCompatActivity {
     }
 
 
-    /**
-     *
-     * @param is
-     * @return trasforma l'InputStream in Stringa
-     */
-    private static String getStringFromInputStream(InputStream is) {
 
-        BufferedReader br = null;
-        StringBuilder sb = new StringBuilder();
-
-        String line;
-        try {
-
-            br = new BufferedReader(new InputStreamReader(is));
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        return sb.toString();
-    }
 }

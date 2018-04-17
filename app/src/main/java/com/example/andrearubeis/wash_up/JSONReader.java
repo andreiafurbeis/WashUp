@@ -7,6 +7,10 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class JSONReader {
@@ -213,6 +217,75 @@ public class JSONReader {
         return null;
 
     }
+
+
+    /**
+     *
+     * @param jsonString
+     * @return Stringa dell'URL della foto della stanza
+     */
+    public String readJSONStanzaImage (String jsonString) {
+
+        String url=null;
+
+        try {
+
+
+            jsonString = "{\"info\":"+ jsonString + "}";
+            Log.w("INFORMATION", jsonString);
+            JSONObject jsonObj = new JSONObject(jsonString);
+            JSONArray info = jsonObj.getJSONArray("info");
+            JSONObject c = info.getJSONObject(0);
+            url = c.getString("stanza_image");
+
+            //Log.w("INFORMAIONE" , image_stanza);
+
+            //Bitmap immagine = stringToBitmap(image_stanza);
+
+
+
+        }catch (Exception e){
+
+        }
+
+        return url;
+
+    }
+
+
+    /**
+     *
+     * @param is
+     * @return Trasforma l'InputStream in Stringa
+     */
+    public String getStringFromInputStream(InputStream is) {
+
+        BufferedReader br = null;
+        StringBuilder sb = new StringBuilder();
+
+        String line;
+        try {
+
+            br = new BufferedReader(new InputStreamReader(is));
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return sb.toString();
+    }
+
 
 
 }

@@ -26,11 +26,14 @@ public class AggiungiInquilinoActivity extends AppCompatActivity {
     EditText mail_new_inquilino;
     Persona temp_persona;
     SharedPreferences pref;
+    JSONReader reader_json;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_aggiungi_inquilino);
+
+        reader_json = new JSONReader(getApplicationContext());
 
         aggiungi_inquilino = findViewById(R.id.aggiungi_inquilino_button_aggiungi);
         mail_new_inquilino  = findViewById(R.id.aggiungi_inquilino_plain_text_mail);
@@ -83,7 +86,7 @@ public class AggiungiInquilinoActivity extends AppCompatActivity {
                 @Override
                 public void onTaskComplete(Object resp) {
 
-                    String result = getStringFromInputStream((InputStream) resp);
+                    String result = reader_json.getStringFromInputStream((InputStream) resp);
 
                     if(result.equals("0")) {
                         Toast.makeText(getApplicationContext() , "Errore durante l'aggiunta del nuovo inquilino" , Toast.LENGTH_SHORT).show();
@@ -102,36 +105,6 @@ public class AggiungiInquilinoActivity extends AppCompatActivity {
         }
 
 
-    }
-
-
-
-    private static String getStringFromInputStream(InputStream is) {
-
-        BufferedReader br = null;
-        StringBuilder sb = new StringBuilder();
-
-        String line;
-        try {
-
-            br = new BufferedReader(new InputStreamReader(is));
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        return sb.toString();
     }
 
 }

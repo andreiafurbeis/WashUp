@@ -45,12 +45,7 @@ public class ModificaCompitiActivity extends AppCompatActivity{
     ArrayList<Compito> compiti_global;
     int indice_stanza;
     ArrayList<Compito> compiti=null;
-
     AdapterCompiti adapter;
-
-
-
-
     SharedPreferences pref;
 
 
@@ -63,24 +58,14 @@ public class ModificaCompitiActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modifica_compiti);
-        button_aggiungi = (Button) findViewById(R.id.modifica_compiti_button_add);
-
-        title_bar = (Button) findViewById(R.id.modifica_compiti_title_bar);
-        linear = findViewById(R.id.modifica_compiti_linear);
-
-        listview = (ListView) findViewById(R.id.modifica_compiti_listview);
-
-
-
-
-
         ActionBar barra = getSupportActionBar();
         barra.hide();
-        Intent intent = getIntent();
-        //String nome_stanza = intent.getStringExtra("nome_stanza");
-        temp = new Stanza (null, intent.getStringExtra("nome_stanza") ,null);
 
-        //temp_persona = getIntent().getParcelableExtra("persona");
+        button_aggiungi = (Button) findViewById(R.id.modifica_compiti_button_add);
+        title_bar = (Button) findViewById(R.id.modifica_compiti_title_bar);
+        linear = findViewById(R.id.modifica_compiti_linear);
+        listview = (ListView) findViewById(R.id.modifica_compiti_listview);
+
 
         pref = getApplicationContext().getSharedPreferences("persona", MODE_PRIVATE);
 
@@ -91,6 +76,15 @@ public class ModificaCompitiActivity extends AppCompatActivity{
         if(temp_persona == null) {
             Log.d("ConfigurazioneStanze" , "L'oggetto appena scaricato dalle SharedPreference é NULL");
         }
+
+
+
+        Intent intent = getIntent();
+
+        temp = new Stanza (null, intent.getStringExtra("nome_stanza") ,null);
+
+        //temp_persona = getIntent().getParcelableExtra("persona");
+
 
         title_bar.setText(title_bar.getText() + " " + temp.getNameStanza());
         //indice_stanza = getIndiceStanza(temp_persona.getStanze() , getIntent().getStringExtra("nome_stanza"));
@@ -104,13 +98,6 @@ public class ModificaCompitiActivity extends AppCompatActivity{
         addCompiti(compiti);
 
 
-
-
-
-
-
-
-
         button_aggiungi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,10 +105,6 @@ public class ModificaCompitiActivity extends AppCompatActivity{
 
             }
         });
-
-
-
-
 
     }
 
@@ -235,12 +218,6 @@ public class ModificaCompitiActivity extends AppCompatActivity{
         listview.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
-
-
-
-
-
-
         //Aggiornare dati locali
 
         compiti_global = compiti;
@@ -279,12 +256,7 @@ public class ModificaCompitiActivity extends AppCompatActivity{
                 @Override
                 public void onTaskComplete(Object resp) {
 
-
-
-
-
                     Toast.makeText(getApplicationContext(), "Compiti aggiunti con successo", Toast.LENGTH_SHORT).show();
-
 
                 }
             }).execute().get();
@@ -296,43 +268,6 @@ public class ModificaCompitiActivity extends AppCompatActivity{
     }
 
 
-    private static String getStringFromInputStream(InputStream is) {
-
-        BufferedReader br = null;
-        StringBuilder sb = new StringBuilder();
-
-        String line;
-        try {
-
-            br = new BufferedReader(new InputStreamReader(is));
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        return sb.toString();
-    }
-
-    private int getIndiceStanza(ArrayList<Stanza> stanze , String name_stanza) {
-        int position = -1;
-        for(int i = 0 ; i < stanze.size() ; i++) {
-            if ( name_stanza.equals(stanze.get(i).getNameStanza()) ) {
-                position = i;
-            }
-        }
-        return position;
-    }
 
 }
 
