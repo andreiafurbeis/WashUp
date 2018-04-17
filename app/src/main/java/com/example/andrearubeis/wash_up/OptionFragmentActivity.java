@@ -55,6 +55,7 @@ public class OptionFragmentActivity extends Fragment {
     Button log_out;
     Button modifica_casa;
     Button contact_us;
+    Button about;
     Button aggiungi_inquilino;
     Button abbandona_casa;
     TextView nome_persona;
@@ -132,6 +133,24 @@ public class OptionFragmentActivity extends Fragment {
 
         nome_persona = (TextView) vista.findViewById(R.id.fragment_option_text_name);
         nome_persona.setText(temp_persona.getNome() + " " + temp_persona.getCognome());
+
+
+
+
+        //azione pulsante about
+        about = (Button) vista.findViewById(R.id.fragment_option_button_about);
+        about.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Intent intent = new Intent(getActivity(),AboutActivity.class);
+                Intent intent = new Intent(getActivity(),ConfigurazioneStanzaTutorial.class);
+                startActivity(intent);
+            }
+        });
+
+
+
+
 
         //azione pulsante modifica_casa
         modifica_casa = (Button) vista.findViewById(R.id.fragment_option_button_modifica_casa);

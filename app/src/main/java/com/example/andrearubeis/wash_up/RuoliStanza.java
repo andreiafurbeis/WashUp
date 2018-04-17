@@ -8,12 +8,16 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -24,10 +28,10 @@ import java.util.GregorianCalendar;
 public class RuoliStanza extends AppCompatActivity {
 
     TextView text_data;
-    //Button button_immagine;
-    ImageView image_stanza;
     TextView nome_stanza;
+    ImageView image_stanza;
     Stanza temp;
+    ListView list;
 
     //String image_stanza;
     //String nome_stanza;
@@ -43,15 +47,65 @@ public class RuoliStanza extends AppCompatActivity {
 
         text_data = (TextView) findViewById(R.id.ruoli_x_stanza_date_bar);
         image_stanza = (ImageView) findViewById(R.id.ruoli_x_stanza_image);
-        nome_stanza = (TextView) findViewById(R.id.ruoli_x_stanza_name);
+        nome_stanza = (TextView) findViewById(R.id.ruoli_x_stanza_name) ;
+
+
 
         Intent intent = getIntent();
 
+        //temp = new Stanza( intent.getStringExtra("image_stanza") , intent.getStringExtra("nome_stanza") , intent.getStringExtra("home_id"));
         //nome_stanza = intent.getStringExtra("nome_stanza");
         //image_stanza = intent.getStringExtra("image_stanza");
         //id_home = intent.getStringExtra("home_id");
 
-        temp = new Stanza( intent.getStringExtra("image_stanza") , intent.getStringExtra("nome_stanza") , intent.getStringExtra("home_id"));
+
+
+        //creo un ArrayList provvisorio per vedere se tutto funziona
+        //campo stanza e' l'immagine della persona che deve fare il copito
+        //uso un'immagine profilo di default
+
+
+        /*String img_profilo = "\"/data/user/0/com.example.andrearubeis.wash_up/app_imageDir photo_20180413_09_48_28.jpg\"";
+
+
+        ArrayList<Compito> compiti = new ArrayList<Compito>();
+        Compito cmp = new Compito(null,"lava",img_profilo,null);
+        Compito cmp1 = new Compito(null,"baadsas",img_profilo,null);
+        Compito cmp2 = new Compito(null,"bagndsdsdo",img_profilo,null);
+        Compito cmp3 = new Compito(null,"bagdsdsno",img_profilo,null);
+        Compito cmp4 = new Compito(null,"bagddddno",img_profilo,null);
+
+        compiti.add(cmp);
+        compiti.add(cmp1);
+        compiti.add(cmp2);
+        compiti.add(cmp3);
+        compiti.add(cmp4);*/
+
+
+
+
+
+
+        //temp = new Stanza( intent.getStringExtra("image_stanza") , intent.getStringExtra("nome_stanza") , intent.getStringExtra("home_id"));
+        temp = intent.getParcelableExtra("stanza");
+        list = findViewById(R.id.ruoli_x_stanza_list);
+        if (temp.getCompiti()!= null){
+            Log.d("RuoliStanza","IL VETTORE A: " + temp.getCompiti().size());
+        }else{
+            Log.d("RuoliStanza","IL VETTORE E' NULL");
+
+        }
+
+        //DA RIFARE , I COMPITI DA STAMPARE QUI DENTRO DEVO PRENDERLI DAL DATABASE , QUERY PER PRENDERE I COMPITI DA ASSEGNAMENTI (AVRO' UN FILE JSON DA GESTIRE CON ANCHE L' IMMAGINE DELL' INQUILINO CHE DEVE SVOLGERLO)
+
+        AdapterRuoliStanza adapter = new AdapterRuoliStanza(this,temp.getCompiti());
+        list.setAdapter(adapter);
+
+
+
+
+
+
 
 
     }
@@ -78,32 +132,16 @@ public class RuoliStanza extends AppCompatActivity {
         String data_odierna = giorni_settimana[gc.get(Calendar.DAY_OF_WEEK)-1] + " " + gc.get(Calendar.DAY_OF_MONTH) + " " + mesi[gc.get(Calendar.MONTH)];
         text_data.setText(data_odierna);
 
-        String [] image_path = temp.getImageStanza().split(" ");
+
 
         Log.d("immagine","RuoliStanza : La stringa dell'immagine é : " + temp.getImageStanza());
 
 
-        /*if(image_path[0].equals("D")){
-
-            image_drawable = getResources().getDrawable(Integer.parseInt(image_path[1]));
-
-        }else{
-
-            //Toast.makeText(getApplicationContext(),"Sto mettendo l'immagine con il metodo nuovo" ,Toast.LENGTH_SHORT).show();
-            //ImageManager manager = new ImageManager(getApplicationContext());
-            ImageManager manager = new ImageManager(getApplicationContext());
-
-            Bitmap image_bitmap = manager.loadImageFromStorage(image_path[1],image_path[2]);
-            //Bitmap image_bitmap_scaled = Bitmap.createScaledBitmap(image_bitmap , ViewGroup.LayoutParams.MATCH_PARENT , getResources().getDisplayMetrics().heightPixels/6,true);
-            image_drawable = new BitmapDrawable(getResources() , image_bitmap);
-
-        }*/
-
         nome_stanza.setText(temp.getNameStanza());
-        Picasso.get().load(temp.getImageStanza()).into(image_stanza,new com.squareup.picasso.Callback() {
+        Picasso.get().load(temp.getImageStanza()).into(image_stanza,new com.squareup.picasso.Callback(){
+
             @Override
             public void onSuccess() {
-
 
             }
 
@@ -111,13 +149,27 @@ public class RuoliStanza extends AppCompatActivity {
             public void onError(Exception e) {
 
             }
-
         });
-
-        //button_immagine.setText(temp.getNameStanza());
-        //button_immagine.setBackground(image_drawable);
 
 
     }
+
+
+
+   /* public Drawable getDrawable(String image) {
+        Drawable image_drawable;
+        String[] image_path = image.split(" ");
+
+
+        Toast.makeText(getApplicationContext(), "Sto mettendo l'immagine con il metodo nuovo", Toast.LENGTH_SHORT).show();
+        ImageManager manager = new ImageManager(getApplicationContext());
+        Bitmap image_bitmap = manager.loadImageFromStorage(image_path[0], image_path[1]);
+        Log.d("OptionFragment" , "il path è : " + image_path[0] + "   " + image_path[1]);
+        Bitmap image_bitmap_scaled = Bitmap.createScaledBitmap(image_bitmap , ViewGroup.LayoutParams.MATCH_PARENT , getResources().getDisplayMetrics().heightPixels/6,true);
+        image_drawable = new BitmapDrawable(getResources(), image_bitmap);
+
+
+        return image_drawable;
+    }*/
 
 }

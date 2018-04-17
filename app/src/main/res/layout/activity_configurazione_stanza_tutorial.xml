@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_view_color"
+    tools:context=".ConfigurazioneStanzaActivity">
+
+
+    <Button
+        android:id="@+id/configurazione_tutorial_button_continua"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button"
+        android:fontFamily="@font/lovelo_black"
+        android:text="@string/continua"
+        android:textColor="@android:color/white"
+        android:textSize="21sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <Button
+        android:id="@+id/configurazione_tutorial_button_add"
+        android:layout_width="wrap_content"
+        android:layout_height="87dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/add_button"
+        android:gravity="bottom
+"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/configurazione_tutorial_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/title_bar_bottom_navigation"
+        android:text="@string/configurazione_stanze"
+        android:textColor="@android:color/white"
+        android:textAlignment="viewStart"
+        android:paddingLeft="16dp"
+
+        android:fontFamily="@font/lovelo_black"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/configurazione_tutorial_text_view_benvenuti"
+        android:layout_width="wrap_content"
+        android:layout_height="96dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/holo_green_dark"
+        android:fontFamily="@font/lovelo_black"
+        android:gravity="center"
+        android:text="Questo tutorial ti mostrerà come aggiungere una stanza alla tua casa e aggiungerervi una lista di compiti da svolgere"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/configurazione_tutorial_title_bar" />
+
+    <Button
+        android:id="@+id/configurazione_tutorial_button_skip"
+        android:layout_width="180dp"
+        android:layout_height="51dp"
+        android:background="@color/bottomNavigationColor"
+        android:fontFamily="@font/lovelo_black"
+        android:text="salta il tutorial >"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/configurazione_tutorial_text_view_benvenuti" />
+
+</android.support.constraint.ConstraintLayout>

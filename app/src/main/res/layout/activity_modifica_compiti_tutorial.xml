@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_view_color">
+
+        <Button
+            android:id="@+id/modifica_compiti_tutorial_title_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/title_bar_bottom_navigation"
+            android:fontFamily="@font/lovelo_black"
+            android:paddingLeft="16dp"
+            android:text="@string/compiti"
+            android:textAlignment="viewStart"
+
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/modifica_compiti_tutorial_button_add"
+            android:layout_width="wrap_content"
+            android:layout_height="87dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/add_button"
+            android:gravity="bottom"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <ScrollView
+            android:id="@+id/modifica_compiti_tutorial_scroll"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/modifica_compiti_tutorial_title_bar">
+
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/modifica_compiti_tutorial_linear"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/modifica_compiti_tutorial_scroll"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/modifica_compiti_tutorial_title_bar"
+            app:layout_constraintVertical_bias="0.0">
+
+            <com.baoyz.swipemenulistview.SwipeMenuListView
+                android:id="@+id/modifica_compiti_tutorial_listview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical" />
+
+
+        </LinearLayout>
+
+
+    </android.support.constraint.ConstraintLayout>
+
+</RelativeLayout>

@@ -10,38 +10,6 @@ import java.util.ArrayList;
  * Created by andrearubeis on 28/12/17.
  */
 
-/*public class Stanza {
-
-    private String nome;
-    private String stanza_image;
-
-    public Stanza(String image , String nome) {
-        this.nome=nome;
-        this.stanza_image=image;
-    }
-
-    public void setName(String name) {
-        this.nome = name;
-    }
-
-    public void setImage(String image) {
-        this.stanza_image = image;
-    }
-
-    public String getName() {
-        return this.nome;
-    }
-
-    public String getImage() {
-        return this.stanza_image;
-    }
-
-    public String toString() {
-        return this.nome;
-    }
-
-
-}*/
 
 
 public class Stanza implements Parcelable {
@@ -52,13 +20,13 @@ public class Stanza implements Parcelable {
     private ArrayList<Compito> compiti;
 
 
-    public Stanza(String image , String nome) {
-        this.nome=nome;
-        this.stanza_image=image;
+    public Stanza(String image, String nome) {
+        this.nome = nome;
+        this.stanza_image = image;
         this.compiti = new ArrayList<Compito>();
     }
 
-    public Stanza(String image , String nome , String id) {
+    public Stanza(String image, String nome, String id) {
         this.id_casa = id;
         this.nome = nome;
         this.stanza_image = image;
@@ -102,11 +70,16 @@ public class Stanza implements Parcelable {
     }
 
 
-
-
     protected Stanza(Parcel in) {
         nome = in.readString();
         stanza_image = in.readString();
+        id_casa = in.readString();
+        if (in.readByte() == 0x01) {
+            compiti = new ArrayList<Compito>();
+            in.readList(compiti, Compito.class.getClassLoader());
+        } else {
+            compiti = null;
+        }
     }
 
     @Override
@@ -118,6 +91,13 @@ public class Stanza implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(nome);
         dest.writeString(stanza_image);
+        dest.writeString(id_casa);
+        if (compiti == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(compiti);
+        }
     }
 
     @SuppressWarnings("unused")

@@ -119,9 +119,16 @@ public class AdapterStanze extends ArrayAdapter<Stanza> {
                     Globals g = Globals.getInstance();
                     Intent intent = new Intent(context,
                             RuoliStanza.class);
-                    intent.putExtra("nome_stanza",data.get(position).getNameStanza());
-                    intent.putExtra("image_stanza",data.get(position).getImageStanza());
-                    intent.putExtra("home_id",g.getIdString());
+                    //intent.putExtra("nome_stanza",data.get(position).getNameStanza());
+                    //intent.putExtra("image_stanza",data.get(position).getImageStanza());
+                    //intent.putExtra("home_id",g.getIdString());
+                    //intent.putp("stanza",data.get(position));
+                    Bundle bundle = new Bundle();
+                    Log.d("AdapterStanze","il vettore compiti di " + data.get(position).getNameStanza() + " ha " + data.get(position).getCompiti().size());
+                    bundle.putParcelable("stanza",data.get(position));
+                    bundle.putString("home_id",g.getIdString());
+                    intent.putExtras(bundle);
+
                     context.startActivity(intent);
                 }
 

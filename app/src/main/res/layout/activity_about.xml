@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@color/background_view_color"
+    android:layout_height="match_parent"
+    tools:context="com.example.andrearubeis.wash_up.AboutActivity">
+
+    <TextView
+        android:id="@+id/about_text_view_1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="   WashUp Version 1.8"
+        android:fontFamily="@font/lovelo_black"
+        android:textColor="@android:color/white"
+        android:textSize="20dp"
+
+        android:textAlignment="viewStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/about_text_view_2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="    Developed by Andrea Rubeis and Nicolo Ricci"
+        android:fontFamily="@font/lovelo_black"
+        android:textColor="@android:color/white"
+        android:textSize="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/about_text_view_1" />
+</android.support.constraint.ConstraintLayout>

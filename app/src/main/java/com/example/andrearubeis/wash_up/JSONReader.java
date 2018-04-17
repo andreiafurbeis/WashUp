@@ -20,6 +20,56 @@ public class JSONReader {
     }
 
 
+
+    public ArrayList<Compito> readJSONCompiti(String jsonString) {
+        /*if(temp_persona.getCompitiStanza(1) != null) {
+            Log.d("ConfigurazioneStanze", "All'inizio di ReadJSON :  ci sono : " + temp_persona.getCompitiStanza(1).size() + "compiti in questa stanza ");
+        }*/
+
+        ArrayList <Compito> vectorCompiti= new ArrayList<Compito>();
+
+
+        try {
+
+
+            jsonString = "{\"compiti\":"+ jsonString + "}";
+            //jsonString = "{" + jsonString + "}";
+            Log.w("INFORMATION", jsonString);
+            JSONObject jsonObj = new JSONObject(jsonString);
+            JSONArray compiti = jsonObj.getJSONArray("compiti");
+            for(int i = 0; i< compiti.length(); i++) {
+                JSONObject c = compiti.getJSONObject(i);
+
+
+
+                //Log.w("INFORMAIONE" , image_stanza);
+
+
+
+                //Stanza stanza = new Stanza(c.getString("stanza_image"),c.getString("nome_stanza"));
+                Compito compito = new Compito(c.getString("id_compito") , c.getString("descrizione") , c.getString("stanza") , c.getString("id_casa"));
+                vectorCompiti.add(compito);
+
+            }
+
+        }catch (Exception e){
+            Log.d("ConfigurazioneStanze" , "Eccezione catturata nel ReadJSONCompiti");
+        }
+
+        Globals g = Globals.getInstance();
+        //g.setStanze(vectorStanze);
+
+        //temp_persona.setStanze(vectorStanze);
+
+        /*if(temp_persona.getCompitiStanza(1) != null) {
+            Log.d("ConfigurazioneStanze", "readJson : ci sono : " + temp_persona.getCompitiStanza(1).size() + "compiti in questa stanza ");
+        }*/
+
+        return vectorCompiti;
+
+    }
+
+
     /**
      *
      * @param jsonString Stringa JSON [{ "nome_stanza" : "nome" , "stanza_image" : "url immagine presente sul server" } , ...
@@ -42,11 +92,13 @@ public class JSONReader {
                 String image_stanza = c.getString("stanza_image");
 
 
+
                 //Log.w("INFORMAIONE" , image_stanza);
 
 
 
                 Stanza stanza = new Stanza(image_stanza,nome_stanza);
+                stanza.setCompiti(readJSONCompiti(c.getString("compiti")));
                 vectorStanze.add(stanza);
 
             }

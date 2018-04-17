@@ -5,7 +5,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-feature android:name="android.hardware.camera"
+
+    <uses-feature
+        android:name="android.hardware.camera"
         android:required="true" />
 
     <application
@@ -15,25 +17,28 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.example.andrearubeis.wash_up.MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.andrearubeis.wash_up.Registrazione" />
+        <activity android:name=".Registrazione" />
         <activity
-            android:name="com.example.andrearubeis.wash_up.bottom_activity"
+            android:name=".bottom_activity"
             android:label="@string/title_activity_bottom_activity" />
-        <activity android:name="com.example.andrearubeis.wash_up.NewHome"></activity>
-        <activity android:name="com.example.andrearubeis.wash_up.AggiungiStanzaActivity"></activity>
-        <activity android:name="com.example.andrearubeis.wash_up.ConfigurazioneStanzaActivity"></activity>
-        <activity android:name="com.example.andrearubeis.wash_up.RuoliStanza"></activity>
-        <activity android:name="com.example.andrearubeis.wash_up.ModificaCompitiActivity"></activity>
-        <activity android:name="com.example.andrearubeis.wash_up.AggiungiInquilinoActivity"></activity>
-        <activity android:name="com.example.andrearubeis.wash_up.RuoliInquilino"></activity>
-
+        <activity android:name=".NewHome" />
+        <activity android:name=".AggiungiStanzaActivity" />
+        <activity android:name=".ConfigurazioneStanzaActivity" />
+        <activity android:name=".RuoliStanza" />
+        <activity android:name=".ModificaCompitiActivity" />
+        <activity android:name=".AggiungiInquilinoActivity" />
+        <activity android:name=".RuoliInquilino" />
+        <activity android:name=".AboutActivity" />
+        <activity android:name=".AggiungiStanzaTutorial" />
+        <activity android:name=".ModificaCompitiTutorial" />
+        <activity android:name=".ConfigurazioneStanzaTutorial"></activity>
     </application>
 
 </manifest>
