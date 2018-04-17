@@ -346,8 +346,4 @@ public class Registrazione extends AppCompatActivity {
 
 
 
-    public void setImagePicasso() {
-        Picasso.get().load("http://washit.dek4.net/photo_20180416_09_06_48.jpg").into(foto_profilo);
-    }
-
 }

@@ -105,44 +105,21 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
         if(temp_persona == null) {
             Log.d("ConfigurazioneStanze" , "L'oggetto appena scaricato dalle SharedPreference é NULL");
         }
-        /*if(temp_persona.getCompitiStanza(1) != null) {
-            Log.d("ConfigurazioneStanze", "ci sono : " + temp_persona.getCompitiStanza(1).size() + "compiti in questa stanza ");
-        }*/
-
-        //temp_persona = new_home_intent.getParcelableExtra("persona");
-
-
-
-        //SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
-
-
-
-
-
-
-
-
-
-
 
 
 
         //INIZIALIZZAZIONE DATABASE CON STANZE STANDARD
         inizializationNewHome();
 
-        /*if(temp_persona.getCompitiStanza(1) != null) {
-            Log.d("ConfigurazioneStanze", "Dopo InizializationNewHome :  ci sono : " + temp_persona.getCompitiStanza(1).size() + "compiti in questa stanza ");
-        }*/
+
         Log.w("INFORMATION" , "sto per entrare nella configurazione della nuova classe");
+
+
         //INIZIALIZZAZIONE INTERFACCIA DINAMICA
         inizializationInterface();
 
         Globals g = Globals.getInstance();
         g.setInfoUtente(temp_persona);
-
-
-        //Log.w("INFORMATION" , "l'oggetto persona contiene : " + temp_persona.getNome() + " " + g.getStanze().toString());
-       // Log.w("INFORMATION" , "l'oggetto persona contiene : " + temp_persona.getNome() + " " + temp_persona.getStanze().toString());
 
 
         add.setOnClickListener(new View.OnClickListener() {
@@ -161,49 +138,28 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
         continua.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*Intent intent = new Intent(ConfigurazioneStanzaActivity.this,
-                        bottom_activity.class);
-                startActivity(intent);*/
 
                 Intent new_home_intent = getIntent();
 
                 Globals g = Globals.getInstance();
-                //temp_persona = g.getInfoUtente();
-                //temp_persona = new_home_intent.getParcelableExtra("persona");
 
                 Log.w("INFORMATION" , "l'oggetto persona contiene : " + temp_persona.getNome() + " " + vectorStanze.toString());
 
-                LoadHome home = new LoadHome(temp_persona.getIdHome(), g.getDomain() , getApplicationContext());
-                home.setStanze(vectorStanze);
-                //temp_persona.setStanze(vectorStanze);
-                //g.setStanze(home.getVectorStanze());
 
 
-
-                //Bundle bundle = new Bundle();
                 Intent intent = new Intent(ConfigurazioneStanzaActivity.this, bottom_activity.class);
-                //bundle.putString("id" , temp_persona.getIdHome());
-                //bundle.putParcelable("persona" , temp_persona);
 
                 Log.w("INFORMATION" , "l'oggetto persona contiene : " + temp_persona.getNome() + " " + temp_persona.getStanze().get(0).getNameStanza() + " " + temp_persona.getStanze().get(0).getImageStanza());
 
-                //intent.putExtras(bundle);
 
-                //intent.putExtra("stanze" , parts[2]);
-
-
-                //intent.putParcelableArrayListExtra("stanze" , home.getStanze());
-
-                if(home.getStanze() == null) {
+                if(temp_persona.getStanze() == null) {
                     Toast.makeText(getApplicationContext(),"ConfigurazioneStanze : il vettore è NULL ",Toast.LENGTH_SHORT).show();
                     Log.d("ConfigurazioneStanze" , "Il vettore tornato è NULL");
                 }else{
-                    Log.d("ConfigurazioneStanze" , "Il vettore tornato è : " + home.getStanze().toString());
+                    Log.d("ConfigurazioneStanze" , "Il vettore tornato è : " + temp_persona.getStanze().toString());
                 }
 
                 startActivity(intent);
-
-
 
 
 
@@ -246,6 +202,10 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
     }
 
 
+    /**
+     * Nel caso fosse una nuova casa , aggiunge le stanze di default
+     * @param data
+     */
     private void addStanza(String data) {
         URL url=null;
         Globals g = Globals.getInstance();

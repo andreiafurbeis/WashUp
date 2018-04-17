@@ -31,7 +31,7 @@ public class LoadHome {
         this.Stanze = new ArrayList<Stanza>();
     }
 
-    public void inizializationHome() {
+    /*public void inizializationHome() {
 
         URL url=null;
         //Globals g = Globals.getInstance();
@@ -63,10 +63,10 @@ public class LoadHome {
         }
 
 
-    }
+    }*/
 
 
-    private static String getStringFromInputStream(InputStream is) {
+    /*private static String getStringFromInputStream(InputStream is) {
 
         BufferedReader br = null;
         StringBuilder sb = new StringBuilder();
@@ -92,7 +92,7 @@ public class LoadHome {
         }
 
         return sb.toString();
-    }
+    }*/
 
 
 
@@ -135,6 +135,47 @@ public class LoadHome {
         }
 
         this.setStanze(vectorStanze);
+
+    }
+
+
+    public ArrayList<Stanza> readJSONWhitReturn (String jsonString) {
+
+        ArrayList<Stanza> vectorStanze = new ArrayList<Stanza>();
+
+        try {
+
+
+            jsonString = "{\"stanze\":"+ jsonString + "}";
+            Log.w("INFORMATION Load Home", jsonString);
+            JSONObject jsonObj = new JSONObject(jsonString);
+            JSONArray stanze = jsonObj.getJSONArray("stanze");
+            for(int i = 0; i< stanze.length(); i++) {
+                JSONObject c = stanze.getJSONObject(i);
+                String nome_stanza = c.getString("nome_stanza");
+                String image_stanza = c.getString("stanza_image");
+
+
+                //Log.w("INFORMAIONE" , image_stanza);
+
+
+
+                Stanza stanza = new Stanza(image_stanza,nome_stanza);
+                vectorStanze.add(stanza);
+
+            }
+
+            if(vectorStanze == null) {
+                Toast.makeText(this.context,"LoadHome : il vettore è NULL ",Toast.LENGTH_SHORT).show();
+            }else{
+                Log.d("LoadHome" ,  vectorStanze.toString());
+            }
+
+        }catch (Exception e){
+
+        }
+
+        return vectorStanze;
 
     }
 

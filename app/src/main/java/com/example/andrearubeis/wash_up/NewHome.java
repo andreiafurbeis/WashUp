@@ -43,9 +43,6 @@ public class NewHome extends AppCompatActivity {
         setContentView(R.layout.activity_new_home);
         ActionBar barra = getSupportActionBar();
         barra.hide();
-        //main_activity_intent = getIntent();
-
-        //temp_persona = main_activity_intent.getParcelableExtra("persona");
 
 
         pref = getApplicationContext().getSharedPreferences("persona", MODE_PRIVATE);
@@ -66,26 +63,7 @@ public class NewHome extends AppCompatActivity {
             public void onClick(View view) {
                 try {
 
-                    //ESEMPIO SharedPreference
-                    /*
-                    SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = pref.edit();
-
-                    editor.putBoolean("key_name1", true);           // Saving boolean - true/false
-                    Gson gson = new Gson();
-                    String json = gson.toJson(temp_persona);
-                    editor.putString("MyObject", json);
-
-
-                    // Save the changes in SharedPreferences
-                    editor.commit(); // commit changes */
-
-
                     creationNewHome(temp_persona.getMail());
-
-
-
-
 
                 }
                 catch(Exception e) {
@@ -99,6 +77,10 @@ public class NewHome extends AppCompatActivity {
     }
 
 
+    /**
+     * Crea la nuova casa e la aggiunge al database
+     * @param mail
+     */
     private void creationNewHome(String mail) {
         URL url=null;
         Globals g = Globals.getInstance();
@@ -138,12 +120,18 @@ public class NewHome extends AppCompatActivity {
 
     }
 
+
+    /**
+     * Imposta l'id della nuova casa nel file Persona globale e procede in ConfigurazioneStane
+     * @param id
+     */
     private void goToConfiguration(String id) {
         Globals g = Globals.getInstance();
         g.setIdString(id);
-        //temp_persona = getIntent().getParcelableExtra("persona");
+
         temp_persona.setIdHome(id);
 
+        //AGGIORNO INFORMAZIONI GLOBALI APLICAZIONE
         pref = getApplicationContext().getSharedPreferences("persona", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         editor.remove("persona");
@@ -151,24 +139,26 @@ public class NewHome extends AppCompatActivity {
         Gson gson = new Gson();
         String json = gson.toJson(temp_persona);
         editor.putString("persona", json);
-
-
         // Save the changes in SharedPreferences
         editor.commit(); // commit changes
 
         Toast.makeText(getApplicationContext(), id_home, Toast.LENGTH_SHORT).show();
 
-        //Bundle bundle = new Bundle();
-        //bundle.putParcelable("persona" , temp_persona);
+
         if(temp_persona == null ) {
             Log.d("NewHome" , "L'oggetto Persona é NULL");
         }
+
         Intent intent = new Intent(NewHome.this, ConfigurazioneStanzaActivity.class);
-        //intent.putExtras(bundle);
         startActivity(intent);
     }
 
 
+    /**
+     *
+     * @param is
+     * @return trasforma l'InputStream in Stringa
+     */
     private static String getStringFromInputStream(InputStream is) {
 
         BufferedReader br = null;
