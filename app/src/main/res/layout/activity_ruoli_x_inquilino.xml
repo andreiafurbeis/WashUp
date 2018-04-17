@@ -4,34 +4,58 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_view_color"
+    android:background="@color/bottomNavigationColor"
     tools:context=".RuoliInquilino">
 
-    <Button
-        android:id="@+id/ruoli_x_inquilino_title"
-        android:layout_width="262dp"
-        android:layout_height="wrap_content"
-        android:background="@color/bottomNavigationColor"
-        android:paddingLeft="@dimen/padding_icona_sx"
-        android:text="@string/nicol_ricci"
-        android:textColor="@android:color/white"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/button3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:orientation="horizontal"
+        android:background="@color/bottomNavigationColor">
+
+        <ImageView
+            android:id="@+id/ruoli_x_inquilino_image"
+            android:layout_width="155dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:cropToPadding="true"
+            app:layout_constraintEnd_toStartOf="@+id/ruoli_x_inquilino_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/nicolo_icon" />
+
+        <Button
+            android:id="@+id/ruoli_x_inquilino_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/bottomNavigationColor"
+            android:paddingLeft="@dimen/padding_icona_sx"
+            android:text="@string/nicol_ricci"
+            android:textAlignment="textStart"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/button3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/button3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:background="@android:color/holo_red_light"
         android:text="@string/data_di_oggi"
         android:textColor="@android:color/white"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ruoli_x_inquilino_image" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
     <ScrollView
         android:id="@+id/scrollView3"
@@ -40,7 +64,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button3">
+        app:layout_constraintTop_toBottomOf="@+id/button3"
+        android:background="@color/background_view_color">
 
     </ScrollView>
 
@@ -57,19 +82,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="519dp" />
-    </LinearLayout>
+            tools:layout_editor_absoluteY="519dp" >
 
-    <ImageView
-        android:id="@+id/ruoli_x_inquilino_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/ruoli_x_inquilino_title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/nicolo_icon" />
+        </ListView>
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -45,7 +46,12 @@ public class ModificaCompitiActivity extends AppCompatActivity{
     ArrayList<Compito> compiti_global;
     int indice_stanza;
     ArrayList<Compito> compiti=null;
+
     AdapterCompiti adapter;
+
+
+
+
     SharedPreferences pref;
 
 
@@ -58,14 +64,24 @@ public class ModificaCompitiActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modifica_compiti);
-        ActionBar barra = getSupportActionBar();
-        barra.hide();
-
         button_aggiungi = (Button) findViewById(R.id.modifica_compiti_button_add);
+
         title_bar = (Button) findViewById(R.id.modifica_compiti_title_bar);
         linear = findViewById(R.id.modifica_compiti_linear);
+
         listview = (ListView) findViewById(R.id.modifica_compiti_listview);
 
+
+
+
+
+        ActionBar barra = getSupportActionBar();
+        barra.hide();
+        Intent intent = getIntent();
+        //String nome_stanza = intent.getStringExtra("nome_stanza");
+        temp = new Stanza (null, intent.getStringExtra("nome_stanza") ,null);
+
+        //temp_persona = getIntent().getParcelableExtra("persona");
 
         pref = getApplicationContext().getSharedPreferences("persona", MODE_PRIVATE);
 
@@ -77,15 +93,6 @@ public class ModificaCompitiActivity extends AppCompatActivity{
             Log.d("ConfigurazioneStanze" , "L'oggetto appena scaricato dalle SharedPreference é NULL");
         }
 
-
-
-        Intent intent = getIntent();
-
-        temp = new Stanza (null, intent.getStringExtra("nome_stanza") ,null);
-
-        //temp_persona = getIntent().getParcelableExtra("persona");
-
-
         title_bar.setText(title_bar.getText() + " " + temp.getNameStanza());
         //indice_stanza = getIndiceStanza(temp_persona.getStanze() , getIntent().getStringExtra("nome_stanza"));
         indice_stanza = temp_persona.getIndiceStanza(getIntent().getStringExtra("nome_stanza"));
@@ -95,7 +102,33 @@ public class ModificaCompitiActivity extends AppCompatActivity{
         //Log.d("ModificaCompiti" , "ci sono : " + compiti.size() + "compiti in questa stanza ");
 
 
+        adapter = new AdapterCompiti(this , compiti);
+
+
         addCompiti(compiti);
+
+
+
+
+
+        listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                //compiti.remove(position);
+
+                removeItemFromList(position);
+
+
+                return true;
+            }
+
+        });
+
+
+
+
+
+
 
 
         button_aggiungi.setOnClickListener(new View.OnClickListener() {
@@ -105,6 +138,10 @@ public class ModificaCompitiActivity extends AppCompatActivity{
 
             }
         });
+
+
+
+
 
     }
 
@@ -214,9 +251,15 @@ public class ModificaCompitiActivity extends AppCompatActivity{
     private void addCompiti(ArrayList<Compito> compiti) {
         Log.d("ModificaCompiti" , "imposto nuovo Adapter" );
 
-        adapter = new AdapterCompiti(this , compiti);
+        //adapter = new AdapterCompiti(this , compiti);
         listview.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+
+
+
+
+
+
 
         //Aggiornare dati locali
 
@@ -256,7 +299,12 @@ public class ModificaCompitiActivity extends AppCompatActivity{
                 @Override
                 public void onTaskComplete(Object resp) {
 
+
+
+
+
                     Toast.makeText(getApplicationContext(), "Compiti aggiunti con successo", Toast.LENGTH_SHORT).show();
+
 
                 }
             }).execute().get();
@@ -266,6 +314,41 @@ public class ModificaCompitiActivity extends AppCompatActivity{
             e.printStackTrace();
         }
     }
+
+
+
+    protected void removeItemFromList(int position) {
+        final int deletePosition = position;
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(
+                ModificaCompitiActivity.this);
+
+        alert.setTitle("Delete");
+        alert.setMessage("Do you want delete this item?");
+        alert.setPositiveButton("YES",  new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                compiti.remove(deletePosition );
+                adapter.notifyDataSetChanged();
+                adapter.notifyDataSetInvalidated();
+
+            }
+        });
+        alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        alert.show();
+
+    }
+
+
+
+
 
 
 
