@@ -56,25 +56,10 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
     Button add;
     Button continua;
     ListView listview;
-    LinearLayout configurazione_linear;
-    Bitmap imageBitmap;
-    //HashMap<String,Object> data;
-    String data;
-    String stringaJSON;
-    ArrayList<Stanza> vectorStanze;
-    //URL url = null;
-    Intent new_home_intent;
     Persona temp_persona;
-    int i;
-    Target target;
-    String image;
-    Drawable image_drawable = null;
-
-    Button buttonStanza[];
-
+    JSONReader reader_json;
     SharedPreferences pref;
 
-    //String loveloBlack = "R.font.lovelo_black;
 
 
     @Override
@@ -88,14 +73,13 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
         barra.hide();
 
         listview = (ListView) findViewById(R.id.configurazione_listview);
-
         add = (Button) findViewById(R.id.configurazione_button_add);
         continua = (Button) findViewById(R.id.configurazione_button_continua);
-        configurazione_linear = (LinearLayout) findViewById(R.id.configurazione_linear);
 
-        new_home_intent = getIntent();
 
         pref = getApplicationContext().getSharedPreferences("persona", MODE_PRIVATE);
+
+        reader_json = new JSONReader(getApplicationContext());
 
         Gson gson = new Gson();
         String json = pref.getString("persona", "");
@@ -135,21 +119,18 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
                 startActivity(intent);
             }
         });
+
+
+
         continua.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Intent new_home_intent = getIntent();
-
-                Globals g = Globals.getInstance();
-
-                Log.w("INFORMATION" , "l'oggetto persona contiene : " + temp_persona.getNome() + " " + vectorStanze.toString());
-
-
+                //Log.w("INFORMATION" , "l'oggetto persona contiene : " + temp_persona.getNome() + " " + temp_persona.getStanze().toString());
 
                 Intent intent = new Intent(ConfigurazioneStanzaActivity.this, bottom_activity.class);
 
-                Log.w("INFORMATION" , "l'oggetto persona contiene : " + temp_persona.getNome() + " " + temp_persona.getStanze().get(0).getNameStanza() + " " + temp_persona.getStanze().get(0).getImageStanza());
+                //Log.w("INFORMATION" , "l'oggetto persona contiene : " + temp_persona.getNome() + " " + temp_persona.getStanze().get(0).getNameStanza() + " " + temp_persona.getStanze().get(0).getImageStanza());
 
 
                 if(temp_persona.getStanze() == null) {
@@ -175,25 +156,25 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
         inizializationInterface();
     }
 
+
+    /**
+     * Crezione delle stanze Standard (bagno,cucina,camera)
+     */
     private void inizializationNewHome(){
 
         Globals g = Globals.getInstance();
 
         //INIZIALIZZAZIONE BAGNO
-        //Stanza bagno = new Stanza( "D " + R.drawable.bagno , "bagno" , g.getIdString());
         Stanza bagno = new Stanza( g.getDomain()+"bagno.png", "bagno" , g.getIdString());
 
         //INIZIALIZZAZIONE CUCINA
-        //Stanza cucina = new Stanza( "D " + R.drawable.cucina , "cucina" , g.getIdString());
         Stanza cucina = new Stanza( g.getDomain()+"cucina.png", "cucina" , g.getIdString());
 
         //INIZIALIZZAZIONE CAMERA
-
-        //Stanza camera = new Stanza( "D " + R.drawable.camera , "camera" , g.getIdString());
         Stanza camera = new Stanza( g.getDomain()+"camera.png", "camera" , g.getIdString());
 
 
-        data = getURLData(bagno , cucina , camera);
+        String data = getURLData(bagno , cucina , camera);
 
 
         addStanza(data);
@@ -237,26 +218,29 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
     }
 
 
-
+    /**
+     *
+     * @param temp1
+     * @param temp2
+     * @param temp3
+     * @return la stringa URL con cui inviare la richiesta di aggiunta stanze standard al server
+     */
     public String getURLData (Stanza temp1 , Stanza temp2 , Stanza temp3) {
 
-        //temp_persona = getIntent().getParcelableExtra("persona");
         String url_data = "?home_id="+temp_persona.getIdHome()+"&image1="+temp1.getImageStanza()+"&image2="+temp2.getImageStanza()+"&image3="+temp3.getImageStanza();
         return url_data;
 
     }
 
 
-
+    /**
+     * Avvia la creazione dinamica dell'interfaccia , prima fa la richiesta HTTP poi chiama la funzione creaInterfaccia()
+     */
     public void inizializationInterface() {
 
         URL url=null;
         Globals g = Globals.getInstance();
-        //temp_persona = getIntent().getParcelableExtra("persona");
 
-        /*if(temp_persona.getCompitiStanza(1) != null) {
-            Log.d("ConfigurazioneStanze", "Dentro InizializationInterface :  ci sono : " + temp_persona.getCompitiStanza(1).size() + "compiti in questa stanza ");
-        }*/
 
         try {
             url = new URL(g.getDomain() + "get_stanze.php?home_id="+temp_persona.getIdHome());
@@ -273,16 +257,61 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
 
                 Toast.makeText(getApplicationContext(),result,Toast.LENGTH_SHORT).show();
 
-                readJSON(result);
+                temp_persona.setStanze(reader_json.readJSONStanze(result));
+
+                creaInterfaccia();
 
             }
         }).execute();
-
-
-
     }
 
 
+
+    /**
+     *
+     * Popolamento della ListView con tutte le stanze della casa e assegnamento OnClick
+     */
+    public void creaInterfaccia(){
+
+
+        pref = getApplicationContext().getSharedPreferences("persona", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.remove("persona");
+        editor.apply();
+        Gson gson = new Gson();
+        String json = gson.toJson(temp_persona);
+        editor.putString("persona", json);
+        // Save the changes in SharedPreferences
+        editor.commit(); // commit changes
+
+
+
+
+
+        if(temp_persona.getStanze() != null ) {
+            Log.d("ConfigurazioneStanze" , "Il vector ha : " + temp_persona.getStanze().size() + " elementi");
+        }else{
+            Log.d("ConfigurazioneStanze" , "Il vector é NULL");
+        }
+
+
+        AdapterStanze adapter = new AdapterStanze(getApplicationContext() , temp_persona.getStanze());
+
+
+        if(adapter == null ) {
+            Log.d("ConfigurazioneStanze" , "L'adapter é NULL");
+        }
+
+        listview.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+    }
+
+
+    /**
+     *
+     * @param is
+     * @return trasforma l'InputStream in Stringa
+     */
     private static String getStringFromInputStream(InputStream is) {
 
         BufferedReader br = null;
@@ -310,232 +339,6 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
 
         return sb.toString();
     }
-
-
-
-
-
-    public void readJSON (String jsonString ) {
-
-        //new_home_intent = this.getIntent();
-        //temp_persona = new_home_intent.getParcelableExtra("persona");
-
-        /*if(temp_persona.getCompitiStanza(1) != null) {
-            Log.d("ConfigurazioneStanze", "All'inizio di ReadJSON :  ci sono : " + temp_persona.getCompitiStanza(1).size() + "compiti in questa stanza ");
-        }*/
-
-        vectorStanze= new ArrayList<Stanza>();
-
-        try {
-
-
-            jsonString = "{\"stanze\":"+ jsonString + "}";
-            Log.w("INFORMATION", jsonString);
-            JSONObject jsonObj = new JSONObject(jsonString);
-            JSONArray stanze = jsonObj.getJSONArray("stanze");
-            for(int i = 0; i< stanze.length(); i++) {
-                JSONObject c = stanze.getJSONObject(i);
-
-
-
-                //Log.w("INFORMAIONE" , image_stanza);
-
-
-
-                Stanza stanza = new Stanza(c.getString("stanza_image"),c.getString("nome_stanza"));
-                stanza.setCompiti(readJSONCompiti(c.getString("compiti")));
-                vectorStanze.add(stanza);
-
-            }
-
-        }catch (Exception e){
-            Log.d("ConfigurazioneStanze" , "Eccezione catturata nel ReadJSON");
-        }
-
-        Globals g = Globals.getInstance();
-        g.setStanze(vectorStanze);
-
-        temp_persona.setStanze(vectorStanze);
-
-        /*if(temp_persona.getCompitiStanza(1) != null) {
-            Log.d("ConfigurazioneStanze", "readJson : ci sono : " + temp_persona.getCompitiStanza(1).size() + "compiti in questa stanza ");
-        }*/
-
-        creaInterfaccia();
-
-
-    }
-
-
-    public ArrayList<Compito> readJSONCompiti(String jsonString) {
-        /*if(temp_persona.getCompitiStanza(1) != null) {
-            Log.d("ConfigurazioneStanze", "All'inizio di ReadJSON :  ci sono : " + temp_persona.getCompitiStanza(1).size() + "compiti in questa stanza ");
-        }*/
-
-        ArrayList <Compito> vectorCompiti= new ArrayList<Compito>();
-
-
-        try {
-
-
-            jsonString = "{\"compiti\":"+ jsonString + "}";
-            //jsonString = "{" + jsonString + "}";
-            Log.w("INFORMATION", jsonString);
-            JSONObject jsonObj = new JSONObject(jsonString);
-            JSONArray compiti = jsonObj.getJSONArray("compiti");
-            for(int i = 0; i< compiti.length(); i++) {
-                JSONObject c = compiti.getJSONObject(i);
-
-
-
-                //Log.w("INFORMAIONE" , image_stanza);
-
-
-
-                //Stanza stanza = new Stanza(c.getString("stanza_image"),c.getString("nome_stanza"));
-                Compito compito = new Compito(c.getString("id_compito") , c.getString("descrizione") , c.getString("stanza") , c.getString("id_casa"));
-                vectorCompiti.add(compito);
-
-            }
-
-        }catch (Exception e){
-            Log.d("ConfigurazioneStanze" , "Eccezione catturata nel ReadJSONCompiti");
-        }
-
-        Globals g = Globals.getInstance();
-        //g.setStanze(vectorStanze);
-
-        //temp_persona.setStanze(vectorStanze);
-
-        /*if(temp_persona.getCompitiStanza(1) != null) {
-            Log.d("ConfigurazioneStanze", "readJson : ci sono : " + temp_persona.getCompitiStanza(1).size() + "compiti in questa stanza ");
-        }*/
-
-        return vectorCompiti;
-
-    }
-
-
-
-    //CREAZIONE DI TUTTI I BUTTON IN MODO DINAMICO , CON ANCHE L'ASSEGNAMENTO DEGLI ONCLICK
-    public void creaInterfaccia(){
-
-
-        pref = getApplicationContext().getSharedPreferences("persona", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.remove("persona");
-        editor.apply();
-        Gson gson = new Gson();
-        String json = gson.toJson(temp_persona);
-        editor.putString("persona", json);
-
-
-        // Save the changes in SharedPreferences
-        editor.commit(); // commit changes
-
-
-
-
-
-        if(vectorStanze != null ) {
-            Log.d("ConfigurazioneStanze" , "Il vector ha : " + vectorStanze.size() + " elementi");
-        }else{
-            Log.d("ConfigurazioneStanze" , "Il vector é NULL");
-        }
-
-
-        AdapterStanze adapter = new AdapterStanze(getApplicationContext() , vectorStanze);
-
-
-        if(adapter == null ) {
-            Log.d("ConfigurazioneStanze" , "L'adapter é NULL");
-        }
-
-        listview.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-
-
-
-
-
-
-
-
-        /*
-
-        buttonStanza = new  Button[vectorStanze.size()];
-
-
-
-
-
-
-        for(i=0; i < vectorStanze.size(); i++){
-
-            buttonStanza[i] = new Button(getApplicationContext());
-            final Stanza stanzaCorrente = vectorStanze.get(i);
-            buttonStanza[i].setText(stanzaCorrente.getNameStanza());
-            //BitmapDrawable drawableCorrente = new BitmapDrawable(getApplicationContext().getResources(),stanzaCorrente.getImage());
-            image = stanzaCorrente.getImageStanza();
-            String [] image_path = image.split(" ");
-
-            Log.d("immagine","La stringa dell'immagine é : " + image);
-
-            if(image_path[0].equals("D")){
-
-                image_drawable = getResources().getDrawable(Integer.parseInt(image_path[1]));
-
-            }else{
-
-                Toast.makeText(getApplicationContext(),"Sto mettendo l'immagine con il metodo nuovo" ,Toast.LENGTH_SHORT).show();
-                ImageManager manager = new ImageManager(getApplicationContext());
-                Bitmap image_bitmap = manager.loadImageFromStorage(image_path[1],image_path[2]);
-                //Bitmap image_bitmap_scaled = Bitmap.createScaledBitmap(image_bitmap , ViewGroup.LayoutParams.MATCH_PARENT , getResources().getDisplayMetrics().heightPixels/6,true);
-                image_drawable = new BitmapDrawable(getResources() , image_bitmap);
-
-            }
-
-
-
-            buttonStanza[i].setBackground(image_drawable);
-
-            Log.d("ConfigStanze","Dopo Picasso");
-
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,getResources().getDisplayMetrics().heightPixels/6);
-
-
-
-            //params.height = 50;
-            //buttonStanza[i].setLayoutParams(params);
-
-            //buttonStanza[i].setHeight(mGestureThreshold);
-            buttonStanza[i].setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    Globals g = Globals.getInstance();
-                    Intent intent = new Intent(ConfigurazioneStanzaActivity.this,
-                            AggiungiStanzaActivity.class);
-                    Bundle bundle = new Bundle();
-
-                    bundle.putString("nome_stanza",stanzaCorrente.getNameStanza());
-                    bundle.putString("home_id",g.getIdString());
-                    bundle.putInt("update",1);
-                    //bundle.putParcelable("persona" , temp_persona);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                    finish();
-                }
-            });
-
-            //buttonStanza[i].setTypeface(Typeface.createFromAsset(getAssets(),loveloBlack));
-            configurazione_linear.addView(buttonStanza[i],params);
-
-
-
-        }*/
-
-    }
-
-
 
 
 

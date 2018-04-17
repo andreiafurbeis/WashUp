@@ -162,6 +162,7 @@ public class OptionFragmentActivity extends Fragment {
                 Intent intent = new Intent(getActivity(),
                         ConfigurazioneStanzaActivity.class);
                 intent.putExtras(bundle);
+                Log.d("OptionFragment","Sto per Andare in Configurazione Stanze ");
                 startActivity(intent);
             }
         });

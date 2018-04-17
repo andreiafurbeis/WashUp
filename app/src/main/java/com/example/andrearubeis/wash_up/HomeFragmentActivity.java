@@ -222,17 +222,22 @@ public class HomeFragmentActivity extends Fragment {
 
 
             if(vectorStanze != null ) {
-                Log.d("ConfigurazioneStanze" , "Il vector ha : " + vectorStanze.size() + " elementi");
+                Log.d("HomeFragment" , "Il vector ha : " + vectorStanze.size() + " elementi");
             }else{
-                Log.d("ConfigurazioneStanze" , "Il vector é NULL");
+                Log.d("HomeFragment" , "Il vector é NULL");
             }
+
+            Stanza prova = vectorStanze.get(0);
+
+            Log.d("HomeFragment" , "La stanza " + prova.getNameStanza() + " ha in totale " + prova.getCompiti().size() + " compiti" );
+
 
 
             AdapterStanze adapter = new AdapterStanze(getActivity(), vectorStanze);
 
 
             if(adapter == null ) {
-                Log.d("ConfigurazioneStanze" , "L'adapter é NULL");
+                Log.d("HomeFragment" , "L'adapter é NULL");
             }
 
             listview.setAdapter(adapter);
