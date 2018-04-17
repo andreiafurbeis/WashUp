@@ -60,18 +60,11 @@ public class OptionFragmentActivity extends Fragment {
     Button abbandona_casa;
     TextView nome_persona;
     ImageView profile_image;
-    ImageManager manager_image;
     Context context;
     View vista;
     SharedPreferences pref;
     Persona temp_persona;
-    int flag_new_image;
 
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-    static final int PICK_IMAGE_REQUEST = 2;
-
-    Drawable img_profilo;
-    CharSequence nome_profilo;
 
     public static OptionFragmentActivity newInstance() {
         OptionFragmentActivity fragment = new OptionFragmentActivity();
@@ -96,49 +89,37 @@ public class OptionFragmentActivity extends Fragment {
 
         vista = inflater.inflate(R.layout.fragment_option, container, false);
 
+        //inizializzazione Button
+        nome_persona = (TextView) vista.findViewById(R.id.fragment_option_text_name);
+        about = (Button) vista.findViewById(R.id.fragment_option_button_about);
+        modifica_casa = (Button) vista.findViewById(R.id.fragment_option_button_modifica_casa);
+        aggiungi_inquilino = (Button) vista.findViewById(R.id.fragment_option_button_aggiungi_inquilino);
+        abbandona_casa = (Button) vista.findViewById(R.id.fragment_option_button_log_out_home);
+        profile_image = (ImageView) vista.findViewById(R.id.fragment_option_profile_image);
+        log_out = (Button) vista.findViewById(R.id.fragment_option_button_log_out);
+        contact_us = (Button) vista.findViewById(R.id.fragment_option_button_contact_us);
+
 
 
 
         pref = getActivity().getSharedPreferences("persona", MODE_PRIVATE);
-
         Gson gson = new Gson();
         String json = pref.getString("persona", "");
         temp_persona = gson.fromJson(json, Persona.class);
+
 
         if(temp_persona == null) {
             Log.d("ConfigurazioneStanze" , "L'oggetto appena scaricato dalle SharedPreference é NULL");
         }
 
         Log.d("OptionFragment" , temp_persona.getNome() + " " +  temp_persona.getCognome() + " " + temp_persona.getProfileImage());
-        profile_image = (ImageView) vista.findViewById(R.id.fragment_option_profile_image);
-
-        /*Drawable image_drawable = getDrawable(temp_persona.getProfileImage());
-
-        profile_image.setImageDrawable(image_drawable);*/
-
-        Picasso.get().load(temp_persona.getProfileImage()).into(profile_image,new com.squareup.picasso.Callback() {
-            @Override
-            public void onSuccess() {
-
-
-            }
-
-            @Override
-            public void onError(Exception e) {
-
-            }
-
-        });
-
-
-        nome_persona = (TextView) vista.findViewById(R.id.fragment_option_text_name);
-        nome_persona.setText(temp_persona.getNome() + " " + temp_persona.getCognome());
 
 
 
+        //inizializza l'activity con
+        inizializzaInterfaccia();
 
         //azione pulsante about
-        about = (Button) vista.findViewById(R.id.fragment_option_button_about);
         about.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,12 +129,7 @@ public class OptionFragmentActivity extends Fragment {
             }
         });
 
-
-
-
-
         //azione pulsante modifica_casa
-        modifica_casa = (Button) vista.findViewById(R.id.fragment_option_button_modifica_casa);
         modifica_casa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -167,10 +143,7 @@ public class OptionFragmentActivity extends Fragment {
             }
         });
 
-
-
         //azione pulsante aggiungi_inquilino
-        aggiungi_inquilino = (Button) vista.findViewById(R.id.fragment_option_button_aggiungi_inquilino);
         aggiungi_inquilino.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -183,6 +156,7 @@ public class OptionFragmentActivity extends Fragment {
         });
 
 
+        //cambio immagine profilo
         profile_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -195,16 +169,7 @@ public class OptionFragmentActivity extends Fragment {
         });
 
 
-
-
-
-
-
-
         //azione pulsante abbandona_casa
-        //prendi da imagechooser l'alert dialog
-
-        abbandona_casa = (Button) vista.findViewById(R.id.fragment_option_button_log_out_home);
         abbandona_casa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -214,8 +179,6 @@ public class OptionFragmentActivity extends Fragment {
 
 
         //azione pulsante log_out
-
-        log_out = (Button) vista.findViewById(R.id.fragment_option_button_log_out);
         log_out.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -225,9 +188,6 @@ public class OptionFragmentActivity extends Fragment {
 
 
         //azione pulsante contact_us
-
-        contact_us = (Button) vista.findViewById(R.id.fragment_option_button_contact_us);
-
         contact_us.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -246,16 +206,35 @@ public class OptionFragmentActivity extends Fragment {
     }
 
 
+    private void inizializzaInterfaccia() {
+        nome_persona.setText(temp_persona.getNome() + " " + temp_persona.getCognome());
+        Picasso.get().load(temp_persona.getProfileImage()).into(profile_image,new com.squareup.picasso.Callback() {
+            @Override
+            public void onSuccess() {
+
+
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+
+        });
+
+    }
+
+
     public void logOut() {
 
-        final CharSequence[] items = { "si",  context.getString(R.string.annulla) };
+        final CharSequence[] items = { "Si",  context.getString(R.string.annulla) };
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Sei sicuro di voler tornare al login ?");
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
 
-                if(items[item].equals("si")) {
+                if(items[item].equals("Si")) {
 
                     //Toast.makeText(context, "hai cliccato si, ora ti mando al login", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getActivity(), MainActivity.class);
@@ -276,39 +255,20 @@ public class OptionFragmentActivity extends Fragment {
         });
         builder.show();
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     //sei sicuro di voler uscire??
 
 
     public void exitFromHome() {
 
-        final CharSequence[] items = { "si",  context.getString(R.string.annulla) };
+        final CharSequence[] items = { "Si",  context.getString(R.string.annulla) };
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Sei sicuro di voler uscire dalla casa ?");
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
 
-                if(items[item].equals("si")) {
+                if(items[item].equals("Si")) {
 
                     //Toast.makeText(context, "hai cliccato si, ora ti mando al login", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getActivity(), MainActivity.class);
@@ -329,24 +289,5 @@ public class OptionFragmentActivity extends Fragment {
         });
         builder.show();
     }
-
-
-    public Drawable getDrawable(String image) {
-        Drawable image_drawable;
-        String[] image_path = image.split(" ");
-
-
-            Toast.makeText(getActivity(), "Sto mettendo l'immagine con il metodo nuovo", Toast.LENGTH_SHORT).show();
-            ImageManager manager = new ImageManager(getActivity());
-            Bitmap image_bitmap = manager.loadImageFromStorage(image_path[0], image_path[1]);
-            Log.d("OptionFragment" , "il path è : " + image_path[0] + "   " + image_path[1]);
-            Bitmap image_bitmap_scaled = Bitmap.createScaledBitmap(image_bitmap , ViewGroup.LayoutParams.MATCH_PARENT , getResources().getDisplayMetrics().heightPixels/6,true);
-            image_drawable = new BitmapDrawable(getResources(), image_bitmap);
-
-
-        return image_drawable;
-    }
-
-
 
 }

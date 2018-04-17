@@ -54,13 +54,8 @@ public class bottom_activity extends AppCompatActivity {
         bottomNavigationView = (BottomNavigationView)findViewById(R.id.navigation);
 
 
-
-
-        //Intent intent = getIntent();
-
         Bundle args = new Bundle();
 
-        //Persona temp_persona = intent.getParcelableExtra("persona");
 
         pref = getApplicationContext().getSharedPreferences("persona", MODE_PRIVATE);
 
@@ -82,8 +77,6 @@ public class bottom_activity extends AppCompatActivity {
         transaction.replace(R.id.frame_activity_bottom, fragment);
         transaction.commit();
 
-        //Used to select an item programmatically
-        //bottomNavigationView.getMenu().getItem(2).setChecked(true);
     }
 
 
@@ -102,8 +95,6 @@ public class bottom_activity extends AppCompatActivity {
 
 
                                 selectedFragment = HomeFragmentActivity.newInstance();
-                                //intent = getIntent();
-                                //temp_persona = intent.getParcelableExtra("persona");
                                 args = new Bundle();
                                 args.putParcelableArrayList("stanze" ,temp_persona.getStanze());
                                 args.putString("id" , temp_persona.getIdHome());
@@ -133,13 +124,9 @@ public class bottom_activity extends AppCompatActivity {
 
                                 selectedFragment = RuoliFragmentActivity.newInstance();
 
-
-                                //intent = getIntent();
                                 args = new Bundle();
-                                //temp_persona = intent.getParcelableExtra("persona");
                                 args.putParcelableArrayList("stanze" ,temp_persona.getStanze());
                                 args.putString("id" , temp_persona.getIdHome());
-                                //args.putParcelable("persona", temp_persona);
                                 selectedFragment.setArguments(args);
 
                                 break;
@@ -212,7 +199,6 @@ public class bottom_activity extends AppCompatActivity {
             Uri URIfilePath = data.getData();
             try {
                 bitmap_image = MediaStore.Images.Media.getBitmap(getContentResolver(), URIfilePath);
-                //imageManager(imageBitmap);
 
                 manager_image = new ImageManager(getApplicationContext());
 
@@ -334,8 +320,6 @@ public class bottom_activity extends AppCompatActivity {
                         Log.d("OptionUpload", "Upload Success , il path sul server è : " + response.body().getValue());
 
                         reloadUI();
-
-                        //setImagePicasso();
 
                     }else {
                         //Snackbar.make(parentView, "Upload Fail", Snackbar.LENGTH_LONG).show();

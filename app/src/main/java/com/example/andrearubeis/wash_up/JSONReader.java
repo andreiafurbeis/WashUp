@@ -11,20 +11,19 @@ import java.util.ArrayList;
 
 public class JSONReader {
 
-    //String id_home;
     Context context;
 
     public JSONReader ( Context context ) {
-        //this.id_home = id;
         this.context = context;
     }
 
 
-
+    /**
+     *
+     * @param jsonString
+     * @return
+     */
     public ArrayList<Compito> readJSONCompiti(String jsonString) {
-        /*if(temp_persona.getCompitiStanza(1) != null) {
-            Log.d("ConfigurazioneStanze", "All'inizio di ReadJSON :  ci sono : " + temp_persona.getCompitiStanza(1).size() + "compiti in questa stanza ");
-        }*/
 
         ArrayList <Compito> vectorCompiti= new ArrayList<Compito>();
 
@@ -33,20 +32,11 @@ public class JSONReader {
 
 
             jsonString = "{\"compiti\":"+ jsonString + "}";
-            //jsonString = "{" + jsonString + "}";
             Log.w("INFORMATION", jsonString);
             JSONObject jsonObj = new JSONObject(jsonString);
             JSONArray compiti = jsonObj.getJSONArray("compiti");
             for(int i = 0; i< compiti.length(); i++) {
                 JSONObject c = compiti.getJSONObject(i);
-
-
-
-                //Log.w("INFORMAIONE" , image_stanza);
-
-
-
-                //Stanza stanza = new Stanza(c.getString("stanza_image"),c.getString("nome_stanza"));
                 Compito compito = new Compito(c.getString("id_compito") , c.getString("descrizione") , c.getString("stanza") , c.getString("id_casa"));
                 vectorCompiti.add(compito);
 
@@ -56,14 +46,6 @@ public class JSONReader {
             Log.d("ConfigurazioneStanze" , "Eccezione catturata nel ReadJSONCompiti");
         }
 
-        Globals g = Globals.getInstance();
-        //g.setStanze(vectorStanze);
-
-        //temp_persona.setStanze(vectorStanze);
-
-        /*if(temp_persona.getCompitiStanza(1) != null) {
-            Log.d("ConfigurazioneStanze", "readJson : ci sono : " + temp_persona.getCompitiStanza(1).size() + "compiti in questa stanza ");
-        }*/
 
         return vectorCompiti;
 
@@ -81,22 +63,16 @@ public class JSONReader {
 
         try {
 
-
             jsonString = "{\"stanze\":"+ jsonString + "}";
             Log.w("JSONReader", jsonString);
             JSONObject jsonObj = new JSONObject(jsonString);
             JSONArray stanze = jsonObj.getJSONArray("stanze");
+
             for(int i = 0; i< stanze.length(); i++) {
+
                 JSONObject c = stanze.getJSONObject(i);
                 String nome_stanza = c.getString("nome_stanza");
                 String image_stanza = c.getString("stanza_image");
-
-
-
-                //Log.w("INFORMAIONE" , image_stanza);
-
-
-
                 Stanza stanza = new Stanza(image_stanza,nome_stanza);
                 stanza.setCompiti(readJSONCompiti(c.getString("compiti")));
                 vectorStanze.add(stanza);
@@ -104,9 +80,13 @@ public class JSONReader {
             }
 
             if(vectorStanze == null) {
+
                 Toast.makeText(this.context,"JSONReader : il vettore è NULL ",Toast.LENGTH_SHORT).show();
+
             }else{
+
                 Log.d("JSONReader" ,  vectorStanze.toString());
+
             }
 
         }catch (Exception e){
@@ -128,6 +108,7 @@ public class JSONReader {
         String id=null;
 
         if(!jsonString.equals("[]")) {
+
             try {
 
                 jsonString = "{\"info\":" + jsonString + "}";
@@ -138,11 +119,17 @@ public class JSONReader {
                 id = c.getString("id");
 
             } catch (Exception e) {
+
                 Log.w("Exception", "Eccezione durante lettura JSON Login");
+
             }
+
             return id;
+
         } else {
+
             return null;
+
         }
 
     }
@@ -179,35 +166,36 @@ public class JSONReader {
             return temp;
 
         }catch (Exception e){
+
             Log.w("Exception" , "Eccezione durante lettura JSON Login");
+
         }
 
         return null;
 
     }
 
-    public ArrayList<Persona> readJSONCoinquilini (String jsonString , String id_home ) {
 
-        //new_home_intent = this.getIntent();
-        //temp_persona = new_home_intent.getParcelableExtra("persona");
+    /**
+     *
+     * @param jsonString
+     * @param id_home
+     * @return ArrayList di persone contenente tutti i coinquilini dell'utente loggato (non contine l'utente stesso)
+     */
+    public ArrayList<Persona> readJSONCoinquilini (String jsonString , String id_home ) {
 
         ArrayList<Persona> coinquilini= new ArrayList<Persona>();
 
         try {
 
-
             jsonString = "{\"coinquilini\":"+ jsonString + "}";
             Log.w("JSONReader", jsonString);
             JSONObject jsonObj = new JSONObject(jsonString);
             JSONArray json_coinquilini = jsonObj.getJSONArray("coinquilini");
+
             for(int i = 0; i< json_coinquilini.length(); i++) {
+
                 JSONObject c = json_coinquilini.getJSONObject(i);
-
-
-
-                //Log.w("INFORMAIONE" , image_stanza);
-
-
                 Persona persona_temp = new Persona(c.getString("nome") , c.getString("cognome") , c.getString("mail") , c.getString("profile_image") , id_home , null );
                 //Stanza stanza = new Stanza(c.getString("stanza_image"),c.getString("nome_stanza"));
                 coinquilini.add(persona_temp);
@@ -217,12 +205,10 @@ public class JSONReader {
             return coinquilini;
 
         }catch (Exception e){
+
             Log.d("ConfigurazioneStanze" , "Eccezione catturata nel ReadJSON");
+
         }
-
-        //Globals g = Globals.getInstance();
-        //g.setStanze(vectorStanze);
-
 
         return null;
 
