@@ -35,7 +35,10 @@ package com.example.andrearubeis.wash_up;
 
         import java.io.File;
         import java.io.IOException;
+        import java.net.URL;
+        import java.util.ArrayList;
         import java.util.HashMap;
+        import java.util.concurrent.ExecutionException;
 
         import okhttp3.MediaType;
         import okhttp3.MultipartBody;
@@ -124,8 +127,7 @@ public class OptionFragmentActivity extends Fragment {
             @Override
             public void onClick(View v) {
                 //Intent intent = new Intent(getActivity(),AboutActivity.class);
-                Intent intent = new Intent(getActivity(),ConfigurazioneStanzaTutorial.class);
-                startActivity(intent);
+                ricalcolaCompiti();
             }
         });
 
@@ -223,6 +225,75 @@ public class OptionFragmentActivity extends Fragment {
         });
 
     }
+
+
+
+
+    private void updateCompiti() {
+        URL url=null;
+        Globals g = Globals.getInstance();
+        String temp_url = g.getDomain() + "assegna_compiti.php?id_home=" + g.getIdString();
+
+        try {
+            url = new URL(temp_url);
+        } catch (IOException e) {
+            Toast.makeText(context, "Creazione URL non riuscita", Toast.LENGTH_SHORT).show();
+        }
+
+        try {
+            new TaskAsincrono(context, url , new TaskCompleted() {
+                @Override
+                public void onTaskComplete(Object resp) {
+
+
+
+
+
+                    Toast.makeText(context, "Compiti ricalcolati con successo", Toast.LENGTH_SHORT).show();
+
+
+                }
+            }).execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    public void ricalcolaCompiti() {
+
+        final CharSequence[] items = { "Si",  context.getString(R.string.annulla) };
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Sei sicuro di voler ricalcolare i compiti ?");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+
+                if(items[item].equals("Si")) {
+
+                    //Toast.makeText(context, "hai cliccato si, ora ti mando al login", Toast.LENGTH_SHORT).show();
+
+                    updateCompiti();
+                }
+
+
+
+                if (items[item].equals(context.getString(R.string.annulla))) {
+                    dialog.dismiss();
+                    //Toast.makeText(context, "hai cliccato annulla, torna sul fragment option", Toast.LENGTH_SHORT).show();
+
+
+                }
+                //Toast.makeText(getApplicationContext(), "hai cliccato su un elemento del dialog", Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.show();
+    }
+
+
 
 
     public void logOut() {

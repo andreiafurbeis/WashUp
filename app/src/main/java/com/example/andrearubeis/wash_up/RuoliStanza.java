@@ -53,6 +53,8 @@ public class RuoliStanza extends AppCompatActivity {
         text_data = (TextView) findViewById(R.id.ruoli_x_stanza_date_bar);
         image_stanza = (ImageView) findViewById(R.id.ruoli_x_stanza_image);
         nome_stanza = (TextView) findViewById(R.id.ruoli_x_stanza_name) ;
+        list = findViewById(R.id.ruoli_x_stanza_list);
+
 
         reader_json = new JSONReader(getApplicationContext());
 
@@ -97,8 +99,7 @@ public class RuoliStanza extends AppCompatActivity {
         //temp = new Stanza( intent.getStringExtra("image_stanza") , intent.getStringExtra("nome_stanza") , intent.getStringExtra("home_id"));
         temp = intent.getParcelableExtra("stanza");
 
-        list = findViewById(R.id.ruoli_x_stanza_list);
-        if (temp.getCompiti()!= null){
+        /*if (temp.getCompiti()!= null){
             Log.d("RuoliStanza","IL VETTORE A: " + temp.getCompiti().size());
         }else{
             Log.d("RuoliStanza","IL VETTORE E' NULL");
@@ -108,7 +109,7 @@ public class RuoliStanza extends AppCompatActivity {
         //DA RIFARE , I COMPITI DA STAMPARE QUI DENTRO DEVO PRENDERLI DAL DATABASE , QUERY PER PRENDERE I COMPITI DA ASSEGNAMENTI (AVRO' UN FILE JSON DA GESTIRE CON ANCHE L' IMMAGINE DELL' INQUILINO CHE DEVE SVOLGERLO)
 
         AdapterRuoliStanza adapter = new AdapterRuoliStanza(this,temp.getCompiti());
-        list.setAdapter(adapter);
+        list.setAdapter(adapter);*/
 
 
 
@@ -161,7 +162,7 @@ public class RuoliStanza extends AppCompatActivity {
         });
 
 
-        //getInfoCompitiStanze();
+        getInfoCompitiStanze();
 
 
     }
@@ -170,14 +171,14 @@ public class RuoliStanza extends AppCompatActivity {
     /**
      * Richiesta al DataBase per avere un file JSON composto da { Immagine profilo Utente , Descrizione Compito }
      */
-    /*private void getInfoCompitiStanze () {
+    private void getInfoCompitiStanze () {
 
             URL url=null;
             Globals g = Globals.getInstance();
 
 
             try {
-                url = new URL(g.getDomain() + "get_stanze.php?home_id="+temp_persona.getIdHome());
+                url = new URL(g.getDomain() + "get_ruoli_x_stanza.php?home_id="+g.getIdString()+"&nome_stanza="+temp.getNameStanza());
             }catch(IOException e){
                 Toast.makeText(getApplicationContext(),"Creazione URL non riuscita",Toast.LENGTH_SHORT).show();
             }
@@ -189,15 +190,23 @@ public class RuoliStanza extends AppCompatActivity {
 
                     String result = reader_json.getStringFromInputStream((InputStream) resp);
 
+
+
                     //Toast.makeText(getApplicationContext(),result,Toast.LENGTH_SHORT).show();
 
+                    ArrayList<Compito> temp_interface = reader_json.readJSONCompitiXStanza(result);
 
-
+                    listViewPopolation(temp_interface);
 
                 }
             }).execute();
 
 
-    }*/
+    }
+
+    private void listViewPopolation (ArrayList<Compito> compiti) {
+        AdapterRuoliStanza adapter = new AdapterRuoliStanza(this,compiti);
+        list.setAdapter(adapter);
+    }
 
 }

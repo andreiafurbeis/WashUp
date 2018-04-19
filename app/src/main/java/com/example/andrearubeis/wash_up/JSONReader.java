@@ -139,6 +139,40 @@ public class JSONReader {
     }
 
 
+
+    public ArrayList<Compito> readJSONCompitiXStanza(String jsonString) {
+
+        ArrayList <Compito> vectorCompitiXStanza= new ArrayList<Compito>();
+
+        try {
+
+            jsonString = "{\"ruoliXstanza\":"+ jsonString + "}";
+            Log.w("JSONReader", jsonString);
+            JSONObject jsonObj = new JSONObject(jsonString);
+            JSONArray json_coinquilini = jsonObj.getJSONArray("ruoliXstanza");
+
+            for(int i = 0; i< json_coinquilini.length(); i++) {
+
+                JSONObject c = json_coinquilini.getJSONObject(i);
+                //dentro stanza ho l'immagine , dentro a descrizione la descrizione
+                Compito compito_temp = new Compito(c.getString("descrizione") , c.getString("profile_image") , null);
+                //Stanza stanza = new Stanza(c.getString("stanza_image"),c.getString("nome_stanza"));
+                vectorCompitiXStanza.add(compito_temp);
+
+            }
+
+            return vectorCompitiXStanza;
+
+        }catch (Exception e){
+
+            Log.d("ConfigurazioneStanze" , "Eccezione catturata nel ReadJSON");
+
+        }
+        return null;
+
+    }
+
+
     /**
      *
      * @param jsonString Stringa JSON [{ "nome" : "nome_persona" ,"cognome": "cognome_persona" , "profile_image" : "url immagine presente sul server" }]
@@ -202,6 +236,7 @@ public class JSONReader {
                 JSONObject c = json_coinquilini.getJSONObject(i);
                 Persona persona_temp = new Persona(c.getString("nome") , c.getString("cognome") , c.getString("mail") , c.getString("profile_image") , id_home , null );
                 //Stanza stanza = new Stanza(c.getString("stanza_image"),c.getString("nome_stanza"));
+                persona_temp.setCompiti(readJSONCompiti(c.getString("compiti")));
                 coinquilini.add(persona_temp);
 
             }

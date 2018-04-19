@@ -152,7 +152,7 @@ public class bottom_activity extends AppCompatActivity {
 
     public void logOut() {
 
-        final CharSequence[] items = { "si",  selectedFragment.getContext().getString(R.string.annulla) };
+        final CharSequence[] items = { "Si",  selectedFragment.getContext().getString(R.string.annulla) };
         AlertDialog.Builder builder = new AlertDialog.Builder(selectedFragment.getContext());
         builder.setTitle("Sei sicuro di voler tornare al login ?");
         builder.setItems(items, new DialogInterface.OnClickListener() {

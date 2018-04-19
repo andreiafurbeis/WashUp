@@ -14,7 +14,7 @@
         android:orientation="horizontal"
         android:background="@color/bottomNavigationColor">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/ruoli_x_inquilino_image"
             android:layout_width="155dp"
             android:layout_height="match_parent"
@@ -22,8 +22,6 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:cropToPadding="true"
             app:layout_constraintEnd_toStartOf="@+id/ruoli_x_inquilino_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -46,7 +44,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/ruoli_x_inquilino_date_bar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@android:color/holo_red_light"
@@ -64,7 +62,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button3"
+        app:layout_constraintTop_toBottomOf="@+id/ruoli_x_inquilino_date_bar"
         android:background="@color/background_view_color">
 
     </ScrollView>
@@ -72,17 +70,17 @@
     <LinearLayout
         android:id="@+id/ruoli_x_inquilino_linear"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_height="378dp"
         android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="@+id/scrollView3">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ruoli_x_inquilino_date_bar">
 
         <ListView
             android:id="@+id/ruoli_x_inquilino_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="519dp" >
+            tools:layout_editor_absoluteY="519dp">
 
         </ListView>
     </LinearLayout>

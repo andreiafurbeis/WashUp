@@ -86,7 +86,9 @@ public class RuoliFragmentActivity extends Fragment {
             Log.d("RuoliFragment" , "Il vettore coinquilini é null");
 
         }
-        coinquilini.add(new Persona(temp_persona.getNome() , temp_persona.getCognome() , temp_persona.getMail() , temp_persona.getProfileImage() , temp_persona.getIdHome() , null));
+        Persona loggata = new Persona(temp_persona.getNome() , temp_persona.getCognome() , temp_persona.getMail() , temp_persona.getProfileImage() , temp_persona.getIdHome() , null);
+        loggata.setCompiti(temp_persona.getCompiti());
+        coinquilini.add(loggata);
 
 
         AdapterRuoli adapter = new AdapterRuoli(getActivity(),coinquilini);

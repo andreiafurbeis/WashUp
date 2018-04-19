@@ -78,14 +78,16 @@
         <Button
             android:id="@+id/fragment_option_button_about"
 
+            android:drawableLeft="@drawable/cloud_processing"
+
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-
+            android:drawableTint="@android:color/white"
             android:background="@color/bottomNavigationColor"
             android:drawablePadding="16dp"
             android:paddingLeft="16dp"
-            android:text="@string/about"
+            android:text="@string/ricalcolo_compiti"
             android:textAlignment="textStart"
             android:textColor="@android:color/white"
             app:layout_constraintEnd_toEndOf="parent"
@@ -97,7 +99,8 @@
 
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-
+            android:drawableLeft="@drawable/ic_contact_mail"
+            android:drawableTint="@android:color/white"
             android:layout_marginTop="4dp"
             android:background="@color/bottomNavigationColor"
             android:drawablePadding="16dp"

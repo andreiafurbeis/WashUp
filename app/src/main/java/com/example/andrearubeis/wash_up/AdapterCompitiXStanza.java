@@ -1,10 +1,9 @@
 package com.example.andrearubeis.wash_up;
 
-/**
- * Created by nicolo on 12/04/18.
- */
+
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,9 +30,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-/**
- * Created by nicolo on 12/04/18.
- */
 
 
 
@@ -77,6 +73,7 @@ public class AdapterCompitiXStanza extends ArrayAdapter<Compito> {
         if (vi == null){
             vi = inflater.inflate(R.layout.row_checkable_compito, null);
         }
+        Log.d("AdapterCompitiXStanza" , "sto aggiungendo alla listview il compito : " + data.get(position).getDescrizione());
         CheckBox cb = vi.findViewById(R.id.row_checkable_compito_check_box);
         cb.setText(data.get(position).getDescrizione());
 
@@ -84,3 +81,5 @@ public class AdapterCompitiXStanza extends ArrayAdapter<Compito> {
         return vi;
     }
 }
+
+

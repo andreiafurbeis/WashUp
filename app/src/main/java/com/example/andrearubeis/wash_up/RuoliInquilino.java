@@ -6,6 +6,7 @@ package com.example.andrearubeis.wash_up;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -63,6 +64,7 @@ public class RuoliInquilino extends AppCompatActivity {
     ImageView profile_image;
     ArrayList<String> stanze_da_sistemare;
     ArrayList<Stanza> stanze;
+    Persona global_temp_persona;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,23 +81,20 @@ public class RuoliInquilino extends AppCompatActivity {
 
         temp_persona = intent.getParcelableExtra("persona");
         compiti = temp_persona.getCompiti();
-        //compiti = new ArrayList<Compito>();
 
-        /*Compito cmp = new Compito(null,"lava","camera",null);
-        Compito cmp1 = new Compito(null,"baadsas","salotto",null);
-        Compito cmp2 = new Compito(null,"bagndsdsdo","cucina",null);
-        Compito cmp3 = new Compito(null,"bagdsdsno","bagno",null);
-        Compito cmp4 = new Compito(null,"bagddddno","bagno",null);
+        Log.d("RuoliInquilino" , "Questo inquilino ha da svolgere : " + compiti.size() + " compiti");
 
-        compiti.add(cmp);
-        compiti.add(cmp1);
-        compiti.add(cmp2);
-        compiti.add(cmp3);
-        compiti.add(cmp4);
-*/
 
-        //String immagine_profilo = temp_persona.getProfileImage();
-        //Drawable immagine_profilo_drawable = getDrawable(immagine_profilo) ;
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("persona", MODE_PRIVATE);
+
+        Gson gson = new Gson();
+        String json = pref.getString("persona", "");
+        global_temp_persona = gson.fromJson(json, Persona.class);
+        Log.d("BottomActivity" , "Aggiorno TEMP_PERSONA");
+        if(global_temp_persona == null) {
+            Log.d("ConfigurazioneStanze" , "L'oggetto appena scaricato dalle SharedPreference é NULL");
+        }
+
 
         title = (Button) findViewById(R.id.ruoli_x_inquilino_title);
         title.setText(temp_persona.getNome());
@@ -115,14 +114,14 @@ public class RuoliInquilino extends AppCompatActivity {
 
         });
 
-        stanze_da_sistemare = new ArrayList<String>();
+        /*stanze_da_sistemare = new ArrayList<String>();
         if(compiti != null) {
             for (Compito c : compiti) {
-                String stanza_temp = c.getStanza();
-                if (stanze_da_sistemare.contains(stanza_temp)) {
+                String nome_stanza_temp = c.getStanza();
+                if (!stanze_da_sistemare.contains(nome_stanza_temp)) {
+                    stanze_da_sistemare.add(nome_stanza_temp);
+                    Log.d("RuoliInquilino","é stata aggiunta la stanza " + nome_stanza_temp);
 
-                } else {
-                    stanze_da_sistemare.add(stanza_temp);
                 }
             }
         }else{
@@ -141,7 +140,8 @@ public class RuoliInquilino extends AppCompatActivity {
         for(String s: stanze_da_sistemare){
             ArrayList<Compito> compitixstanza = new ArrayList<Compito>();
             for(Compito c : compiti){
-                if(c.getStanza()==s){
+                if(c.getStanza().equals(s)){
+                    Log.d("RuoliInquilino" , "Aggiungo il compito : " +c.getDescrizione());
                     compitixstanza.add(c);
                 }
             }
@@ -150,11 +150,27 @@ public class RuoliInquilino extends AppCompatActivity {
             stanza_temp.setCompiti(compitixstanza);
             stanze.add(stanza_temp);
 
+        }*/
+
+        ArrayList<Compito> struttura_temporanea_per_inizializzazione= new ArrayList<Compito>();
+        String nome_stanza_in_corso = "";
+        for(int i = 0 ; i < temp_persona.getCompiti().size() ; i++) {
+            String nome_stanza_da_aggiungere = temp_persona.getCompiti().get(i).getStanza();
+            //Log.d("RuoliInquilino","Sto per aggiungere un compiton in  : " +nome_stanza_da_aggiungere);
+            int indice_stanza = global_temp_persona.getIndiceStanza(nome_stanza_da_aggiungere);
+
+
+            if(!nome_stanza_da_aggiungere.equals(nome_stanza_in_corso)) {
+                struttura_temporanea_per_inizializzazione.add(new Compito(null,global_temp_persona.getStanze().get(indice_stanza).getImageStanza(),temp_persona.getCompiti().get(i).getStanza()));
+                Log.d("RuoliInquilino","Sto aggiungendo la riga : " + temp_persona.getCompiti().get(i).getStanza());
+            }
+            struttura_temporanea_per_inizializzazione.add(new Compito(temp_persona.getCompiti().get(i).getDescrizione(),null,null));
+            nome_stanza_in_corso = nome_stanza_da_aggiungere;
         }
 
 
         list_stanze = findViewById(R.id.ruoli_x_inquilino_list);
-        AdapterStanze  adapter = new AdapterStanze(this, stanze);
+        AdapterStanzeRuoli  adapter = new AdapterStanzeRuoli(this, struttura_temporanea_per_inizializzazione);
         list_stanze.setAdapter(adapter);
 
 
