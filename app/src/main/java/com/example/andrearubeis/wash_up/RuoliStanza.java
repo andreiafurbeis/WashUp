@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -17,6 +18,9 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -32,6 +36,7 @@ public class RuoliStanza extends AppCompatActivity {
     ImageView image_stanza;
     Stanza temp;
     ListView list;
+    JSONReader reader_json;
 
     //String image_stanza;
     //String nome_stanza;
@@ -49,6 +54,7 @@ public class RuoliStanza extends AppCompatActivity {
         image_stanza = (ImageView) findViewById(R.id.ruoli_x_stanza_image);
         nome_stanza = (TextView) findViewById(R.id.ruoli_x_stanza_name) ;
 
+        reader_json = new JSONReader(getApplicationContext());
 
 
         Intent intent = getIntent();
@@ -86,8 +92,11 @@ public class RuoliStanza extends AppCompatActivity {
 
 
 
+
+
         //temp = new Stanza( intent.getStringExtra("image_stanza") , intent.getStringExtra("nome_stanza") , intent.getStringExtra("home_id"));
         temp = intent.getParcelableExtra("stanza");
+
         list = findViewById(R.id.ruoli_x_stanza_list);
         if (temp.getCompiti()!= null){
             Log.d("RuoliStanza","IL VETTORE A: " + temp.getCompiti().size());
@@ -152,24 +161,43 @@ public class RuoliStanza extends AppCompatActivity {
         });
 
 
+        //getInfoCompitiStanze();
+
+
     }
 
 
+    /**
+     * Richiesta al DataBase per avere un file JSON composto da { Immagine profilo Utente , Descrizione Compito }
+     */
+    /*private void getInfoCompitiStanze () {
 
-   /* public Drawable getDrawable(String image) {
-        Drawable image_drawable;
-        String[] image_path = image.split(" ");
-
-
-        Toast.makeText(getApplicationContext(), "Sto mettendo l'immagine con il metodo nuovo", Toast.LENGTH_SHORT).show();
-        ImageManager manager = new ImageManager(getApplicationContext());
-        Bitmap image_bitmap = manager.loadImageFromStorage(image_path[0], image_path[1]);
-        Log.d("OptionFragment" , "il path è : " + image_path[0] + "   " + image_path[1]);
-        Bitmap image_bitmap_scaled = Bitmap.createScaledBitmap(image_bitmap , ViewGroup.LayoutParams.MATCH_PARENT , getResources().getDisplayMetrics().heightPixels/6,true);
-        image_drawable = new BitmapDrawable(getResources(), image_bitmap);
+            URL url=null;
+            Globals g = Globals.getInstance();
 
 
-        return image_drawable;
+            try {
+                url = new URL(g.getDomain() + "get_stanze.php?home_id="+temp_persona.getIdHome());
+            }catch(IOException e){
+                Toast.makeText(getApplicationContext(),"Creazione URL non riuscita",Toast.LENGTH_SHORT).show();
+            }
+
+            new TaskAsincrono(getApplicationContext(), url , new TaskCompleted() {
+                @Override
+                public void onTaskComplete(Object resp) {
+
+
+                    String result = reader_json.getStringFromInputStream((InputStream) resp);
+
+                    //Toast.makeText(getApplicationContext(),result,Toast.LENGTH_SHORT).show();
+
+
+
+
+                }
+            }).execute();
+
+
     }*/
 
 }

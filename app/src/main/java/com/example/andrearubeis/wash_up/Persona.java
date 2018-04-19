@@ -128,16 +128,37 @@ public class Persona implements Parcelable {
         return stanza.getCompiti();
     }
 
-    public int getIndiceStanza(String name_stanza) {
+    public void setCompitiInquilino(int indice , ArrayList<Compito> compiti) {
+        Persona inquilino = this.getCoinquilini().get(indice);
+        inquilino.setCompiti(compiti);
+    }
+
+    public ArrayList<Compito> getCompitiInquilino(int indice) {
+        Persona inquilino = this.getCoinquilini().get(indice);
+        return inquilino.getCompiti();
+    }
+
+    public int getIndiceInquilino(String email) {
         int position = -1;
-        for (int i = 0; i < this.stanze.size(); i++) {
-            if (name_stanza.equals(this.stanze.get(i).getNameStanza())) {
+        for(int i = 0 ; i < this.coinquilini.size() ; i++ ) {
+            if (email.equals(this.coinquilini.get(i).getMail())) {
                 position = i;
+                return position;
             }
         }
         return position;
     }
 
+    public int getIndiceStanza(String name_stanza) {
+        int position = -1;
+        for (int i = 0; i < this.stanze.size(); i++) {
+            if (name_stanza.equals(this.stanze.get(i).getNameStanza())) {
+                position = i;
+                return position;
+            }
+        }
+        return position;
+    }
 
     protected Persona(Parcel in) {
         nome = in.readString();
@@ -215,8 +236,6 @@ public class Persona implements Parcelable {
         }
     };
 }
-
-
 
 
 

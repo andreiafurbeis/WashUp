@@ -38,6 +38,7 @@ public class HomeFragmentActivity extends Fragment {
     View rootView;
     LinearLayout linear;
     ListView listview;
+    Persona temp_persona;
 
 
 

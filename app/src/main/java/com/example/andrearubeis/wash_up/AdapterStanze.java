@@ -1,5 +1,6 @@
 package com.example.andrearubeis.wash_up;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -62,13 +63,13 @@ public class AdapterStanze extends ArrayAdapter<Stanza> {
 
         }
 
-        Log.d("AdapterStanze","Sono dentro al getView");
+        //Log.d("AdapterStanze","Sono dentro al getView");
 
         TextView nome_stanza = (TextView) rowView.findViewById(R.id.row_stanza_name);
 
-        Log.d("AdapterStanze","Il nome della stanza é : " + data.get(position).getNameStanza());
+        //Log.d("AdapterStanze","Il nome della stanza é : " + data.get(position).getNameStanza());
 
-        Log.d("AdapterStanze" , "Il context é " + context.getClass().getName());
+        //Log.d("AdapterStanze" , "Il context é " + context.getClass().getName());
 
 
         nome_stanza.setText(data.get(position).getNameStanza());
@@ -106,6 +107,7 @@ public class AdapterStanze extends ArrayAdapter<Stanza> {
                     Intent intent = new Intent(context,
                             AggiungiStanzaActivity.class);
                     Bundle bundle = new Bundle();
+                    Log.d("AdapterStanze" , "Sono dentro all'OnClick della ListView di ConfigurazioneStanze");
                     /*if(temp_persona.getCompitiStanza(1) != null) {
                         Log.d("ConfigurazioneStanze", "Button : ci sono : " + temp_persona.getCompitiStanza(1).size() + "compiti in questa stanza ");
                     }*/
@@ -115,6 +117,8 @@ public class AdapterStanze extends ArrayAdapter<Stanza> {
                     //bundle.putParcelable("persona" , temp_persona);
                     intent.putExtras(bundle);
                     context.startActivity(intent);
+                    ((Activity)context).finish();
+
                 } else {
                     Globals g = Globals.getInstance();
                     Intent intent = new Intent(context,
@@ -123,13 +127,15 @@ public class AdapterStanze extends ArrayAdapter<Stanza> {
                     //intent.putExtra("image_stanza",data.get(position).getImageStanza());
                     //intent.putExtra("home_id",g.getIdString());
                     //intent.putp("stanza",data.get(position));
+                    Log.d("AdapterStanze" , "Sono dentro all'OnClick della ListView di HomeFragment");
+
                     Bundle bundle = new Bundle();
                     Log.d("AdapterStanze","il vettore compiti di " + data.get(position).getNameStanza() + " ha " + data.get(position).getCompiti().size());
                     bundle.putParcelable("stanza",data.get(position));
                     bundle.putString("home_id",g.getIdString());
                     intent.putExtras(bundle);
-
                     context.startActivity(intent);
+
                 }
 
 

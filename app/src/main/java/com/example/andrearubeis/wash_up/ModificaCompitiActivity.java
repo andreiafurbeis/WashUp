@@ -43,9 +43,9 @@ public class ModificaCompitiActivity extends AppCompatActivity{
     Persona temp_persona;
     ListView listview;
     Stanza temp;
-    ArrayList<Compito> compiti_global;
     int indice_stanza;
-    ArrayList<Compito> compiti=null;
+    ArrayList<Compito> compiti=new ArrayList<Compito>();
+    ArrayList<Compito> new_compiti = new ArrayList<Compito>();
 
     AdapterCompiti adapter;
 
@@ -105,7 +105,7 @@ public class ModificaCompitiActivity extends AppCompatActivity{
         adapter = new AdapterCompiti(this , compiti);
 
 
-        addCompiti(compiti);
+        addCompitiToListView();
 
 
 
@@ -184,15 +184,16 @@ public class ModificaCompitiActivity extends AppCompatActivity{
                         Compito compito = new Compito(descrizione.getText().toString(),temp.getNameStanza(),temp_persona.getIdHome());
 
                         //ArrayList<Compito> compiti = temp_persona.getCompitiStanza(indice_stanza);
-                        if(compiti == null) {
+                        /*if(compiti == null) {
                             Log.d("ModificaCompiti" , "Crezione nuovo ArrayList indice stanza = " + indice_stanza );
 
                             compiti = new ArrayList<Compito>();
-                        }
+                        }*/
+                        new_compiti.add(compito);
                         compiti.add(compito);
                         //temp_persona.setCompiti(compiti);
                         //temp_persona.setCompitiStanza(indice_stanza,compiti);
-                        addCompiti(compiti);
+                        addCompitiToListView();
                     }
                 })
                 .setNegativeButton(R.string.annulla, new DialogInterface.OnClickListener() {
@@ -210,12 +211,15 @@ public class ModificaCompitiActivity extends AppCompatActivity{
         //super.onBackPressed();
 
         //Aggiornare DataBase
-        updateInfoCompiti(compiti_global);
+        if(new_compiti.size() != 0 ) {
+            updateInfoCompiti(new_compiti);
+            updateInfoCompitiLocal(indice_stanza,new_compiti);
+        }
         Intent intent = new Intent(ModificaCompitiActivity.this , AggiungiStanzaActivity.class);
         Bundle bundle = new Bundle();
         //bundle.putParcelable("persona" , temp_persona);
 
-        temp_persona.setCompitiStanza(indice_stanza,compiti_global);
+
 
         SharedPreferences.Editor editor = pref.edit();
         editor.remove("persona");
@@ -232,7 +236,7 @@ public class ModificaCompitiActivity extends AppCompatActivity{
 
 
         //bundle.putParcelableArrayList("compiti" , compiti_global);
-        if(compiti_global == null) {
+        if(compiti == null) {
             Log.d("ModificaCompiti" , "I compiti sono NULL");
         }else{
             //Log.d("ModificaCompiti" , "Array compiti ha dimensione : " + temp_persona.getStanze().get(indice_stanza).getCompiti().size());
@@ -245,10 +249,15 @@ public class ModificaCompitiActivity extends AppCompatActivity{
         finish();
     }
 
+    private void updateInfoCompitiLocal(int indice_stanza , ArrayList<Compito> compiti) {
+
+        temp_persona.setCompitiStanza(indice_stanza , compiti);
+    }
 
 
 
-    private void addCompiti(ArrayList<Compito> compiti) {
+
+    private void addCompitiToListView() {
         Log.d("ModificaCompiti" , "imposto nuovo Adapter" );
 
         //adapter = new AdapterCompiti(this , compiti);
@@ -257,15 +266,10 @@ public class ModificaCompitiActivity extends AppCompatActivity{
 
 
 
-
-
-
-
-        //Aggiornare dati locali
-
-        compiti_global = compiti;
-
     }
+
+
+
 
 
     private String ArrayListToStringCompiti(ArrayList<Compito> compiti) {
@@ -324,14 +328,30 @@ public class ModificaCompitiActivity extends AppCompatActivity{
                 ModificaCompitiActivity.this);
 
         alert.setTitle("Delete");
-        alert.setMessage("Do you want delete this item?");
+        alert.setMessage("Vuoi cancellare il compito dalla stanza " + getIntent().getStringExtra("nome_stanza") + " ?");
         alert.setPositiveButton("YES",  new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                removeCompitoFromDB(compiti.get(deletePosition));
                 compiti.remove(deletePosition );
+
+                temp_persona.setCompitiStanza(indice_stanza,compiti);
+
+                pref = getApplicationContext().getSharedPreferences("persona", MODE_PRIVATE);
+                SharedPreferences.Editor editor = pref.edit();
+                editor.remove("persona");
+                editor.apply();
+                Gson gson = new Gson();
+                String json = gson.toJson(temp_persona);
+                editor.putString("persona", json);
+                // Save the changes in SharedPreferences
+                editor.commit(); // commit changes
+
+
+
                 adapter.notifyDataSetChanged();
                 adapter.notifyDataSetInvalidated();
+
 
             }
         });
@@ -344,6 +364,28 @@ public class ModificaCompitiActivity extends AppCompatActivity{
 
         alert.show();
 
+    }
+
+    private void removeCompitoFromDB(Compito compito_da_rimuovere) {
+        Globals g = Globals.getInstance();
+        String temp_url = g.getDomain()+"remove_compito.php?id_compito=" + compito_da_rimuovere.getId();
+        URL url = null;
+        try {
+            url = new URL(temp_url);
+        } catch (IOException e) {
+            Toast.makeText(getApplicationContext(), "Creazione URL non riuscita", Toast.LENGTH_SHORT).show();
+        }
+
+        new TaskAsincrono(getApplicationContext(), url  , new TaskCompleted() {
+            @Override
+            public void onTaskComplete(Object resp) {
+
+
+                Toast.makeText(getApplicationContext(), "Compito cancellato con successo", Toast.LENGTH_SHORT).show();
+
+
+            }
+        }).execute();
     }
 
 

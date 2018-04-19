@@ -9,12 +9,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/title_bar_bottom_navigation"
-        android:textColor="@android:color/white"
-        android:textAlignment="viewStart"
-        android:paddingLeft="16dp"
-
         android:fontFamily="@font/lovelo_black"
-        android:textSize="19sp"/>
+        android:gravity="center"
+        android:paddingLeft="16dp"
+        android:text="ciao"
+        android:textAlignment="textStart"
+        android:textColor="@android:color/white"
+        android:textSize="19sp" />
 
 
 </LinearLayout>

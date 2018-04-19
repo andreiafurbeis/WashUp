@@ -62,7 +62,7 @@ public class bottom_activity extends AppCompatActivity {
         Gson gson = new Gson();
         String json = pref.getString("persona", "");
         temp_persona = gson.fromJson(json, Persona.class);
-
+        Log.d("BottomActivity" , "Aggiorno TEMP_PERSONA");
         if(temp_persona == null) {
             Log.d("ConfigurazioneStanze" , "L'oggetto appena scaricato dalle SharedPreference é NULL");
         }
@@ -93,7 +93,7 @@ public class bottom_activity extends AppCompatActivity {
                         switch (item.getItemId()) {
                             case R.id.navigation_home:
 
-
+                                globalVariableReload();
                                 selectedFragment = HomeFragmentActivity.newInstance();
                                 args = new Bundle();
                                 args.putParcelableArrayList("stanze" ,temp_persona.getStanze());
@@ -105,6 +105,7 @@ public class bottom_activity extends AppCompatActivity {
 
                             case R.id.navigation_options:
 
+                                globalVariableReload();
 
                                 selectedFragment = OptionFragmentActivity.newInstance();
                                 //intent = getIntent();
@@ -121,6 +122,7 @@ public class bottom_activity extends AppCompatActivity {
 
                             case R.id.navigation_ruoli:
 
+                                globalVariableReload();
 
                                 selectedFragment = RuoliFragmentActivity.newInstance();
 
@@ -244,7 +246,7 @@ public class bottom_activity extends AppCompatActivity {
 
         try {
             String url_temp = g.getDomain() + "update_info_user.php?mail=" + temp_persona.getMail() + "&image=" + g.getDomain()+manager_image.getImageName();
-            Toast.makeText(getApplicationContext(),url_temp ,Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(),url_temp ,Toast.LENGTH_SHORT).show();
 
             url = new URL(url_temp);
         }catch(IOException e){
@@ -268,6 +270,19 @@ public class bottom_activity extends AppCompatActivity {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
+        }
+    }
+
+
+    private void globalVariableReload() {
+        pref = getApplicationContext().getSharedPreferences("persona", MODE_PRIVATE);
+
+        Gson gson = new Gson();
+        String json = pref.getString("persona", "");
+        temp_persona = gson.fromJson(json, Persona.class);
+        Log.d("BottomActivity" , "Aggiorno TEMP_PERSONA");
+        if(temp_persona == null) {
+            Log.d("ConfigurazioneStanze" , "L'oggetto appena scaricato dalle SharedPreference é NULL");
         }
     }
 

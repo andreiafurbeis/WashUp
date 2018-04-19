@@ -161,40 +161,4 @@ public class RuoliInquilino extends AppCompatActivity {
 
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public Drawable getDrawable(String image) {
-        Drawable image_drawable;
-        String[] image_path = image.split(" ");
-
-
-        Toast.makeText(getApplicationContext(), "Sto mettendo l'immagine con il metodo nuovo", Toast.LENGTH_SHORT).show();
-        ImageManager manager = new ImageManager(getApplicationContext());
-        Bitmap image_bitmap = manager.loadImageFromStorage(image_path[0], image_path[1]);
-        Log.d("OptionFragment" , "il path è : " + image_path[0] + "   " + image_path[1]);
-        Bitmap image_bitmap_scaled = Bitmap.createScaledBitmap(image_bitmap , ViewGroup.LayoutParams.MATCH_PARENT , getResources().getDisplayMetrics().heightPixels/6,true);
-        image_drawable = new BitmapDrawable(getResources(), image_bitmap);
-
-
-        return image_drawable;
-    }
-
-
-
-
-
-
 }

@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity  {
             //CREAZIONE URL
             try {
                 String url_temp = g.getDomain() + "login.php?usr=" + usr + "&psw=" + pwd;
-                Toast.makeText(getApplicationContext(),url_temp ,Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(),url_temp ,Toast.LENGTH_SHORT).show();
 
                 url = new URL(url_temp);
             }catch(IOException e){
@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity  {
 
                         String result = json_reader.getStringFromInputStream((InputStream) resp);
 
-                        Toast.makeText(getApplicationContext(),result,Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(),result,Toast.LENGTH_SHORT).show();
 
                         String[] parts = result.split("<br>");
 
@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity  {
                             editor.commit(); // commit changes
 
 
-                            Toast.makeText(getApplicationContext(),g.getIdString(),Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getApplicationContext(),g.getIdString(),Toast.LENGTH_SHORT).show();
 
 
                             if(JSON_id!=null) {
@@ -205,7 +205,7 @@ public class MainActivity extends AppCompatActivity  {
 
                                 //SE LA PERSONA CREATA DEVE CREARE UNA NUOVA CASA
 
-                                Toast.makeText(getApplicationContext(),g.getIdString(),Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getApplicationContext(),g.getIdString(),Toast.LENGTH_SHORT).show();
 
 
                                 Intent intent = new Intent(MainActivity.this, NewHome.class);
@@ -257,7 +257,7 @@ public class MainActivity extends AppCompatActivity  {
 
                 String result = json_reader.getStringFromInputStream((InputStream) resp);
 
-                Toast.makeText(getApplicationContext(),result,Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(),result,Toast.LENGTH_SHORT).show();
 
                 temp_persona.setCoinquilini(json_reader.readJSONCoinquilini(result , temp_persona.getIdHome()));
 

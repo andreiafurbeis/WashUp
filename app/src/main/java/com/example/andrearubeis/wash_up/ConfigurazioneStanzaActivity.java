@@ -253,9 +253,9 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
             public void onTaskComplete(Object resp) {
 
 
-                String result = getStringFromInputStream((InputStream) resp);
+                String result = reader_json.getStringFromInputStream((InputStream) resp);
 
-                Toast.makeText(getApplicationContext(),result,Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(),result,Toast.LENGTH_SHORT).show();
 
                 temp_persona.setStanze(reader_json.readJSONStanze(result));
 
@@ -295,7 +295,7 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
         }
 
 
-        AdapterStanze adapter = new AdapterStanze(getApplicationContext() , temp_persona.getStanze());
+        AdapterStanze adapter = new AdapterStanze(ConfigurazioneStanzaActivity.this , temp_persona.getStanze());
 
 
         if(adapter == null ) {
