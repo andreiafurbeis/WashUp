@@ -12,10 +12,6 @@
         android:id="@+id/aggiungi_stanza_button_aggiungi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:background="@drawable/button"
         android:fontFamily="@font/lovelo_black"
         android:text="@string/aggiungi"
@@ -23,44 +19,39 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.6"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/aggiungi_stanza_button_compiti"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/aggiungi_stanza_button_compiti"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_width="256dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="24dp"
         android:background="@drawable/button_compiti"
         android:fontFamily="@font/lovelo_black"
         android:text="@string/gestione_compiti"
         android:textColor="@android:color/white"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/aggiungi_stanza_button_aggiungi"
-        app:layout_constraintTop_toBottomOf="@+id/aggiungi_stanza_nome_stanza"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/aggiungi_stanza_nome_stanza" />
 
 
     <Button
         android:id="@+id/aggiungi_stanza_title_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="76dp"
         android:background="@drawable/title_bar_bottom_navigation"
-        android:text=""
-        android:textColor="@android:color/white"
-        android:textAlignment="viewStart"
-        android:paddingLeft="16dp"
-
         android:fontFamily="@font/lovelo_black"
+
+        android:paddingLeft="16dp"
+        android:text=""
+        android:textAlignment="viewStart"
+        android:textColor="@android:color/white"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/aggiungi_stanza_nome_stanza"
@@ -68,13 +59,14 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="25dp"
         android:layout_marginStart="25dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="32dp"
         android:background="@drawable/edit_text_background"
         android:drawableLeft="@drawable/home_icon_field"
         android:ems="10"
         android:inputType="textPersonName"
         android:padding="15dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -92,15 +84,32 @@
 
     <ImageView
         android:id="@+id/aggiungi_stanza_profile_image"
-        android:layout_width="0dp"
-        android:layout_height="120dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="389dp"
+        android:layout_height="104dp"
         android:clickable="true"
         android:src="@mipmap/ic_launcher"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/aggiungi_stanza_title_bar" />
+
+    <Button
+        android:id="@+id/aggiungi_stanza_elimina_stanza"
+
+
+        android:layout_width="216dp"
+        android:layout_height="70dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/button"
+        android:backgroundTint="@android:color/holo_red_dark"
+        android:fontFamily="@font/lovelo_black"
+        android:text="elimina stanza"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/aggiungi_stanza_button_compiti" />
 
 
 </android.support.constraint.ConstraintLayout>

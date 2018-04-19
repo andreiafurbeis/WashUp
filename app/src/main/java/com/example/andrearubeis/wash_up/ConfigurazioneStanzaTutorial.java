@@ -14,6 +14,7 @@ public class ConfigurazioneStanzaTutorial extends AppCompatActivity {
 
 
     Button aggiungi_stanza;
+    Button salta_tutorial;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,17 @@ public class ConfigurazioneStanzaTutorial extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ConfigurazioneStanzaTutorial.this, AggiungiStanzaTutorial.class);
+                startActivity(intent);
+            }
+        });
+
+
+
+        salta_tutorial = findViewById(R.id.configurazione_tutorial_button_skip);
+        salta_tutorial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ConfigurazioneStanzaTutorial.this, NewHome.class);
                 startActivity(intent);
             }
         });

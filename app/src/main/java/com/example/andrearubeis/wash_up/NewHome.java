@@ -1,9 +1,11 @@
 package com.example.andrearubeis.wash_up;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -61,16 +63,59 @@ public class NewHome extends AppCompatActivity {
         continua.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
 
-                    creationNewHome(temp_persona.getMail());
 
-                }
-                catch(Exception e) {
-                    Log.d("NewHome" , "Eccezione catturata nell'OnCreate");
-                }
+
+
+
+
+
+
+
+
+
+
+
+                AlertDialog.Builder alert = new AlertDialog.Builder(
+                        NewHome.this);
+
+                alert.setTitle("Assegnare i compiti");
+                alert.setMessage("Una volta configurata la casa ricordati di andare su OPZIONI > RIASSEGNA COMPITI" );
+                alert.setPositiveButton("OK",  new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+
+               dialog.dismiss();
+
+
+
+
+               try {
+
+                            creationNewHome(temp_persona.getMail());
+
+                        }
+                        catch(Exception e) {
+                            Log.d("NewHome" , "Eccezione catturata nell'OnCreate");
+                        }
+
+                    }
+                });
+
+
+                alert.show();
+
+
 
             }
+
+
+
+
+
+
+
         });
 
 

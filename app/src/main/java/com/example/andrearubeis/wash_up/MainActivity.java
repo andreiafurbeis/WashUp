@@ -208,7 +208,7 @@ public class MainActivity extends AppCompatActivity  {
                                 //Toast.makeText(getApplicationContext(),g.getIdString(),Toast.LENGTH_SHORT).show();
 
 
-                                Intent intent = new Intent(MainActivity.this, NewHome.class);
+                                Intent intent = new Intent(MainActivity.this, ConfigurazioneStanzaTutorial.class);
                                 startActivity(intent);
                             }
 

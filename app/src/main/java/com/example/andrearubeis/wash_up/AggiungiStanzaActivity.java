@@ -70,6 +70,7 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
     EditText edit_nome_stanza;
     final Activity call = this;
     int flag_new_image;
+    Button elimina_stanza;
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int PICK_IMAGE_REQUEST = 2;
@@ -91,7 +92,7 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
         ActionBar barra = getSupportActionBar();
         barra.hide();
 
-
+        elimina_stanza = (Button) findViewById(R.id.aggiungi_stanza_elimina_stanza);
         title_bar = (Button) findViewById(R.id.aggiungi_stanza_title_bar);
         stanza_image = (ImageView) findViewById(R.id.aggiungi_stanza_profile_image);
         aggiungi = (Button) findViewById(R.id.aggiungi_stanza_button_aggiungi);
@@ -112,6 +113,16 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
 
 
 
+// elimina_stanza una volta cliccato chiama in fondo a qesta classe removeStanzaFromDB(Stanza s)
+        elimina_stanza.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //creo una Stanza temp da usare come input di removeStanzaFromDB(Stanza s)
+                Stanza stanza_temp = new Stanza(null,intent.getStringExtra("nome_stanza"),intent.getStringExtra("id_casa"));
+
+            }
+        });
 
         if(intent.hasExtra("update")) {
             aggiungi.setText("Modifica");
@@ -465,6 +476,29 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
         }).execute();
 
 
+    }
+
+
+    private void removeStanzaFromDB(Stanza stanza_da_rimuovere) {
+        Globals g = Globals.getInstance();
+        String temp_url = g.getDomain()+"remove_stanza.php?id_compito=" + stanza_da_rimuovere.getIdCasa() + "&nome_stanza =" + stanza_da_rimuovere.getNameStanza();
+        URL url = null;
+        try {
+            url = new URL(temp_url);
+        } catch (IOException e) {
+            Toast.makeText(getApplicationContext(), "Creazione URL non riuscita", Toast.LENGTH_SHORT).show();
+        }
+
+        new TaskAsincrono(getApplicationContext(), url  , new TaskCompleted() {
+            @Override
+            public void onTaskComplete(Object resp) {
+
+
+                Toast.makeText(getApplicationContext(), "Compito cancellato con successo", Toast.LENGTH_SHORT).show();
+
+
+            }
+        }).execute();
     }
 
 
