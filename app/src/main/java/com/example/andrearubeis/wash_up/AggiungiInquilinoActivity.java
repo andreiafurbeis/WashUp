@@ -37,18 +37,12 @@ public class AggiungiInquilinoActivity extends AppCompatActivity {
 
         aggiungi_inquilino = findViewById(R.id.aggiungi_inquilino_button_aggiungi);
         mail_new_inquilino  = findViewById(R.id.aggiungi_inquilino_plain_text_mail);
-        //temp_persona = getIntent().getParcelableExtra("persona");
 
         pref = getApplicationContext().getSharedPreferences("persona", MODE_PRIVATE);
 
         Gson gson = new Gson();
         String json = pref.getString("persona", "");
         temp_persona = gson.fromJson(json, Persona.class);
-        Log.d("NewHome" , "La persona si chiama " + temp_persona.getNome() + " con mail : " + temp_persona.getMail());
-
-        if(temp_persona == null) {
-            Log.d("NewHome" , "L'oggetto appena scaricato dalle SharedPreference é NULL");
-        }
 
 
         aggiungi_inquilino.setOnClickListener(new View.OnClickListener() {
@@ -79,7 +73,6 @@ public class AggiungiInquilinoActivity extends AppCompatActivity {
         } catch (IOException e) {
             Toast.makeText(getApplicationContext(), "Creazione URL non riuscita", Toast.LENGTH_SHORT).show();
         }
-
 
         try {
             new TaskAsincrono(getApplicationContext(), url, new TaskCompleted() {

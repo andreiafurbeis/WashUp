@@ -47,7 +47,6 @@ public class ModificaCompitiTutorial extends AppCompatActivity{
     Persona temp_persona;
     ListView listview;
     Stanza temp;
-    int indice_stanza;
     ArrayList<Compito> compiti=new ArrayList<Compito>();
     ArrayList<Compito> new_compiti = new ArrayList<Compito>();
     TextView tv;
@@ -81,7 +80,7 @@ public class ModificaCompitiTutorial extends AppCompatActivity{
         Intent intent = getIntent();
         String nome_stanza = intent.getStringExtra("nome_stanza");
         temp = new Stanza(null, nome_stanza, null);
-        Log.d("ModificaCompitiTutorial", "IL NOME DELLA STANZA E'" + nome_stanza);
+        //Log.d("ModificaCompitiTutorial", "IL NOME DELLA STANZA E'" + nome_stanza);
 
         //temp_persona = getIntent().getParcelableExtra("persona");
 
@@ -91,9 +90,9 @@ public class ModificaCompitiTutorial extends AppCompatActivity{
         String json = pref.getString("persona", "");
         temp_persona = gson.fromJson(json, Persona.class);
 
-        if (temp_persona == null) {
+        /*if (temp_persona == null) {
             Log.d("ConfigurazioneStanze", "L'oggetto appena scaricato dalle SharedPreference é NULL");
-        }
+        }*/
 
         title_bar.setText(title_bar.getText() + " " + temp.getNameStanza());
         //indice_stanza = getIndiceStanza(temp_persona.getStanze() , getIntent().getStringExtra("nome_stanza"));
@@ -116,7 +115,6 @@ public class ModificaCompitiTutorial extends AppCompatActivity{
         listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                //compiti.remove(position);
 
                 removeItemFromList(position);
 
@@ -148,7 +146,6 @@ public class ModificaCompitiTutorial extends AppCompatActivity{
                 createDialog();
                 tooltip_aggiungi_compito.dismiss();
 
-               // tv.setVisibility(View.VISIBLE);
 
 
 
@@ -227,25 +224,12 @@ public class ModificaCompitiTutorial extends AppCompatActivity{
         AlertDialog.Builder alert = new AlertDialog.Builder(
                 ModificaCompitiTutorial.this);
 
-        alert.setTitle("Delete");
+        alert.setTitle("Cancella");
         alert.setMessage("Vuoi cancellare il compito dalla stanza " + getIntent().getStringExtra("nome_stanza") + " ?");
-        alert.setPositiveButton("YES",  new DialogInterface.OnClickListener() {
+        alert.setPositiveButton("Si",  new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-               // removeCompitoFromDB(compiti.get(deletePosition));
                 compiti.remove(deletePosition );
-
-                //temp_persona.setCompitiStanza(indice_stanza,compiti);
-
-                /*pref = getApplicationContext().getSharedPreferences("persona", MODE_PRIVATE);
-                SharedPreferences.Editor editor = pref.edit();
-                editor.remove("persona");
-                editor.apply();
-                Gson gson = new Gson();
-                String json = gson.toJson(temp_persona);
-                editor.putString("persona", json);
-                // Save the changes in SharedPreferences
-                editor.commit(); // commit changes*/
 
 
 
@@ -253,19 +237,13 @@ public class ModificaCompitiTutorial extends AppCompatActivity{
                 adapter.notifyDataSetInvalidated();
 
 
-               /* try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }*/
-
 
                finetutorial();
 
 
             }
         });
-        alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+        alert.setNegativeButton("Annulla", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -302,8 +280,8 @@ public class ModificaCompitiTutorial extends AppCompatActivity{
 
 
 
-       alert_end.setTitle("Delete");
-       alert_end.setMessage("Il tutorial e' terminato"  );
+       alert_end.setTitle("Tutorial Terminato");
+       alert_end.setMessage("Il tutorial e' terminato , clicca ok e procedi con la creazione della tua casa."  );
        alert_end.setPositiveButton("OK", new DialogInterface.OnClickListener() {
            @Override
            public void onClick(DialogInterface dialog, int which) {

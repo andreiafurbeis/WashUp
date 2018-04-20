@@ -1,23 +1,13 @@
 package com.example.andrearubeis.wash_up;
 
-/**
- * Created by andrearubeis on 22/12/17.
- */
 
 
-        import android.app.Activity;
-        import android.app.ProgressDialog;
+
         import android.content.Context;
         import android.content.DialogInterface;
         import android.content.Intent;
         import android.content.SharedPreferences;
-        import android.graphics.Bitmap;
-        import android.graphics.drawable.BitmapDrawable;
-        import android.graphics.drawable.Drawable;
-        import android.net.Uri;
-        import android.os.AsyncTask;
         import android.os.Bundle;
-        import android.provider.MediaStore;
         import android.support.v4.app.Fragment;
         import android.support.v7.app.AlertDialog;
         import android.util.Log;
@@ -28,26 +18,11 @@ package com.example.andrearubeis.wash_up;
         import android.widget.ImageView;
         import android.widget.TextView;
         import android.widget.Toast;
-
-        import com.example.andrearubeis.wash_up.R;
         import com.google.gson.Gson;
         import com.squareup.picasso.Picasso;
-
-        import java.io.File;
         import java.io.IOException;
         import java.net.URL;
-        import java.util.ArrayList;
-        import java.util.HashMap;
         import java.util.concurrent.ExecutionException;
-
-        import okhttp3.MediaType;
-        import okhttp3.MultipartBody;
-        import okhttp3.RequestBody;
-        import retrofit2.Call;
-        import retrofit2.Callback;
-        import retrofit2.Response;
-
-        import static android.app.Activity.RESULT_OK;
         import static android.content.Context.MODE_PRIVATE;
 
 
@@ -111,12 +86,12 @@ public class OptionFragmentActivity extends Fragment {
         temp_persona = gson.fromJson(json, Persona.class);
 
 
-        if(temp_persona == null) {
+        /*if(temp_persona == null) {
             Log.d("ConfigurazioneStanze" , "L'oggetto appena scaricato dalle SharedPreference é NULL");
         }
 
         Log.d("OptionFragment" , temp_persona.getNome() + " " +  temp_persona.getCognome() + " " + temp_persona.getProfileImage());
-
+        */
 
 
         //inizializza l'activity con
@@ -126,7 +101,7 @@ public class OptionFragmentActivity extends Fragment {
         about.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent(getActivity(),AboutActivity.class);
+
                 ricalcolaCompiti();
             }
         });
@@ -140,7 +115,7 @@ public class OptionFragmentActivity extends Fragment {
                 Intent intent = new Intent(getActivity(),
                         ConfigurazioneStanzaActivity.class);
                 intent.putExtras(bundle);
-                Log.d("OptionFragment","Sto per Andare in Configurazione Stanze ");
+                //Log.d("OptionFragment","Sto per Andare in Configurazione Stanze ");
                 startActivity(intent);
             }
         });
@@ -327,6 +302,40 @@ public class OptionFragmentActivity extends Fragment {
         builder.show();
     }
 
+
+    private void removeInquilinoFromDB(String email) {
+        URL url=null;
+        Globals g = Globals.getInstance();
+        String temp_url = g.getDomain() + "remove_inquilino.php?mail=" + email;
+
+        try {
+            url = new URL(temp_url);
+        } catch (IOException e) {
+            Toast.makeText(context, "Creazione URL non riuscita", Toast.LENGTH_SHORT).show();
+        }
+
+        try {
+            new TaskAsincrono(context, url , new TaskCompleted() {
+                @Override
+                public void onTaskComplete(Object resp) {
+
+
+
+
+
+                    Toast.makeText(context, "Compiti ricalcolati con successo", Toast.LENGTH_SHORT).show();
+
+
+                }
+            }).execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     //sei sicuro di voler uscire??
 
 
@@ -342,6 +351,7 @@ public class OptionFragmentActivity extends Fragment {
                 if(items[item].equals("Si")) {
 
                     //Toast.makeText(context, "hai cliccato si, ora ti mando al login", Toast.LENGTH_SHORT).show();
+                    removeInquilinoFromDB(temp_persona.getMail());
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);
 

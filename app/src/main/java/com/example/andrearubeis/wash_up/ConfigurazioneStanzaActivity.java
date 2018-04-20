@@ -84,26 +84,30 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
         Gson gson = new Gson();
         String json = pref.getString("persona", "");
         temp_persona = gson.fromJson(json, Persona.class);
-        Log.d("ConfigurazioneStanze" , "La persona si chiama " + temp_persona.getNome() + temp_persona.getMail() + temp_persona.getProfileImage());
+        //Log.d("ConfigurazioneStanze" , "La persona si chiama " + temp_persona.getNome() + temp_persona.getMail() + temp_persona.getProfileImage());
 
-        if(temp_persona == null) {
+        /*if(temp_persona == null) {
             Log.d("ConfigurazioneStanze" , "L'oggetto appena scaricato dalle SharedPreference é NULL");
-        }
+        }*/
 
 
 
         //INIZIALIZZAZIONE DATABASE CON STANZE STANDARD
-        inizializationNewHome();
+        if(getIntent().getStringExtra("crea_le_stanze_standard") != null) {
+            if(getIntent().getStringExtra("crea_le_stanze_standard").equals("si")){
+                inizializationNewHome();
+            }
+        }
 
 
-        Log.w("INFORMATION" , "sto per entrare nella configurazione della nuova classe");
+
+        //Log.w("INFORMATION" , "sto per entrare nella configurazione della nuova classe");
 
 
         //INIZIALIZZAZIONE INTERFACCIA DINAMICA
         inizializationInterface();
 
         Globals g = Globals.getInstance();
-        g.setInfoUtente(temp_persona);
 
 
         add.setOnClickListener(new View.OnClickListener() {
@@ -112,10 +116,6 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
                 Globals g = Globals.getInstance();
                 Intent intent = new Intent(ConfigurazioneStanzaActivity.this,
                         AggiungiStanzaActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("home_id" , g.getIdString());
-                //bundle.putParcelable("persona" ,temp_persona);
-                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });
@@ -126,19 +126,10 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
             @Override
             public void onClick(View view) {
 
-                //Log.w("INFORMATION" , "l'oggetto persona contiene : " + temp_persona.getNome() + " " + temp_persona.getStanze().toString());
 
                 Intent intent = new Intent(ConfigurazioneStanzaActivity.this, bottom_activity.class);
 
-                //Log.w("INFORMATION" , "l'oggetto persona contiene : " + temp_persona.getNome() + " " + temp_persona.getStanze().get(0).getNameStanza() + " " + temp_persona.getStanze().get(0).getImageStanza());
 
-
-                if(temp_persona.getStanze() == null) {
-                    Toast.makeText(getApplicationContext(),"ConfigurazioneStanze : il vettore è NULL ",Toast.LENGTH_SHORT).show();
-                    Log.d("ConfigurazioneStanze" , "Il vettore tornato è NULL");
-                }else{
-                    Log.d("ConfigurazioneStanze" , "Il vettore tornato è : " + temp_persona.getStanze().toString());
-                }
 
                 startActivity(intent);
 
@@ -254,8 +245,7 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
 
 
                 String result = reader_json.getStringFromInputStream((InputStream) resp);
-
-                //Toast.makeText(getApplicationContext(),result,Toast.LENGTH_SHORT).show();
+                Log.d("ConfigurazioneStanze" , "La stringa JSON é " + result);
 
                 temp_persona.setStanze(reader_json.readJSONStanze(result));
 
@@ -281,64 +271,30 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
         Gson gson = new Gson();
         String json = gson.toJson(temp_persona);
         editor.putString("persona", json);
-        // Save the changes in SharedPreferences
         editor.commit(); // commit changes
 
 
 
 
 
-        if(temp_persona.getStanze() != null ) {
+        /*if(temp_persona.getStanze() != null ) {
             Log.d("ConfigurazioneStanze" , "Il vector ha : " + temp_persona.getStanze().size() + " elementi");
         }else{
             Log.d("ConfigurazioneStanze" , "Il vector é NULL");
-        }
+        }*/
 
 
         AdapterStanze adapter = new AdapterStanze(ConfigurazioneStanzaActivity.this , temp_persona.getStanze());
 
 
-        if(adapter == null ) {
+        /*if(adapter == null ) {
             Log.d("ConfigurazioneStanze" , "L'adapter é NULL");
-        }
+        }*/
 
         listview.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
 
-
-    /**
-     *
-     * @param is
-     * @return trasforma l'InputStream in Stringa
-     */
-    private static String getStringFromInputStream(InputStream is) {
-
-        BufferedReader br = null;
-        StringBuilder sb = new StringBuilder();
-
-        String line;
-        try {
-
-            br = new BufferedReader(new InputStreamReader(is));
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        return sb.toString();
-    }
 
 
 

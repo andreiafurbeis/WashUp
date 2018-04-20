@@ -35,10 +35,10 @@
         <activity android:name=".ModificaCompitiActivity" />
         <activity android:name=".AggiungiInquilinoActivity" />
         <activity android:name=".RuoliInquilino" />
-        <activity android:name=".AboutActivity" />
         <activity android:name=".AggiungiStanzaTutorial" />
         <activity android:name=".ModificaCompitiTutorial" />
         <activity android:name=".ConfigurazioneStanzaTutorial"></activity>
+        <activity android:name=".AttendiInvitoActivity"></activity>
     </application>
 
 </manifest>

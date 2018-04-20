@@ -11,7 +11,9 @@
     <ImageView
         android:id="@+id/row_stanza_image"
         android:layout_width="355dp"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

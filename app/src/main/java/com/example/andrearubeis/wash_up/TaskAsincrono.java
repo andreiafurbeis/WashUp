@@ -85,32 +85,10 @@ public class TaskAsincrono extends AsyncTask {
         finally {
             urlConnection.disconnect();
         }
-        //return convertStreamToString(in);
         return in;
     }
 
 
-    //CONVERTIRE INPUTSTREAM IN STRING
 
-    private String convertStreamToString(InputStream is) {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        StringBuilder sb = new StringBuilder();
-
-        String line;
-        try {
-            while ((line = reader.readLine()) != null) {
-                sb.append(line).append('\n');
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                is.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return sb.toString();
-    }
 
 }

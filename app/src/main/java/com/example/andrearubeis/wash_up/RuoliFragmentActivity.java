@@ -65,9 +65,10 @@ public class RuoliFragmentActivity extends Fragment {
         String json = pref.getString("persona", "");
         temp_persona = gson.fromJson(json, Persona.class);
 
-        if(temp_persona == null) {
+
+        /*if(temp_persona == null) {
             Log.d("RuoliFragment" , "L'oggetto appena scaricato dalle SharedPreference é NULL");
-        }
+        }*/
 
         //DEVE ARRIVARE UN ARRAYLIST DI PERSONE
 
@@ -83,15 +84,18 @@ public class RuoliFragmentActivity extends Fragment {
         ArrayList<Persona> coinquilini = temp_persona.getCoinquilini();
         if(coinquilini == null) {
             coinquilini = new ArrayList<Persona>();
-            Log.d("RuoliFragment" , "Il vettore coinquilini é null");
+            //Log.d("RuoliFragment" , "Il vettore coinquilini é null");
 
         }
         Persona loggata = new Persona(temp_persona.getNome() , temp_persona.getCognome() , temp_persona.getMail() , temp_persona.getProfileImage() , temp_persona.getIdHome() , null);
         loggata.setCompiti(temp_persona.getCompiti());
+        /*if(temp_persona.getCompiti() == null) {
+            Log.d("RuoliFragment" , "Il vettore compiti della persona loggata é null");
+        }*/
         coinquilini.add(loggata);
 
 
-        AdapterRuoli adapter = new AdapterRuoli(getActivity(),coinquilini);
+        AdapterRuoli adapter = new AdapterRuoli(getActivity() ,coinquilini);
 
         list_view.setAdapter(adapter);
     }

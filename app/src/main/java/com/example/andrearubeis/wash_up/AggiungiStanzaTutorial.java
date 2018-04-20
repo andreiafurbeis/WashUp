@@ -50,14 +50,19 @@ public class AggiungiStanzaTutorial extends AppCompatActivity {
         gestisci_compiti = (Button) findViewById(R.id.aggiungi_stanza_tutorial_button_compiti);
 
 
-        Tooltip tooltip_modifica_compiti  = new Tooltip.Builder(gestisci_compiti)
+        final Tooltip tooltip_modifica_compiti  = new Tooltip.Builder(gestisci_compiti)
                 .setText(" Assegna un nome alla stanza e poi clicca qui per aggiungere una lista di compiti da svolgere")
                 .setBackgroundColor(Color.parseColor("#ff669900"))
                 .setTextColor(Color.WHITE)
-
-
                 .setGravity(Gravity.BOTTOM)
                 .show();
+
+        stanza.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tooltip_modifica_compiti.dismiss();
+            }
+        });
 
         gestisci_compiti.setOnClickListener(new View.OnClickListener() {
             @Override

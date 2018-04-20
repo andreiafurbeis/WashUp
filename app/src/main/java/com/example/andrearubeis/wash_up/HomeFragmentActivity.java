@@ -55,7 +55,7 @@ public class HomeFragmentActivity extends Fragment {
 
 
 
-        Log.d("precedenza" , "Sono dentro all'OnCreate");
+        //Log.d("precedenza" , "Sono dentro all'OnCreate");
 
 
     }
@@ -71,24 +71,21 @@ public class HomeFragmentActivity extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        //PROVA
-
 
         rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
         listview = (ListView) rootView.findViewById(R.id.fragment_home_listview);
 
-        //Find the layout with the id you gave in on the xml
         linear = (LinearLayout) rootView.findViewById(R.id.fragment_home_linear);
 
         ArrayList<Stanza> vectorStanze = getArguments().getParcelableArrayList("stanze");
 
-        if(vectorStanze == null) {
+        /*if(vectorStanze == null) {
             Toast.makeText(getActivity(),"Home Fragment : Il vettore delle stanze è NULL" ,Toast.LENGTH_SHORT).show();
 
         }else{
             Log.d("HomeFragmentActivity" , vectorStanze.toString());
-        }
+        }*/
 
         creaInterfaccia(vectorStanze);
 
@@ -103,7 +100,7 @@ public class HomeFragmentActivity extends Fragment {
 
     public void creaInterfaccia(ArrayList<Stanza> vectorStanze){
 
-        if(vectorStanze == null) {
+        /*if(vectorStanze == null) {
             Toast.makeText(getActivity(),"Home Fragment : Il vettore delle stanze è NULL" ,Toast.LENGTH_SHORT).show();
 
         }
@@ -113,15 +110,15 @@ public class HomeFragmentActivity extends Fragment {
             Log.d("HomeFragment" , "Il vector ha : " + vectorStanze.size() + " elementi");
         }else{
             Log.d("HomeFragment" , "Il vector é NULL");
-        }
+        }*/
 
 
         AdapterStanze adapter = new AdapterStanze(getActivity(), vectorStanze);
 
 
-        if( adapter == null ) {
+        /*if( adapter == null ) {
             Log.d("HomeFragment" , "L'adapter é NULL");
-        }
+        }*/
 
         listview.setAdapter(adapter);
         adapter.notifyDataSetChanged();

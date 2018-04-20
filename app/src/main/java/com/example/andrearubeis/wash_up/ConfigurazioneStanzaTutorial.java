@@ -2,6 +2,7 @@ package com.example.andrearubeis.wash_up;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -19,17 +20,21 @@ public class ConfigurazioneStanzaTutorial extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_configurazione_stanza_tutorial);
+        //Nascondi AppBar
+        ActionBar barra = getSupportActionBar();
+        barra.hide();
 
         //unica azione possibile dell'activity: premere '+' e creare una nuova stanza ------> passo all'activity AggiungiStanzaTutorial
+
+        Button continua = (Button) findViewById(R.id.configurazione_tutorial_button_continua);
 
         aggiungi_stanza = (Button) findViewById(R.id.configurazione_tutorial_button_add);
         Tooltip tooltip_aggiungi_stanza  = new Tooltip.Builder(aggiungi_stanza)
                 .setText("Clicca qui per aggiungere una nuova stanza")
                 .setBackgroundColor(Color.parseColor("#ff669900"))
                 .setTextColor(Color.WHITE)
-
-
                 .setGravity(Gravity.TOP)
                 .show();
         aggiungi_stanza.setOnClickListener(new View.OnClickListener() {

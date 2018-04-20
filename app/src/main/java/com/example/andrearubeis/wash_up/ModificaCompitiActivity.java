@@ -21,16 +21,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.baoyz.swipemenulistview.SwipeMenu;
-import com.baoyz.swipemenulistview.SwipeMenuCreator;
-import com.baoyz.swipemenulistview.SwipeMenuItem;
-import com.baoyz.swipemenulistview.SwipeMenuListView;
+
 import com.google.gson.Gson;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
@@ -78,10 +72,8 @@ public class ModificaCompitiActivity extends AppCompatActivity{
         ActionBar barra = getSupportActionBar();
         barra.hide();
         Intent intent = getIntent();
-        //String nome_stanza = intent.getStringExtra("nome_stanza");
         temp = new Stanza (null, intent.getStringExtra("nome_stanza") ,null);
 
-        //temp_persona = getIntent().getParcelableExtra("persona");
 
         pref = getApplicationContext().getSharedPreferences("persona", MODE_PRIVATE);
 
@@ -89,17 +81,16 @@ public class ModificaCompitiActivity extends AppCompatActivity{
         String json = pref.getString("persona", "");
         temp_persona = gson.fromJson(json, Persona.class);
 
-        if(temp_persona == null) {
+        /*if(temp_persona == null) {
             Log.d("ConfigurazioneStanze" , "L'oggetto appena scaricato dalle SharedPreference é NULL");
-        }
+        }*/
 
         title_bar.setText(title_bar.getText() + " " + temp.getNameStanza());
-        //indice_stanza = getIndiceStanza(temp_persona.getStanze() , getIntent().getStringExtra("nome_stanza"));
         indice_stanza = temp_persona.getIndiceStanza(getIntent().getStringExtra("nome_stanza"));
 
         compiti = temp_persona.getCompitiStanza(indice_stanza);
 
-        //Log.d("ModificaCompiti" , "ci sono : " + compiti.size() + "compiti in questa stanza ");
+        Log.d("ModificaCompiti" , "ci sono : " + compiti.size() + "compiti in questa stanza ");
 
 
         adapter = new AdapterCompiti(this , compiti);
@@ -114,10 +105,8 @@ public class ModificaCompitiActivity extends AppCompatActivity{
         listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                //compiti.remove(position);
 
                 removeItemFromList(position);
-
 
                 return true;
             }
@@ -155,17 +144,13 @@ public class ModificaCompitiActivity extends AppCompatActivity{
 
     private void createDialog() {
 
-        Log.d("ModificaCompiti" , "Sono denro alla crezione della Dialog");
+        //Log.d("ModificaCompiti" , "Sono denro alla crezione della Dialog");
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        // Get the layout inflater
         LayoutInflater inflater = this.getLayoutInflater();
 
-        // Inflate and set the layout for the dialog
-        // Pass null as the parent view because its going in the dialog layout
         final View dialogView = inflater.inflate(R.layout.aggiungi_compito_dialog , null);
         builder.setView(dialogView)
-                // Add action buttons
                 .setPositiveButton(R.string.aggiungi, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
@@ -180,19 +165,16 @@ public class ModificaCompitiActivity extends AppCompatActivity{
                         }
 
 
-                        //Log.d("ModificaCompiti" , "La persona si chiama " + temp_persona.getNome() )
+                        Log.d("ModificaCompiti" , "La persona si chiama " + temp_persona.getNome() );
                         Compito compito = new Compito(descrizione.getText().toString(),temp.getNameStanza(),temp_persona.getIdHome());
 
-                        //ArrayList<Compito> compiti = temp_persona.getCompitiStanza(indice_stanza);
-                        /*if(compiti == null) {
+                        if(compiti == null) {
                             Log.d("ModificaCompiti" , "Crezione nuovo ArrayList indice stanza = " + indice_stanza );
 
                             compiti = new ArrayList<Compito>();
-                        }*/
+                        }
                         new_compiti.add(compito);
                         compiti.add(compito);
-                        //temp_persona.setCompiti(compiti);
-                        //temp_persona.setCompitiStanza(indice_stanza,compiti);
                         addCompitiToListView();
                     }
                 })
@@ -208,7 +190,6 @@ public class ModificaCompitiActivity extends AppCompatActivity{
 
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
 
         //Aggiornare DataBase
         if(new_compiti.size() != 0 ) {
@@ -217,7 +198,6 @@ public class ModificaCompitiActivity extends AppCompatActivity{
         }
         Intent intent = new Intent(ModificaCompitiActivity.this , AggiungiStanzaActivity.class);
         Bundle bundle = new Bundle();
-        //bundle.putParcelable("persona" , temp_persona);
 
 
 
@@ -236,11 +216,11 @@ public class ModificaCompitiActivity extends AppCompatActivity{
 
 
         //bundle.putParcelableArrayList("compiti" , compiti_global);
-        if(compiti == null) {
+        /*if(compiti == null) {
             Log.d("ModificaCompiti" , "I compiti sono NULL");
         }else{
             //Log.d("ModificaCompiti" , "Array compiti ha dimensione : " + temp_persona.getStanze().get(indice_stanza).getCompiti().size());
-        }
+        }*/
         bundle.putString("nome_stanza" , temp.getNameStanza());
         bundle.putInt("update",1);
         bundle.putInt("indice_stanza",indice_stanza);
@@ -258,7 +238,7 @@ public class ModificaCompitiActivity extends AppCompatActivity{
 
 
     private void addCompitiToListView() {
-        Log.d("ModificaCompiti" , "imposto nuovo Adapter" );
+        //Log.d("ModificaCompiti" , "imposto nuovo Adapter" );
 
         //adapter = new AdapterCompiti(this , compiti);
         listview.setAdapter(adapter);
@@ -327,9 +307,9 @@ public class ModificaCompitiActivity extends AppCompatActivity{
         AlertDialog.Builder alert = new AlertDialog.Builder(
                 ModificaCompitiActivity.this);
 
-        alert.setTitle("Delete");
+        alert.setTitle("Cancella");
         alert.setMessage("Vuoi cancellare il compito dalla stanza " + getIntent().getStringExtra("nome_stanza") + " ?");
-        alert.setPositiveButton("YES",  new DialogInterface.OnClickListener() {
+        alert.setPositiveButton("Si",  new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 removeCompitoFromDB(compiti.get(deletePosition));
@@ -355,7 +335,7 @@ public class ModificaCompitiActivity extends AppCompatActivity{
 
             }
         });
-        alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+        alert.setNegativeButton("Annulla", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();

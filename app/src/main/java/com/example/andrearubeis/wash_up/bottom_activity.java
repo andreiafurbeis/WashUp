@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
@@ -40,9 +41,11 @@ public class bottom_activity extends AppCompatActivity {
     SharedPreferences pref;
     Persona temp_persona;
     Fragment selectedFragment = null;
+    Fragment fragment;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int PICK_IMAGE_REQUEST = 2;
     ImageManager manager_image;
+    JSONReader reader_json;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,25 +56,23 @@ public class bottom_activity extends AppCompatActivity {
         setContentView(R.layout.activity_bottom_activity);
         bottomNavigationView = (BottomNavigationView)findViewById(R.id.navigation);
 
+        //Log.d("BottomActivity" , "BottomActivity ricaricata");
 
         Bundle args = new Bundle();
-
+        reader_json = new JSONReader(getApplicationContext());
 
         pref = getApplicationContext().getSharedPreferences("persona", MODE_PRIVATE);
 
         Gson gson = new Gson();
         String json = pref.getString("persona", "");
         temp_persona = gson.fromJson(json, Persona.class);
-        Log.d("BottomActivity" , "Aggiorno TEMP_PERSONA");
-        if(temp_persona == null) {
-            Log.d("ConfigurazioneStanze" , "L'oggetto appena scaricato dalle SharedPreference é NULL");
-        }
+        //Log.d("BottomActivity" , "Aggiorno TEMP_PERSONA");
+
 
         args.putParcelableArrayList("stanze" ,temp_persona.getStanze());
-
         args.putString("id" , temp_persona.getIdHome());
 
-        HomeFragmentActivity fragment = new HomeFragmentActivity();
+        fragment = HomeFragmentActivity.newInstance();
         fragment.setArguments(args);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_activity_bottom, fragment);
@@ -87,8 +88,6 @@ public class bottom_activity extends AppCompatActivity {
                 (new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        //Intent intent;
-                        //Persona temp_persona;
                         Bundle args;
                         switch (item.getItemId()) {
                             case R.id.navigation_home:
@@ -108,14 +107,15 @@ public class bottom_activity extends AppCompatActivity {
                                 globalVariableReload();
 
                                 selectedFragment = OptionFragmentActivity.newInstance();
-                                //intent = getIntent();
                                 args = new Bundle();
-                                //temp_persona = intent.getParcelableExtra("persona");
-                                args.putString("id" , temp_persona.getIdHome());
-                                args.putString("nome" , temp_persona.getNome());
-                                args.putString("cognome" , temp_persona.getCognome());
-                                args.putString("profile_image" , temp_persona.getProfileImage());
-                                selectedFragment.setArguments(args);
+                                /*args.putString("id",temp_persona.getIdHome());
+                                args.putString("nome",temp_persona.getNome());
+                                args.putString("cognome",temp_persona.getCognome());
+                                args.putString("profile_image",temp_persona.getProfileImage());
+
+
+
+                                selectedFragment.setArguments(args);*/
 
                                 break;
 
@@ -161,7 +161,6 @@ public class bottom_activity extends AppCompatActivity {
 
                 if(items[item].equals("si")) {
 
-                    //Toast.makeText(context, "hai cliccato si, ora ti mando al login", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(selectedFragment.getContext(), MainActivity.class);
                     startActivity(intent);
 
@@ -171,11 +170,9 @@ public class bottom_activity extends AppCompatActivity {
 
                 if (items[item].equals(selectedFragment.getContext().getString(R.string.annulla))) {
                     dialog.dismiss();
-                    //Toast.makeText(context, "hai cliccato annulla, torna sul fragment option", Toast.LENGTH_SHORT).show();
 
 
                 }
-                //Toast.makeText(getApplicationContext(), "hai cliccato su un elemento del dialog", Toast.LENGTH_SHORT).show();
             }
         });
         builder.show();
@@ -212,7 +209,7 @@ public class bottom_activity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-        Log.d("BottomActivity","Adesso faccio l'upload");
+        //Log.d("BottomActivity","Adesso faccio l'upload");
 
 
 
@@ -254,7 +251,7 @@ public class bottom_activity extends AppCompatActivity {
         }
 
 
-        Log.d("BottomActivity","Provo a modificare Dati Utente DB con url : " + url.toString());
+        //Log.d("BottomActivity","Provo a modificare Dati Utente DB con url : " + url.toString());
 
 
         try {
@@ -262,7 +259,7 @@ public class bottom_activity extends AppCompatActivity {
                 @Override
                 public void onTaskComplete(Object resp) {
 
-                    Log.d("BottomActivity","Dati utente aggiornati sul DB");
+                    //Log.d("BottomActivity","Dati utente aggiornati sul DB");
 
                 }
             }).execute().get();
@@ -280,12 +277,69 @@ public class bottom_activity extends AppCompatActivity {
         Gson gson = new Gson();
         String json = pref.getString("persona", "");
         temp_persona = gson.fromJson(json, Persona.class);
-        Log.d("BottomActivity" , "Aggiorno TEMP_PERSONA");
-        if(temp_persona == null) {
+        //Log.d("BottomActivity" , "Aggiorno TEMP_PERSONA");
+        /*if(temp_persona == null) {
             Log.d("ConfigurazioneStanze" , "L'oggetto appena scaricato dalle SharedPreference é NULL");
+        }*/
+        URL url=null;
+        Globals g = Globals.getInstance();
+
+        try {
+            String url_temp = g.getDomain() + "reload_info.php?mail=" + temp_persona.getMail() + "&home_id=" + temp_persona.getIdHome();
+            //Toast.makeText(getApplicationContext(),url_temp ,Toast.LENGTH_SHORT).show();
+
+            url = new URL(url_temp);
+        }catch(IOException e){
+            Toast.makeText(getApplicationContext(),"Creazione URL non riuscita",Toast.LENGTH_SHORT).show();
         }
+
+        try {
+            new TaskAsincrono(getApplicationContext(), url , new TaskCompleted() {
+                @Override
+                public void onTaskComplete(Object resp) {
+
+                    String result = reader_json.getStringFromInputStream((InputStream) resp);
+
+                    //Toast.makeText(getApplicationContext(),result,Toast.LENGTH_SHORT).show();
+
+                    String[] parts = result.split("<br>");
+                    reloadInfo(parts);
+
+
+
+                }
+            }).execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+
+
+
+
+
+
     }
 
+
+
+    public void reloadInfo(String [] parts) {
+
+        temp_persona.setStanze(reader_json.readJSONStanze(parts[0]));
+        temp_persona.setCoinquilini(reader_json.readJSONCoinquilini(parts[1] , temp_persona.getIdHome()));
+        Persona dati_da_salvare = reader_json.readJSONPersona(parts[2]);
+        temp_persona.setCompiti(dati_da_salvare.getCompiti());
+        pref = getApplicationContext().getSharedPreferences("persona", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.remove("persona");
+        editor.apply();
+        Gson gson = new Gson();
+        String json = gson.toJson(temp_persona);
+        editor.putString("persona", json);
+        editor.commit(); // commit changes
+    }
 
 
 
@@ -293,68 +347,44 @@ public class bottom_activity extends AppCompatActivity {
 
     private void uploadImage() {
 
-        /**
-         * Progressbar to Display if you need
-         */
-        /*final ProgressDialog progressDialog;
-        progressDialog = new ProgressDialog(getApplicationContext());
-        progressDialog.setMessage(getString(R.string.caricamento_dati));
-        progressDialog.show();*/
 
-        //Create Upload Server Client
         ApiService service = RetroClient.getApiService();
 
-        //File creating from selected URL
+
 
         String imageString = manager_image.getImagePath()+"/"+manager_image.getImageName();
 
-        Log.d("AggiungiStanzaUpload" , "il path dell' immagine è : " + imageString);
+        //Log.d("AggiungiStanzaUpload" , "il path dell' immagine è : " + imageString);
 
         File file = new File(imageString);
 
-        // create RequestBody instance from file
         RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
 
-        // MultipartBody.Part is used to send also the actual file name
-        MultipartBody.Part body =
-                MultipartBody.Part.createFormData("uploaded_file", file.getName(), requestFile);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("uploaded_file", file.getName(), requestFile);
 
         Call<Result> resultCall = service.uploadImage(body);
-        Log.d("BottomActivity","Sto provando a fare l'upload");
-        // finally, execute the request
+        //Log.d("BottomActivity","Sto provando a fare l'upload");
         resultCall.enqueue(new Callback<Result>() {
             @Override
             public void onResponse(Call<Result> call, Response<Result> response) {
 
-                //progressDialog.dismiss();
 
-                // Response Success or Fail
                 if (response.isSuccessful()) {
                     if (response.body().getResult().equals("success")) {
-                        //Snackbar.make(parentView,"Upload Success", Snackbar.LENGTH_LONG).show();
-                        Log.d("OptionUpload", "Upload Success , il path sul server è : " + response.body().getValue());
+                        //Log.d("OptionUpload", "Upload Success , il path sul server è : " + response.body().getValue());
 
                         reloadUI();
 
                     }else {
-                        //Snackbar.make(parentView, "Upload Fail", Snackbar.LENGTH_LONG).show();
-                        Log.d("RegistrazioneUpload", "Upload Fail");
+                        //Log.d("RegistrazioneUpload", "Upload Fail");
 
                     }
                 } else {
-                    //Snackbar.make(parentView, "Upload Fail", Snackbar.LENGTH_LONG).show();
-                    Log.d("RegistrazioneUpload" , "Upload Fail");
+                    //Log.d("RegistrazioneUpload" , "Upload Fail");
 
                 }
 
 
-
-
-                //Update Views
-
-                //imagePath = "";
-                //textView.setVisibility(View.VISIBLE);
-                //imageView.setVisibility(View.INVISIBLE);
             }
 
             @Override

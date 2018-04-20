@@ -61,62 +61,7 @@ public class RuoliStanza extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        //temp = new Stanza( intent.getStringExtra("image_stanza") , intent.getStringExtra("nome_stanza") , intent.getStringExtra("home_id"));
-        //nome_stanza = intent.getStringExtra("nome_stanza");
-        //image_stanza = intent.getStringExtra("image_stanza");
-        //id_home = intent.getStringExtra("home_id");
-
-
-
-        //creo un ArrayList provvisorio per vedere se tutto funziona
-        //campo stanza e' l'immagine della persona che deve fare il copito
-        //uso un'immagine profilo di default
-
-
-        /*String img_profilo = "\"/data/user/0/com.example.andrearubeis.wash_up/app_imageDir photo_20180413_09_48_28.jpg\"";
-
-
-        ArrayList<Compito> compiti = new ArrayList<Compito>();
-        Compito cmp = new Compito(null,"lava",img_profilo,null);
-        Compito cmp1 = new Compito(null,"baadsas",img_profilo,null);
-        Compito cmp2 = new Compito(null,"bagndsdsdo",img_profilo,null);
-        Compito cmp3 = new Compito(null,"bagdsdsno",img_profilo,null);
-        Compito cmp4 = new Compito(null,"bagddddno",img_profilo,null);
-
-        compiti.add(cmp);
-        compiti.add(cmp1);
-        compiti.add(cmp2);
-        compiti.add(cmp3);
-        compiti.add(cmp4);*/
-
-
-
-
-
-
-
-
-        //temp = new Stanza( intent.getStringExtra("image_stanza") , intent.getStringExtra("nome_stanza") , intent.getStringExtra("home_id"));
         temp = intent.getParcelableExtra("stanza");
-
-        /*if (temp.getCompiti()!= null){
-            Log.d("RuoliStanza","IL VETTORE A: " + temp.getCompiti().size());
-        }else{
-            Log.d("RuoliStanza","IL VETTORE E' NULL");
-
-        }
-
-        //DA RIFARE , I COMPITI DA STAMPARE QUI DENTRO DEVO PRENDERLI DAL DATABASE , QUERY PER PRENDERE I COMPITI DA ASSEGNAMENTI (AVRO' UN FILE JSON DA GESTIRE CON ANCHE L' IMMAGINE DELL' INQUILINO CHE DEVE SVOLGERLO)
-
-        AdapterRuoliStanza adapter = new AdapterRuoliStanza(this,temp.getCompiti());
-        list.setAdapter(adapter);*/
-
-
-
-
-
-
-
 
     }
 
@@ -133,8 +78,6 @@ public class RuoliStanza extends AppCompatActivity {
 
     private void inizializzazioneInterface() {
 
-        Drawable image_drawable = null;
-
         String [] giorni_settimana = {"Domenica" , "Lunedí" , "Martedí" , "Mercoledí" , "Giovedí" , "Venerdí" , "Sabato"};
         String [] mesi = {"Gennaio" , "Febbraio" , "Marzo" , "Aprile" , "Maggio" , "Giugno" , "Luglio" , "Agosto" , "Settembre" , "Ottobre" , "Novembre" , "Dimcebre"};
         GregorianCalendar gc = new GregorianCalendar();
@@ -144,11 +87,11 @@ public class RuoliStanza extends AppCompatActivity {
 
 
 
-        Log.d("immagine","RuoliStanza : La stringa dell'immagine é : " + temp.getImageStanza());
+        //Log.d("immagine","RuoliStanza : La stringa dell'immagine é : " + temp.getImageStanza());
 
 
         nome_stanza.setText(temp.getNameStanza());
-        Picasso.get().load(temp.getImageStanza()).into(image_stanza,new com.squareup.picasso.Callback(){
+        Picasso.get().load(temp.getImageStanza()).fit().centerCrop().into(image_stanza,new com.squareup.picasso.Callback(){
 
             @Override
             public void onSuccess() {

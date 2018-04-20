@@ -1,5 +1,6 @@
 package com.example.andrearubeis.wash_up;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -21,9 +22,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-/**
- * Created by nicolo on 10/04/18.
- */
+
 
 public class AdapterRuoli extends ArrayAdapter<Persona> {
 
@@ -58,7 +57,7 @@ public class AdapterRuoli extends ArrayAdapter<Persona> {
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, final View convertView, ViewGroup parent) {
 
         View rowView = convertView;
 
@@ -69,9 +68,7 @@ public class AdapterRuoli extends ArrayAdapter<Persona> {
         ImageView image_inquilino = (ImageView) rowView.findViewById(R.id.item_persona_imageview);
         Button campanella = (Button) rowView.findViewById(R.id.item_persona_button_bell);
         TextView name_inquilino = (TextView) rowView.findViewById(R.id.item_persona_text_view_nome);
-        //row_inquilino.setCompoundDrawablesRelativeWithIntrinsicBounds(getDrawable(data[position].getProfileImage()),null,null,null);
         name_inquilino.setText(data.get(position).getNome());
-        //row_inquilino.setCompoundDrawablesWithIntrinsicBounds( getDrawable(data.get(position).getProfileImage()), null, null, null);
 
         Log.d("AdapterRuoli","il link dell'immagine é : " + data.get(position).getProfileImage());
 
@@ -90,6 +87,12 @@ public class AdapterRuoli extends ArrayAdapter<Persona> {
 
         });
 
+        if(data.get(position).getCompiti() != null) {
+            Log.d("AdapterRuoli", "INFO COMPITI : " + data.get(position).getCompiti().toString());
+        }else{
+            Log.d("AdapterRuoli", "L'utente " + data.get(position).getMail() + "ha il vettore compiti NULL");
+
+        }
 
         campanella.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,15 +100,12 @@ public class AdapterRuoli extends ArrayAdapter<Persona> {
                 Log.d("AdapterRuoli","e stata cliccata la campanella");
                 ArrayList<Persona> coinquilini = data.get(position).getCoinquilini();
                 String mail_corrente = data.get(position).getMail();
-
-
-
                 Log.d("AdapterRuoli","e stata cliccata la campanella");
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("plain/text");
                 intent.putExtra(Intent.EXTRA_EMAIL, new String[] { mail_corrente });
                 intent.putExtra(Intent.EXTRA_SUBJECT, "REFFATI");
-                intent.putExtra(Intent.EXTRA_TEXT, "devi pulire, controlla su WashUp");
+                intent.putExtra(Intent.EXTRA_TEXT, "Devi pulire, controlla su WashUp");
                 context.startActivity(Intent.createChooser(intent, ""));
             }
         });
@@ -114,14 +114,13 @@ public class AdapterRuoli extends ArrayAdapter<Persona> {
             @Override
             public void onClick(View v) {
                 Log.d("AdapterRuoli" , "e stato cliccato un bottone");
+                Log.d("AdapterRuoli", "INFO COMPITI : " + data.get(position).getCompiti().toString());
                 Intent intent = new Intent(context, RuoliInquilino.class);
                 Bundle bundle = new Bundle();
-                //intent.putExtra("nome_persona",data.get(position).getNome() );
                 bundle.putParcelable("persona" , data.get(position));
                 intent.putExtras(bundle);
                 context.startActivity(intent);
-
-                //Log.d("log2","SONO IN RUOLIFRAGMENTACTIVITY,STARTACTIVITY(intent) ");
+                ((Activity)context).finish();
             }
         });
 

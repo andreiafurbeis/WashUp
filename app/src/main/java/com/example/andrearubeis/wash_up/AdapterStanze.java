@@ -63,21 +63,13 @@ public class AdapterStanze extends ArrayAdapter<Stanza> {
 
         }
 
-        //Log.d("AdapterStanze","Sono dentro al getView");
-
         TextView nome_stanza = (TextView) rowView.findViewById(R.id.row_stanza_name);
-
-        //Log.d("AdapterStanze","Il nome della stanza é : " + data.get(position).getNameStanza());
-
-        //Log.d("AdapterStanze" , "Il context é " + context.getClass().getName());
-
 
         nome_stanza.setText(data.get(position).getNameStanza());
 
         ImageView image_stanza = (ImageView) rowView.findViewById(R.id.row_stanza_image);
 
-
-        Picasso.get().load(data.get(position).getImageStanza()).into(image_stanza,new com.squareup.picasso.Callback() {
+        Picasso.get().load(data.get(position).getImageStanza()).fit().centerCrop().into(image_stanza,new com.squareup.picasso.Callback() {
             @Override
             public void onSuccess() {
 
@@ -90,10 +82,6 @@ public class AdapterStanze extends ArrayAdapter<Stanza> {
             }
 
         });
-
-        //Picasso.get().load(data.get(position).getImageStanza()).into(image_stanza);
-
-
 
 
 
@@ -108,13 +96,9 @@ public class AdapterStanze extends ArrayAdapter<Stanza> {
                             AggiungiStanzaActivity.class);
                     Bundle bundle = new Bundle();
                     Log.d("AdapterStanze" , "Sono dentro all'OnClick della ListView di ConfigurazioneStanze");
-                    /*if(temp_persona.getCompitiStanza(1) != null) {
-                        Log.d("ConfigurazioneStanze", "Button : ci sono : " + temp_persona.getCompitiStanza(1).size() + "compiti in questa stanza ");
-                    }*/
                     bundle.putString("nome_stanza",data.get(position).getNameStanza());
                     bundle.putString("home_id",g.getIdString());
                     bundle.putInt("update",1);
-                    //bundle.putParcelable("persona" , temp_persona);
                     intent.putExtras(bundle);
                     context.startActivity(intent);
                     ((Activity)context).finish();
@@ -123,10 +107,6 @@ public class AdapterStanze extends ArrayAdapter<Stanza> {
                     Globals g = Globals.getInstance();
                     Intent intent = new Intent(context,
                             RuoliStanza.class);
-                    //intent.putExtra("nome_stanza",data.get(position).getNameStanza());
-                    //intent.putExtra("image_stanza",data.get(position).getImageStanza());
-                    //intent.putExtra("home_id",g.getIdString());
-                    //intent.putp("stanza",data.get(position));
                     Log.d("AdapterStanze" , "Sono dentro all'OnClick della ListView di HomeFragment");
 
                     Bundle bundle = new Bundle();

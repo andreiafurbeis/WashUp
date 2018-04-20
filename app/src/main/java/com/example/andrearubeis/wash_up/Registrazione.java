@@ -98,23 +98,18 @@ public class Registrazione extends AppCompatActivity {
         registrati = findViewById(R.id.registrazione_button_registrati);
         foto_profilo = findViewById(R.id.profile_image);
 
-        //immagine profilo di default
-        //imageBitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.mipmap.ic_launcher);
-
 
         registrati.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
                     String usr = username.getText().toString().trim();
-                    //String pwd = md5(password.getText().toString()).trim();
                     String mail = email.getText().toString().trim();
 
                     if(!usr.equals("") && !password.getText().toString().trim().equals("") && !mail.equals("") && flag_new_image!=0) {
 
                         //Invio richiesta di registrazione
                         uploadImage();
-                        //registrationRequest();
 
 
                     }else{
@@ -138,8 +133,6 @@ public class Registrazione extends AppCompatActivity {
         foto_profilo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //dispatchTakePictureIntent();
-                //selectImage();
                 ImageChooser img = new ImageChooser(Registrazione.this , call);
                 img.selectImage();
                 photoFlag();
@@ -184,14 +177,12 @@ public class Registrazione extends AppCompatActivity {
             filePath = data.getData();
             try {
                 bitmap_image = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                //imageManager(imageBitmap);
 
                 manager_image = new ImageManager(getApplicationContext());
 
                 manager_image.imageManager(bitmap_image);
                 manager_image.setImageUri(filePath);
 
-                //Log.d("Immagine" , "il path dell' immmagine è : " + manager.getImagePath());
 
 
                 foto_profilo.setImageBitmap(manager_image.getImageBitmap());
@@ -273,73 +264,46 @@ public class Registrazione extends AppCompatActivity {
 
     private void uploadImage() {
 
-        /**
-         * Progressbar to Display if you need
-         */
-        /*final ProgressDialog progressDialog;
-        progressDialog = new ProgressDialog(getApplicationContext());
-        progressDialog.setMessage(getString(R.string.caricamento_dati));
-        progressDialog.show();*/
 
-        //Create Upload Server Client
         ApiService service = RetroClient.getApiService();
-
-        //File creating from selected URL
 
         String imageString = manager_image.getImagePath()+"/"+manager_image.getImageName();
 
-        Log.d("RegistrazioneUpload" , "il path dell' immagine è : " + imageString);
+        //Log.d("RegistrazioneUpload" , "il path dell' immagine è : " + imageString);
 
         File file = new File(imageString);
 
-        // create RequestBody instance from file
         RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
 
-        // MultipartBody.Part is used to send also the actual file name
         MultipartBody.Part body =
                 MultipartBody.Part.createFormData("uploaded_file", file.getName(), requestFile);
 
         Call<Result> resultCall = service.uploadImage(body);
-        Log.d("MainActivity","Sto provando a fare l'upload");
-        // finally, execute the request
+        //Log.d("MainActivity","Sto provando a fare l'upload");
         resultCall.enqueue(new Callback<Result>() {
             @Override
             public void onResponse(Call<Result> call, Response<Result> response) {
 
-                //progressDialog.dismiss();
-
-                // Response Success or Fail
                 if (response.isSuccessful()) {
                     if (response.body().getResult().equals("success")) {
-                        //Snackbar.make(parentView,"Upload Success", Snackbar.LENGTH_LONG).show();
-                        Log.d("RegistrazioneUpload", "Upload Success , il path sul server è : " + response.body().getValue());
+                        //Log.d("RegistrazioneUpload", "Upload Success , il path sul server è : " + response.body().getValue());
                         registrationRequest();
-                        //setImagePicasso();
 
                     }else {
-                        //Snackbar.make(parentView, "Upload Fail", Snackbar.LENGTH_LONG).show();
-                        Log.d("RegistrazioneUpload", "Upload Fail");
+                        //Log.d("RegistrazioneUpload", "Upload Fail");
 
                     }
                 } else {
-                    //Snackbar.make(parentView, "Upload Fail", Snackbar.LENGTH_LONG).show();
-                    Log.d("RegistrazioneUpload" , "Upload Fail");
+                    //Log.d("RegistrazioneUpload" , "Upload Fail");
 
                 }
 
 
-
-
-                 //Update Views
-
-                //imagePath = "";
-                //textView.setVisibility(View.VISIBLE);
-                //imageView.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void onFailure(Call<Result> call, Throwable t) {
-                //progressDialog.dismiss();
+
             }
         });
     }

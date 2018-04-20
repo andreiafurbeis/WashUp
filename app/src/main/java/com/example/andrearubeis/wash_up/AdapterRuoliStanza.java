@@ -18,13 +18,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-/**
- * Created by nicolo on 13/04/18.
- */
-
-
-
-
 
 
 
@@ -68,7 +61,6 @@ public class AdapterRuoliStanza extends ArrayAdapter<Compito> {
 
         TextView tv = (TextView) view.findViewById(R.id.row_ruoli_stanza_text_view_nome);
         tv.setText(data.get(position).getDescrizione());
-        //tv.setCompoundDrawablesWithIntrinsicBounds(getDrawable(data.get(position).getStanza()),null,null,null);
         ImageView iv = (ImageView)  view.findViewById(R.id.row_ruoli_stanza_imageview);
 
 

@@ -17,43 +17,49 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/title_bar_bottom_navigation"
-            android:text="@string/title_home"
-            android:textColor="@android:color/white"
-            android:textAlignment="viewStart"
-            android:paddingLeft="16dp"
-
             android:fontFamily="@font/lovelo_black"
+            android:paddingLeft="16dp"
+            android:text="@string/title_home"
+            android:textAlignment="viewStart"
+
+            android:textColor="@android:color/white"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ScrollView
-            android:id="@+id/scrollView2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:id="@+id/fragment_home_scroll"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fragment_home_title_bar">
+            app:layout_constraintTop_toBottomOf="@+id/fragment_home_title_bar"
+            app:layout_constraintVertical_bias="0.6">
+
+            <LinearLayout
+                android:id="@+id/fragment_home_linear"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:descendantFocusability="blocksDescendants">
+
+                <ListView
+                    android:id="@+id/fragment_home_listview"
+                    android:layout_width="match_parent"
+                    android:layout_height="438dp"
+                    android:clickable="true">
+
+                </ListView>
+            </LinearLayout>
+
 
         </ScrollView>
 
-        <LinearLayout
-            android:id="@+id/fragment_home_linear"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/scrollView2">
-
-
-            <ListView
-                android:id="@+id/fragment_home_listview"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </LinearLayout>
 
     </android.support.constraint.ConstraintLayout>
+
 </RelativeLayout>

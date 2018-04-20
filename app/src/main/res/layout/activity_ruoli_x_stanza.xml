@@ -9,9 +9,11 @@
 
     <ImageView
         android:id="@+id/ruoli_x_stanza_image"
-        android:layout_width="355dp"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
         android:layout_marginTop="8dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -37,14 +39,16 @@
         android:id="@+id/ruoli_x_stanza_date_bar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@android:color/holo_red_dark"
+        android:fontFamily="@font/lovelo_black"
+        android:gravity="center"
+        android:background="@android:color/holo_red_light"
         android:text="@string/data_di_oggi"
-        android:textAlignment="center"
         android:textColor="@android:color/white"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ruoli_x_stanza_image" />
+
 
     <ScrollView
         android:id="@+id/ruoli_x_stanza_scroll_view"

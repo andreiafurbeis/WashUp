@@ -47,23 +47,8 @@ public class AdapterCompiti extends ArrayAdapter<Compito>{
             if (vi == null){
                 vi = inflater.inflate(R.layout.row_compito, parent ,false);
             }
-            //TextView text = (TextView) vi.findViewById(R.id.text);
             TextView row = (TextView) vi.findViewById(R.id.row_compito_descrizione);
             row.setText("-  " + data.get(position).getDescrizione());
-            /*row.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    data.remove(position);
-
-
-
-                    //adapter.notifyDataSetChanged();
-
-                    //Toast.makeText(AdapterCompiti.this, "Item Deleted", Toast.LENGTH_LONG).show();
-
-                    return true;
-                }
-            });*/
             return vi;
         }
 }

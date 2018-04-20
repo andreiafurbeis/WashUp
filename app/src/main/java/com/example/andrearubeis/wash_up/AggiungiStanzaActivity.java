@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -17,6 +18,7 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -111,26 +113,28 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
         String json = pref.getString("persona", "");
         temp_persona = gson.fromJson(json, Persona.class);
 
-
-
-// elimina_stanza una volta cliccato chiama in fondo a qesta classe removeStanzaFromDB(Stanza s)
-        elimina_stanza.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                //creo una Stanza temp da usare come input di removeStanzaFromDB(Stanza s)
-                Stanza stanza_temp = new Stanza(null,intent.getStringExtra("nome_stanza"),intent.getStringExtra("id_casa"));
-
-            }
-        });
-
         if(intent.hasExtra("update")) {
             aggiungi.setText("Modifica");
             title_bar.setText("Modifica Stanza");
             inizializzazione(); //INIZIALIZZA L'ACTIVITY CON TUTTE LE INFORMAZIONI DELLA STANZA PRECEDENTEMENTE CREATA
         }else{
             title_bar.setText("Aggiungi Stanza");
+            elimina_stanza.setVisibility(View.GONE);
         }
+
+
+        // elimina_stanza una volta cliccato chiama in fondo a qesta classe removeStanzaFromDB(Stanza s)
+        elimina_stanza.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //creo una Stanza temp da usare come input di removeStanzaFromDB(Stanza s)
+                Stanza stanza_temp = new Stanza(null,intent.getStringExtra("nome_stanza"),intent.getStringExtra("id_casa"));
+                removeStanza(stanza_temp);
+
+            }
+        });
+
 
 
 
@@ -166,7 +170,6 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 ImageChooser image_chooser = new ImageChooser(AggiungiStanzaActivity.this , call);
-                //image_chooser.selectImageRoom();
                 image_chooser.selectImage();
 
             }
@@ -204,8 +207,6 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
             //MODALITÁ DI MODIFICA , IN QUESTO CASO LA STANZA É GIÁ STATA CREATA , MA VUOLE ESSERE MODIFICATA
             Stanza temp = new Stanza(null,intent.getStringExtra("nome_stanza"),temp_persona.getIdHome());
             String temp_url = g.getDomain() + "update_room.php?home_id=" + temp.getIdCasa() + "&nuovo_nome_stanza=" + edit_nome_stanza.getText() + "&nome_stanza=" + temp.getNameStanza() + "";
-
-            //Log.d("immagine_click", "il path dell'immagine é : " + filePath.toString());
 
             if (flag_new_image == 1) {
 
@@ -259,7 +260,6 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
 
             //MODALITÁ DI AGGIUNTA , LA STANZA DEVE ANCORA ESSERE AGGIUNTA AL DB
 
-            //String home_id = intent.getStringExtra("home_id");
             Stanza temp = new Stanza(null,null,temp_persona.getIdHome());
 
             if(flag_new_image == 1) {
@@ -306,21 +306,42 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
         }
     }
 
+    private void removeStanza(final Stanza temp_stanza) {
+        final CharSequence[] items = { "Si",  getApplicationContext().getString(R.string.annulla) };
+        AlertDialog.Builder builder = new AlertDialog.Builder(AggiungiStanzaActivity.this);
+        builder.setTitle("Sei sicuro di voler eliminare la stanza : " + temp_stanza.getNameStanza() + " ?");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+
+                if(items[item].equals("Si")) {
+
+                    removeStanzaFromDB(temp_stanza);
+                    onBackPressed();
+
+                }
+
+
+
+                if (items[item].equals(getApplicationContext().getString(R.string.annulla))) {
+                    dialog.dismiss();
+
+
+                }
+            }
+        });
+        builder.show();
+    }
+
 
     private void uploadImage() {
 
-        /**
-         * Progressbar to Display if you need
-         */
-        /*final ProgressDialog progressDialog;
-        progressDialog = new ProgressDialog(getApplicationContext());
-        progressDialog.setMessage(getString(R.string.caricamento_dati));
-        progressDialog.show();*/
 
-        //Create Upload Server Client
+
+
         ApiService service = RetroClient.getApiService();
 
-        //File creating from selected URL
+
 
         String imageString = manager_image.getImagePath()+"/"+manager_image.getImageName();
 
@@ -328,53 +349,40 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
 
         File file = new File(imageString);
 
-        // create RequestBody instance from file
+
         RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
 
-        // MultipartBody.Part is used to send also the actual file name
         MultipartBody.Part body =
                 MultipartBody.Part.createFormData("uploaded_file", file.getName(), requestFile);
 
         Call<Result> resultCall = service.uploadImage(body);
         Log.d("MainActivity","Sto provando a fare l'upload");
-        // finally, execute the request
         resultCall.enqueue(new Callback<Result>() {
             @Override
             public void onResponse(Call<Result> call, Response<Result> response) {
 
-                //progressDialog.dismiss();
 
-                // Response Success or Fail
+
                 if (response.isSuccessful()) {
                     if (response.body().getResult().equals("success")) {
-                        //Snackbar.make(parentView,"Upload Success", Snackbar.LENGTH_LONG).show();
                         Log.d("RegistrazioneUpload", "Upload Success , il path sul server è : " + response.body().getValue());
-                        //setImagePicasso();
 
                     }else {
-                        //Snackbar.make(parentView, "Upload Fail", Snackbar.LENGTH_LONG).show();
                         Log.d("RegistrazioneUpload", "Upload Fail");
 
                     }
                 } else {
-                    //Snackbar.make(parentView, "Upload Fail", Snackbar.LENGTH_LONG).show();
                     Log.d("RegistrazioneUpload" , "Upload Fail");
 
                 }
 
 
 
-
-                //Update Views
-
-                //imagePath = "";
-                //textView.setVisibility(View.VISIBLE);
-                //imageView.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void onFailure(Call<Result> call, Throwable t) {
-                //progressDialog.dismiss();
+
             }
         });
     }
@@ -440,21 +448,15 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
             @Override
             public void onTaskComplete(Object resp) {
 
-                //String result = getStringFromInputStream((InputStream) resp);
                 String result = reader_json.getStringFromInputStream((InputStream) resp);
 
-                //String JSON_image_stanza = readJSON(result);
                 String JSON_image_stanza = reader_json.readJSONStanzaImage(result);
-                //Drawable image_drawable = null;
 
                 if(JSON_image_stanza != null) {
 
-
-
-                    Picasso.get().load(JSON_image_stanza).into(view_stanza_image,new com.squareup.picasso.Callback() {
+                    Picasso.get().load(JSON_image_stanza).fit().centerCrop().into(view_stanza_image,new com.squareup.picasso.Callback() {
                         @Override
                         public void onSuccess() {
-
 
                         }
 
@@ -471,7 +473,7 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
                     //nessuna immagine presente
 
                 }
-                //readStream((String) resp);
+
             }
         }).execute();
 
@@ -481,7 +483,8 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
 
     private void removeStanzaFromDB(Stanza stanza_da_rimuovere) {
         Globals g = Globals.getInstance();
-        String temp_url = g.getDomain()+"remove_stanza.php?id_compito=" + stanza_da_rimuovere.getIdCasa() + "&nome_stanza =" + stanza_da_rimuovere.getNameStanza();
+        String temp_url = g.getDomain()+"remove_stanza.php?id_home=" + g.getIdString() + "&nome_stanza=" + stanza_da_rimuovere.getNameStanza();
+        Log.d("AggiungiStanza","L'URL é : " + temp_url);
         URL url = null;
         try {
             url = new URL(temp_url);
@@ -494,7 +497,7 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
             public void onTaskComplete(Object resp) {
 
 
-                Toast.makeText(getApplicationContext(), "Compito cancellato con successo", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Stanza eliminata con successo", Toast.LENGTH_SHORT).show();
 
 
             }

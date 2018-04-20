@@ -36,19 +36,15 @@ public class ImageChooser {
 
                 if(items[item].equals(context.getString(R.string.scegli_galleria))) {
                     showFileChooser();
-                    //Toast.makeText(context, "hai cliccato scegli galleria", Toast.LENGTH_SHORT).show();
                 }
 
                 if(items[item].equals(context.getString(R.string.scatta_foto))) {
                     dispatchTakePictureIntent();
-                    //Toast.makeText(context, "hai cliccato scatta foto", Toast.LENGTH_SHORT).show();
                 }
 
                 if (items[item].equals(context.getString(R.string.annulla))) {
                     dialog.dismiss();
-                    //Toast.makeText(context, "hai cliccato annulla", Toast.LENGTH_SHORT).show();
                 }
-                //Toast.makeText(getApplicationContext(), "hai cliccato su un elemento del dialog", Toast.LENGTH_SHORT).show();
             }
         });
         builder.show();
@@ -74,7 +70,7 @@ public class ImageChooser {
 
 
 
-    public void selectImageRoom() {
+    /*public void selectImageRoom() {
         final CharSequence[] items = { context.getString(R.string.scegli_galleria), context.getString(R.string.annulla) };
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(context.getString(R.string.aggiungi_foto_profilo));
@@ -95,7 +91,7 @@ public class ImageChooser {
             }
         });
         builder.show();
-    }
+    }*/
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);

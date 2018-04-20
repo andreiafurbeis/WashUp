@@ -11,34 +11,34 @@
     <ScrollView
         android:id="@+id/configurazione_scroll"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="76dp"
+        android:layout_height="0dp"
         android:background="@color/background_view_color"
-        app:layout_constraintBottom_toBottomOf="@id/configurazione_linear"
-        app:layout_constraintTop_toTopOf="@+id/configurazione_linear">
+        app:layout_constraintBottom_toTopOf="@id/configurazione_constraint_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/configurazione_title_bar"
+        app:layout_constraintVertical_bias="0.6">
+
+        <LinearLayout
+            android:id="@+id/configurazione_linear"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:descendantFocusability="blocksDescendants">
+
+
+            <ListView
+                android:id="@+id/configurazione_listview"
+                android:layout_width="match_parent"
+                android:layout_height="438dp"
+                android:clickable="true"/>
+        </LinearLayout>
 
     </ScrollView>
 
 
-    <LinearLayout
-        android:id="@+id/configurazione_linear"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/background_view_color"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@id/configurazione_constraint_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/configurazione_title_bar">
 
-
-        <ListView
-            android:id="@+id/configurazione_listview"
-            android:layout_width="match_parent"
-            android:layout_height="343dp" />
-    </LinearLayout>
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/configurazione_constraint_button"
@@ -77,21 +77,23 @@
             app:layout_constraintEnd_toEndOf="parent" />
     </android.support.constraint.ConstraintLayout>
 
+
+
     <Button
         android:id="@+id/configurazione_title_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/title_bar_bottom_navigation"
-        android:text="@string/configurazione_stanze"
-        android:textColor="@android:color/white"
-        android:textAlignment="viewStart"
-        android:paddingLeft="16dp"
-
         android:fontFamily="@font/lovelo_black"
+        android:paddingLeft="16dp"
+        android:text="@string/configurazione_stanze"
+        android:textAlignment="viewStart"
+
+        android:textColor="@android:color/white"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

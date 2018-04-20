@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity  {
 
                         String[] parts = result.split("<br>");
 
-                        Log.d("MainActivity" , "La stringa risultante é : " + result);
+                        //Log.d("MainActivity" , "La stringa risultante é : " + result);
 
                         Globals g = Globals.getInstance();
 
@@ -168,6 +168,7 @@ public class MainActivity extends AppCompatActivity  {
                             temp_persona.setNome(dati_da_salvare.getNome());
                             temp_persona.setCognome(dati_da_salvare.getCognome());
                             temp_persona.setProfileImage(dati_da_salvare.getProfileImage());
+                            temp_persona.setCompiti(dati_da_salvare.getCompiti());
 
 
 
@@ -233,7 +234,7 @@ public class MainActivity extends AppCompatActivity  {
     /**
      * Il file JSON di risposta é cosí composto :
      *
-     * [{ "nome" : "nome_persona" , "cognome" : "cognome_persona" , "mail" : "mail_persona" , "profile_image" : "url immagine presente sul server" } , ...
+     * [{ "nome" : "nome_persona" , "cognome" : "cognome_persona" , "mail" : "mail_persona" , "profile_image" : "url immagine presente sul server" , "compiti" : [.....]} , ...
      *
      *
      */
@@ -281,7 +282,7 @@ public class MainActivity extends AppCompatActivity  {
         editor.apply();
         Gson gson = new Gson();
         String json = gson.toJson(temp_persona);
-        Log.d("MainActivity" , "La persona si chiama " + temp_persona.getNome());
+       // Log.d("MainActivity" , "La persona si chiama " + temp_persona.getNome());
         editor.putString("persona", json);
         // Save the changes in SharedPreferences
         editor.commit(); // commit changes

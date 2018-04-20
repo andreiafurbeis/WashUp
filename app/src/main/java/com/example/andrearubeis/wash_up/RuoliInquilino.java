@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.andrearubeis.wash_up.R;
@@ -47,6 +48,8 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Vector;
 import java.util.concurrent.ExecutionException;
@@ -65,6 +68,7 @@ public class RuoliInquilino extends AppCompatActivity {
     ArrayList<String> stanze_da_sistemare;
     ArrayList<Stanza> stanze;
     Persona global_temp_persona;
+    TextView text_data;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,15 +78,24 @@ public class RuoliInquilino extends AppCompatActivity {
         barra.hide();
 
 
+
+
         Intent intent = getIntent();
 
 
         profile_image = (ImageView) findViewById(R.id.ruoli_x_inquilino_image);
-
+        text_data = (TextView) findViewById(R.id.ruoli_x_inquilino_date_bar);
         temp_persona = intent.getParcelableExtra("persona");
         compiti = temp_persona.getCompiti();
 
-        Log.d("RuoliInquilino" , "Questo inquilino ha da svolgere : " + compiti.size() + " compiti");
+        //Log.d("RuoliInquilino" , "Questo inquilino ha da svolgere : " + compiti.size() + " compiti");
+
+        String [] giorni_settimana = {"Domenica" , "Lunedí" , "Martedí" , "Mercoledí" , "Giovedí" , "Venerdí" , "Sabato"};
+        String [] mesi = {"Gennaio" , "Febbraio" , "Marzo" , "Aprile" , "Maggio" , "Giugno" , "Luglio" , "Agosto" , "Settembre" , "Ottobre" , "Novembre" , "Dimcebre"};
+        GregorianCalendar gc = new GregorianCalendar();
+
+        String data_odierna = giorni_settimana[gc.get(Calendar.DAY_OF_WEEK)-1] + " " + gc.get(Calendar.DAY_OF_MONTH) + " " + mesi[gc.get(Calendar.MONTH)];
+        text_data.setText(data_odierna);
 
 
         SharedPreferences pref = getApplicationContext().getSharedPreferences("persona", MODE_PRIVATE);
@@ -90,15 +103,14 @@ public class RuoliInquilino extends AppCompatActivity {
         Gson gson = new Gson();
         String json = pref.getString("persona", "");
         global_temp_persona = gson.fromJson(json, Persona.class);
-        Log.d("BottomActivity" , "Aggiorno TEMP_PERSONA");
-        if(global_temp_persona == null) {
+        //Log.d("BottomActivity" , "Aggiorno TEMP_PERSONA");
+        /*if(global_temp_persona == null) {
             Log.d("ConfigurazioneStanze" , "L'oggetto appena scaricato dalle SharedPreference é NULL");
-        }
+        }*/
 
 
         title = (Button) findViewById(R.id.ruoli_x_inquilino_title);
         title.setText(temp_persona.getNome());
-        //title.setCompoundDrawablesRelative(immagine_profilo_drawable,null,null,null);
 
         Picasso.get().load(temp_persona.getProfileImage()).into(profile_image , new com.squareup.picasso.Callback() {
             @Override
@@ -114,46 +126,11 @@ public class RuoliInquilino extends AppCompatActivity {
 
         });
 
-        /*stanze_da_sistemare = new ArrayList<String>();
-        if(compiti != null) {
-            for (Compito c : compiti) {
-                String nome_stanza_temp = c.getStanza();
-                if (!stanze_da_sistemare.contains(nome_stanza_temp)) {
-                    stanze_da_sistemare.add(nome_stanza_temp);
-                    Log.d("RuoliInquilino","é stata aggiunta la stanza " + nome_stanza_temp);
-
-                }
-            }
-        }else{
-            Log.d("RuoliInquilino","il vettore compiti e' null");
-        }
-
-
-        int size = stanze_da_sistemare.size();
-        Log.d("RuoliInquilino", "il numero di stanze e': " + size);
-
-
-
-
-        stanze = new ArrayList<Stanza>();
-
-        for(String s: stanze_da_sistemare){
-            ArrayList<Compito> compitixstanza = new ArrayList<Compito>();
-            for(Compito c : compiti){
-                if(c.getStanza().equals(s)){
-                    Log.d("RuoliInquilino" , "Aggiungo il compito : " +c.getDescrizione());
-                    compitixstanza.add(c);
-                }
-            }
-
-            Stanza stanza_temp = new Stanza(null,s);
-            stanza_temp.setCompiti(compitixstanza);
-            stanze.add(stanza_temp);
-
-        }*/
 
         ArrayList<Compito> struttura_temporanea_per_inizializzazione= new ArrayList<Compito>();
         String nome_stanza_in_corso = "";
+        //Log.d("RuoliInquilino", "INFO COMPITI : " + temp_persona.getCompiti().toString());
+
         for(int i = 0 ; i < temp_persona.getCompiti().size() ; i++) {
             String nome_stanza_da_aggiungere = temp_persona.getCompiti().get(i).getStanza();
             //Log.d("RuoliInquilino","Sto per aggiungere un compiton in  : " +nome_stanza_da_aggiungere);
@@ -162,9 +139,12 @@ public class RuoliInquilino extends AppCompatActivity {
 
             if(!nome_stanza_da_aggiungere.equals(nome_stanza_in_corso)) {
                 struttura_temporanea_per_inizializzazione.add(new Compito(null,global_temp_persona.getStanze().get(indice_stanza).getImageStanza(),temp_persona.getCompiti().get(i).getStanza()));
-                Log.d("RuoliInquilino","Sto aggiungendo la riga : " + temp_persona.getCompiti().get(i).getStanza());
+                //Log.d("RuoliInquilino","Sto aggiungendo la riga : " + temp_persona.getCompiti().get(i).getStanza());
             }
-            struttura_temporanea_per_inizializzazione.add(new Compito(temp_persona.getCompiti().get(i).getDescrizione(),null,null));
+            Compito temporaneo = new Compito(temp_persona.getCompiti().get(i).getId(),temp_persona.getCompiti().get(i).getDescrizione(),null,null);
+            temporaneo.setSvolto(temp_persona.getCompiti().get(i).getSvolto());
+            //Log.d("RuoliInquilino" , "Il compito " + temp_persona.getCompiti().get(i).getDescrizione() + " ha il flag svolto a : " + temp_persona.getCompiti().get(i).getSvolto());
+            struttura_temporanea_per_inizializzazione.add(temporaneo);
             nome_stanza_in_corso = nome_stanza_da_aggiungere;
         }
 
@@ -177,4 +157,12 @@ public class RuoliInquilino extends AppCompatActivity {
 
     }
 
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(RuoliInquilino.this , bottom_activity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("fragment_select","ruoli");
+        startActivity(intent);
+    }
 }

@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -17,13 +20,17 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
+
 /**
  * Created by nicolo on 12/04/18.
  */
@@ -79,7 +86,7 @@ public class AdapterStanzeRuoli extends ArrayAdapter<Compito> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View vi = convertView;
         if(this.getItemViewType(position) == 0) {
             if (vi == null) {
@@ -107,11 +114,69 @@ public class AdapterStanzeRuoli extends ArrayAdapter<Compito> {
         if (vi == null){
             vi = inflater.inflate(R.layout.row_checkable_compito, parent, false);
         }
-        Log.d("AdapterCompitiXStanza" , "sto aggiungendo alla listview il compito : " + data.get(position).getDescrizione()); //id_casa in questo caso contiene la descrizione del compito
         CheckBox cb = vi.findViewById(R.id.row_checkable_compito_check_box);
         cb.setText(data.get(position).getDescrizione());
+        if(data.get(position).getSvolto() == 1) {
+            cb.setChecked(true);
+        }
+
+
+        cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+               updateCompito(data.get(position).getId(),isChecked);
+
+            }
+        });
 
         return vi;
 
+    }
+
+
+
+    public void updateCompito(String id_compito , final Boolean checkStatus) {
+        URL url=null;
+        Globals g = Globals.getInstance();
+        int flag= -1;
+        if(checkStatus == true) {
+            flag = 1;
+        }else{
+            flag= 0;
+        }
+
+        try {
+            String url_temp = g.getDomain() + "update_compito_svolto.php?id_compito="+id_compito+"&stato="+flag;
+
+            url = new URL(url_temp);
+        }catch(IOException e){
+            Toast.makeText(context,"Creazione URL non riuscita",Toast.LENGTH_SHORT).show();
+        }
+
+        try {
+            new TaskAsincrono(context, url , new TaskCompleted() {
+                @Override
+                public void onTaskComplete(Object resp) {
+
+                    if(checkStatus == true) {
+
+                        Toast.makeText(context, "Il compito é stato segnato come svolto", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(context, "Il compito é stato segnato come non svolto", Toast.LENGTH_SHORT).show();
+
+                    }
+
+
+
+
+                }
+            }).execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 }

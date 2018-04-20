@@ -33,6 +33,7 @@ public class NewHome extends AppCompatActivity {
 
     Button continua;
     Persona temp_persona;
+    Button invito;
     SharedPreferences pref;
     JSONReader reader_json;
 
@@ -58,24 +59,13 @@ public class NewHome extends AppCompatActivity {
             Log.d("NewHome" , "L'oggetto appena scaricato dalle SharedPreference é NULL");
         }
 
-
+        invito = (Button) findViewById(R.id.new_home_button_invito);
         continua = (Button) findViewById(R.id.new_home_button_continua);
+
+
         continua.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-
-
-
-
-
-
-
-
-
-
-
                 AlertDialog.Builder alert = new AlertDialog.Builder(
                         NewHome.this);
 
@@ -85,13 +75,9 @@ public class NewHome extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
+                        dialog.dismiss();
 
-               dialog.dismiss();
-
-
-
-
-               try {
+                        try {
 
                             creationNewHome(temp_persona.getMail());
 
@@ -103,24 +89,30 @@ public class NewHome extends AppCompatActivity {
                     }
                 });
 
-
                 alert.show();
-
-
 
             }
 
+        });
 
 
-
-
-
-
+        invito.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(NewHome.this, AttendiInvitoActivity.class);
+                startActivity(intent);
+            }
         });
 
 
     }
 
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(NewHome.this, MainActivity.class);
+        startActivity(intent);
+    }
 
     /**
      * Crea la nuova casa e la aggiunge al database
@@ -184,17 +176,15 @@ public class NewHome extends AppCompatActivity {
         Gson gson = new Gson();
         String json = gson.toJson(temp_persona);
         editor.putString("persona", json);
-        // Save the changes in SharedPreferences
         editor.commit(); // commit changes
 
-        //Toast.makeText(getApplicationContext(), id_home, Toast.LENGTH_SHORT).show();
 
-
-        if(temp_persona == null ) {
+        /*if(temp_persona == null ) {
             Log.d("NewHome" , "L'oggetto Persona é NULL");
-        }
+        }*/
 
         Intent intent = new Intent(NewHome.this, ConfigurazioneStanzaActivity.class);
+        intent.putExtra("crea_le_stanze_standard","si");
         startActivity(intent);
     }
 
