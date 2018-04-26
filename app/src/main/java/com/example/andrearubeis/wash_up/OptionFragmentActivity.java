@@ -34,6 +34,7 @@ public class OptionFragmentActivity extends Fragment {
     Button modifica_casa;
     Button contact_us;
     Button about;
+    TextView modifica;
     Button aggiungi_inquilino;
     Button abbandona_casa;
     TextView nome_persona;
@@ -63,6 +64,8 @@ public class OptionFragmentActivity extends Fragment {
                              Bundle savedInstanceState) {
 
 
+        //Log.d("OptionFragment","Sono nell' OnCreateView");
+
         context = getActivity();
 
         vista = inflater.inflate(R.layout.fragment_option, container, false);
@@ -76,6 +79,10 @@ public class OptionFragmentActivity extends Fragment {
         profile_image = (ImageView) vista.findViewById(R.id.fragment_option_profile_image);
         log_out = (Button) vista.findViewById(R.id.fragment_option_button_log_out);
         contact_us = (Button) vista.findViewById(R.id.fragment_option_button_contact_us);
+        modifica = (TextView) vista.findViewById(R.id.fragment_option_text_photo);
+
+
+
 
 
 
@@ -94,8 +101,10 @@ public class OptionFragmentActivity extends Fragment {
         */
 
 
-        //inizializza l'activity con
+        //inizializza l'interfaccia dell'activity
         inizializzaInterfaccia();
+
+
 
         //azione pulsante about
         about.setOnClickListener(new View.OnClickListener() {
@@ -189,6 +198,12 @@ public class OptionFragmentActivity extends Fragment {
             @Override
             public void onSuccess() {
 
+                setButtonHeight(modifica_casa);
+                setButtonHeight(aggiungi_inquilino);
+                setButtonHeight(about);
+                setButtonHeight(contact_us);
+                setButtonHeight(log_out);
+                setButtonHeight(abbandona_casa);
 
             }
 
@@ -198,6 +213,14 @@ public class OptionFragmentActivity extends Fragment {
             }
 
         });
+
+
+
+    }
+
+    private void setButtonHeight (Button button) {
+        int space_not_allowed = 203 * (getResources().getDisplayMetrics().densityDpi/160);
+        Utility.setButtonHeight(button , getArguments().getInt("bottom_height") , space_not_allowed);
 
     }
 

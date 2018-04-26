@@ -90,7 +90,7 @@ public class ModificaCompitiActivity extends AppCompatActivity{
 
         compiti = temp_persona.getCompitiStanza(indice_stanza);
 
-        Log.d("ModificaCompiti" , "ci sono : " + compiti.size() + "compiti in questa stanza ");
+        //Log.d("ModificaCompiti" , "ci sono : " + compiti.size() + "compiti in questa stanza ");
 
 
         adapter = new AdapterCompiti(this , compiti);
@@ -157,19 +157,19 @@ public class ModificaCompitiActivity extends AppCompatActivity{
                         // aggiungi compito
                         EditText descrizione = dialogView.findViewById(R.id.compiti_dialog_descrizione);
                         String testo = descrizione.getText().toString();
-                        Log.d("ModificaCompiti" , "La decrizione é : " + testo);
+                        /*Log.d("ModificaCompiti" , "La decrizione é : " + testo);
 
                         if(temp_persona == null) {
                             Log.d("ModificaCompiti" , "La persona é NULL" );
 
-                        }
+                        }*/
 
 
-                        Log.d("ModificaCompiti" , "La persona si chiama " + temp_persona.getNome() );
+                        //Log.d("ModificaCompiti" , "La persona si chiama " + temp_persona.getNome() );
                         Compito compito = new Compito(descrizione.getText().toString(),temp.getNameStanza(),temp_persona.getIdHome());
 
                         if(compiti == null) {
-                            Log.d("ModificaCompiti" , "Crezione nuovo ArrayList indice stanza = " + indice_stanza );
+                            //Log.d("ModificaCompiti" , "Crezione nuovo ArrayList indice stanza = " + indice_stanza );
 
                             compiti = new ArrayList<Compito>();
                         }

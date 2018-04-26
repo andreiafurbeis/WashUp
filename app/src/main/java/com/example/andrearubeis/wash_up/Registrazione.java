@@ -105,15 +105,21 @@ public class Registrazione extends AppCompatActivity {
 
                     String usr = username.getText().toString().trim();
                     String mail = email.getText().toString().trim();
+                    ImageChooser dialog = new ImageChooser(Registrazione.this , call);
 
                     if(!usr.equals("") && !password.getText().toString().trim().equals("") && !mail.equals("") && flag_new_image!=0) {
 
-                        //Invio richiesta di registrazione
-                        uploadImage();
+                        if(validazioneMail(mail)) {
+                            //Invio richiesta di registrazione
+                            uploadImage();
+                        }else{
+                            Toast.makeText(getApplicationContext() , "Devi immettere una email corretta" , Toast.LENGTH_SHORT).show();
+
+                            dialog.noValidMail();
+                        }
 
 
                     }else{
-                        ImageChooser dialog = new ImageChooser(Registrazione.this , call);
                         if(flag_new_image == 1) {
                             Toast.makeText(getApplicationContext(), "Non si possono lasciare campi vuoti", Toast.LENGTH_SHORT).show();
 
@@ -307,6 +313,22 @@ public class Registrazione extends AppCompatActivity {
             }
         });
     }
+
+
+    public Boolean validazioneMail(String mail) {
+        String[] parts = mail.trim().split("@");
+        //Log.d("Registrazione" , "La mail ha " + parts.length + "parti");
+        if(parts.length != 2) {
+            return false;
+        }
+        parts = parts[1].trim().split("\\.");
+        if( parts.length != 2) {
+            return false;
+        }
+        return true;
+    }
+
+
 
 
 

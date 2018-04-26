@@ -18,27 +18,6 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class RequestHandler {
 
-    public String sendGetRequest(String uri) {
-        try {
-            URL url = new URL(uri);
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
-
-            String result;
-
-            StringBuilder sb = new StringBuilder();
-
-            while((result = bufferedReader.readLine())!=null){
-                sb.append(result);
-            }
-            con.disconnect();
-            //return sb.toString();
-            return "ciao";
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
     public String sendPostRequest(String requestURL,
                                   HashMap<String, Object> postDataParams) {
 

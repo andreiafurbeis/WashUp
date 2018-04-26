@@ -25,9 +25,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-/**
- * Created by nicoloricci on 27/12/17.
- */
 
 public class RuoliStanza extends AppCompatActivity {
 

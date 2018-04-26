@@ -53,11 +53,11 @@ public class NewHome extends AppCompatActivity {
         Gson gson = new Gson();
         String json = pref.getString("persona", "");
         temp_persona = gson.fromJson(json, Persona.class);
-        Log.d("NewHome" , "La persona si chiama " + temp_persona.getNome() + " con mail : " + temp_persona.getMail());
+        //Log.d("NewHome" , "La persona si chiama " + temp_persona.getNome() + " con mail : " + temp_persona.getMail());
 
-        if(temp_persona == null) {
+        /*if(temp_persona == null) {
             Log.d("NewHome" , "L'oggetto appena scaricato dalle SharedPreference é NULL");
-        }
+        }*/
 
         invito = (Button) findViewById(R.id.new_home_button_invito);
         continua = (Button) findViewById(R.id.new_home_button_continua);
@@ -83,7 +83,7 @@ public class NewHome extends AppCompatActivity {
 
                         }
                         catch(Exception e) {
-                            Log.d("NewHome" , "Eccezione catturata nell'OnCreate");
+                            //Log.d("NewHome" , "Eccezione catturata nell'OnCreate");
                         }
 
                     }

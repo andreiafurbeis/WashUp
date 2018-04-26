@@ -107,4 +107,16 @@
 
     <string name="ricalcolo_compiti">Riassegna Compiti</string>
 
+    <string name="inseirsci_password">\tInserisci una password</string>
+
+    <string name="inseirsci_email">\tInserisci la tua email</string>
+
+    <string name="inseirsci_nome">\tInserisci il tuo nome</string>
+
+    <string name="inseirsci_password_login">\tInserisci la password</string>
+
+    <string name="email_non_corretta">Devi inserire un email valida</string>
+
+
+
 </resources>

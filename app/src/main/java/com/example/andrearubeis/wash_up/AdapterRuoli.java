@@ -70,7 +70,7 @@ public class AdapterRuoli extends ArrayAdapter<Persona> {
         TextView name_inquilino = (TextView) rowView.findViewById(R.id.item_persona_text_view_nome);
         name_inquilino.setText(data.get(position).getNome());
 
-        Log.d("AdapterRuoli","il link dell'immagine é : " + data.get(position).getProfileImage());
+        //Log.d("AdapterRuoli","il link dell'immagine é : " + data.get(position).getProfileImage());
 
 
         Picasso.get().load(data.get(position).getProfileImage()).into(image_inquilino,new com.squareup.picasso.Callback() {
@@ -87,20 +87,20 @@ public class AdapterRuoli extends ArrayAdapter<Persona> {
 
         });
 
-        if(data.get(position).getCompiti() != null) {
+        /*if(data.get(position).getCompiti() != null) {
             Log.d("AdapterRuoli", "INFO COMPITI : " + data.get(position).getCompiti().toString());
         }else{
             Log.d("AdapterRuoli", "L'utente " + data.get(position).getMail() + "ha il vettore compiti NULL");
 
-        }
+        }*/
 
         campanella.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("AdapterRuoli","e stata cliccata la campanella");
+                //Log.d("AdapterRuoli","e stata cliccata la campanella");
                 ArrayList<Persona> coinquilini = data.get(position).getCoinquilini();
                 String mail_corrente = data.get(position).getMail();
-                Log.d("AdapterRuoli","e stata cliccata la campanella");
+                //Log.d("AdapterRuoli","e stata cliccata la campanella");
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("plain/text");
                 intent.putExtra(Intent.EXTRA_EMAIL, new String[] { mail_corrente });
@@ -113,8 +113,8 @@ public class AdapterRuoli extends ArrayAdapter<Persona> {
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("AdapterRuoli" , "e stato cliccato un bottone");
-                Log.d("AdapterRuoli", "INFO COMPITI : " + data.get(position).getCompiti().toString());
+                //Log.d("AdapterRuoli" , "e stato cliccato un bottone");
+               // Log.d("AdapterRuoli", "INFO COMPITI : " + data.get(position).getCompiti().toString());
                 Intent intent = new Intent(context, RuoliInquilino.class);
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("persona" , data.get(position));

@@ -63,7 +63,6 @@ public class RuoliInquilino extends AppCompatActivity {
     ArrayList<Compito> compiti;
     LinearLayout linear;
     ListView list_stanze;
-    ListView list_compiti;
     ImageView profile_image;
     ArrayList<String> stanze_da_sistemare;
     ArrayList<Stanza> stanze;
@@ -115,8 +114,9 @@ public class RuoliInquilino extends AppCompatActivity {
         Picasso.get().load(temp_persona.getProfileImage()).into(profile_image , new com.squareup.picasso.Callback() {
             @Override
             public void onSuccess() {
-
-
+                ViewGroup.LayoutParams params = profile_image.getLayoutParams();
+                params.height = getResources().getDisplayMetrics().heightPixels/6;
+                profile_image.setLayoutParams(params);
             }
 
             @Override
@@ -152,6 +152,8 @@ public class RuoliInquilino extends AppCompatActivity {
         list_stanze = findViewById(R.id.ruoli_x_inquilino_list);
         AdapterStanzeRuoli  adapter = new AdapterStanzeRuoli(this, struttura_temporanea_per_inizializzazione);
         list_stanze.setAdapter(adapter);
+        Utility.setListViewHeightBasedOnChildren(list_stanze);
+
 
 
 

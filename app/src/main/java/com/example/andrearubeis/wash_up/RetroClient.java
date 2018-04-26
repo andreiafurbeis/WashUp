@@ -6,11 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetroClient {
 
-    /**
-     * Upload URL of your folder with php file name...
-     * You will find this file in php_upload folder in this project
-     * You can copy that folder and paste in your htdocs folder...
-     */
+
     private static final String ROOT_URL = "";
 
 

@@ -1,5 +1,6 @@
 package com.example.andrearubeis.wash_up;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,8 +15,10 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.andrearubeis.wash_up.R;
@@ -50,11 +53,12 @@ public class bottom_activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         ActionBar barra = getSupportActionBar();
 
         barra.hide();
         setContentView(R.layout.activity_bottom_activity);
-        bottomNavigationView = (BottomNavigationView)findViewById(R.id.navigation);
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
 
         //Log.d("BottomActivity" , "BottomActivity ricaricata");
 
@@ -66,17 +70,6 @@ public class bottom_activity extends AppCompatActivity {
         Gson gson = new Gson();
         String json = pref.getString("persona", "");
         temp_persona = gson.fromJson(json, Persona.class);
-        //Log.d("BottomActivity" , "Aggiorno TEMP_PERSONA");
-
-
-        args.putParcelableArrayList("stanze" ,temp_persona.getStanze());
-        args.putString("id" , temp_persona.getIdHome());
-
-        fragment = HomeFragmentActivity.newInstance();
-        fragment.setArguments(args);
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame_activity_bottom, fragment);
-        transaction.commit();
 
     }
 
@@ -97,6 +90,7 @@ public class bottom_activity extends AppCompatActivity {
                                 args = new Bundle();
                                 args.putParcelableArrayList("stanze" ,temp_persona.getStanze());
                                 args.putString("id" , temp_persona.getIdHome());
+                                args.putInt("bottom_height" , bottomNavigationView.getHeight());
                                 selectedFragment.setArguments(args);
 
                                 break;
@@ -108,14 +102,9 @@ public class bottom_activity extends AppCompatActivity {
 
                                 selectedFragment = OptionFragmentActivity.newInstance();
                                 args = new Bundle();
-                                /*args.putString("id",temp_persona.getIdHome());
-                                args.putString("nome",temp_persona.getNome());
-                                args.putString("cognome",temp_persona.getCognome());
-                                args.putString("profile_image",temp_persona.getProfileImage());
+                                args.putInt("bottom_height" , bottomNavigationView.getHeight());
 
-
-
-                                selectedFragment.setArguments(args);*/
+                                selectedFragment.setArguments(args);
 
                                 break;
 
@@ -129,6 +118,7 @@ public class bottom_activity extends AppCompatActivity {
                                 args = new Bundle();
                                 args.putParcelableArrayList("stanze" ,temp_persona.getStanze());
                                 args.putString("id" , temp_persona.getIdHome());
+                                args.putInt("bottom_height" , bottomNavigationView.getHeight());
                                 selectedFragment.setArguments(args);
 
                                 break;
@@ -150,6 +140,21 @@ public class bottom_activity extends AppCompatActivity {
         logOut();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Bundle args = new Bundle();
+        args.putParcelableArrayList("stanze" ,temp_persona.getStanze());
+        args.putString("id" , temp_persona.getIdHome());
+        args.putInt("bottom_height" , bottomNavigationView.getHeight());
+
+        selectedFragment = HomeFragmentActivity.newInstance();
+        selectedFragment.setArguments(args);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_activity_bottom, selectedFragment);
+        transaction.commit();
+    }
+
     public void logOut() {
 
         final CharSequence[] items = { "Si",  selectedFragment.getContext().getString(R.string.annulla) };
@@ -159,7 +164,7 @@ public class bottom_activity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int item) {
 
-                if(items[item].equals("si")) {
+                if(items[item].equals("Si")) {
 
                     Intent intent = new Intent(selectedFragment.getContext(), MainActivity.class);
                     startActivity(intent);

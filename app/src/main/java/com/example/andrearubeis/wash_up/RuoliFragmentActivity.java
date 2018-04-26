@@ -92,12 +92,20 @@ public class RuoliFragmentActivity extends Fragment {
         /*if(temp_persona.getCompiti() == null) {
             Log.d("RuoliFragment" , "Il vettore compiti della persona loggata é null");
         }*/
-        coinquilini.add(loggata);
+        //coinquilini.add(loggata);
+        if(coinquilini.size() != 0) {
+            coinquilini.add(coinquilini.get(0)); //aggiunge l' inquilino loggato come primo membro della lista in modo da trovarlo in cima , faccio il cambio di posizione in modo da non alzare troppo la complessità
+            coinquilini.set(0,loggata);
+        }else{
+            coinquilini.add(loggata);
+        }
+
 
 
         AdapterRuoli adapter = new AdapterRuoli(getActivity() ,coinquilini);
 
         list_view.setAdapter(adapter);
+        Utility.setListViewHeightBasedOnChildren(list_view , getArguments().getInt("bottom_height"));
     }
 
 

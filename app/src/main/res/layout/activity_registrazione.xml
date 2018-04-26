@@ -12,6 +12,7 @@
         android:id="@+id/profile_image"
         android:layout_width="120dp"
         android:layout_height="120dp"
+        android:layout_marginTop="75dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
@@ -20,47 +21,33 @@
         app:layout_constraintBottom_toTopOf="@+id/registrazione_username"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registrazione_title_bar" />
-
-    <EditText
-        android:id="@+id/registrazione_password"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginStart="25dp"
-        android:background="@drawable/edit_text_background"
-        android:drawableLeft="@drawable/avatar_password"
-        android:ems="10"
-        android:inputType="textPassword"
-        android:padding="15dp"
-        app:layout_constraintBottom_toTopOf="@+id/registrazione_button_registrati"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/registrazione_title_bar" />
 
     <EditText
         android:id="@+id/registrazione_username"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
         android:layout_marginEnd="25dp"
         android:layout_marginStart="25dp"
+        android:layout_marginTop="10dp"
+        android:hint="@string/inseirsci_nome"
         android:background="@drawable/edit_text_background"
         android:drawableLeft="@drawable/avatar_male"
         android:ems="10"
         android:inputType="textPersonName"
         android:padding="15dp"
         app:layout_constraintBottom_toTopOf="@+id/registrazione_mail"
+        app:layout_constraintTop_toBottomOf="@id/profile_image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
+
     <EditText
         android:id="@+id/registrazione_mail"
+        android:hint="@string/inseirsci_email"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
         android:layout_marginEnd="25dp"
         android:layout_marginStart="25dp"
         android:background="@drawable/edit_text_background"
@@ -71,7 +58,29 @@
         app:layout_constraintBottom_toTopOf="@+id/registrazione_password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintTop_toBottomOf="@id/registrazione_username"
         app:layout_constraintStart_toStartOf="parent" />
+
+
+    <EditText
+        android:id="@+id/registrazione_password"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="25dp"
+        android:layout_marginStart="25dp"
+        android:background="@drawable/edit_text_background"
+        android:drawableLeft="@drawable/avatar_password"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:hint="@string/inseirsci_password"
+        android:padding="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/registrazione_button_registrati"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/registrazione_mail"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
 
     <Button
         android:id="@+id/registrazione_button_registrati"
@@ -88,15 +97,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/registrazione_password"
         app:srcCompat="@drawable/button" />
 
     <ImageView
         android:id="@+id/registrazione_title_bar"
         android:layout_width="match_parent"
-        android:layout_height="98dp"
+        android:layout_height="wrap_content"
         android:adjustViewBounds="true"
-        android:cropToPadding="true"
-        android:scaleType="center"
+        android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

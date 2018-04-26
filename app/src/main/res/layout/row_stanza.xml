@@ -10,7 +10,7 @@
 
     <ImageView
         android:id="@+id/row_stanza_image"
-        android:layout_width="355dp"
+        android:layout_width="match_parent"
         android:layout_height="100dp"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"

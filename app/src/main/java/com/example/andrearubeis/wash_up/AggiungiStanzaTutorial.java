@@ -75,9 +75,9 @@ public class AggiungiStanzaTutorial extends AppCompatActivity {
                 bundle.putString("nome_stanza" , nome_stanza);
 
                 intent_compiti.putExtras(bundle);
-                if(temp_persona == null) {
+                /*if(temp_persona == null) {
                     Log.d("AggiungiStanza" , "La persona é NULL" );
-                }
+                }*/
                 startActivity(intent_compiti);
                 finish();
 

@@ -10,26 +10,23 @@
     <LinearLayout
         android:id="@+id/ruoli_x_inquilino_linear2"
         android:layout_width="match_parent"
-        android:layout_height="62dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:background="@color/bottomNavigationColor">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/ruoli_x_inquilino_image"
-            android:layout_width="155dp"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_weight="1"
-            app:layout_constraintEnd_toStartOf="@+id/ruoli_x_inquilino_title"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/nicolo_icon" />
 
         <Button
             android:id="@+id/ruoli_x_inquilino_title"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/bottomNavigationColor"
@@ -38,10 +35,7 @@
             android:fontFamily="@font/lovelo_black"
             android:textAlignment="textStart"
             android:textColor="@android:color/white"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/button3"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textSize="20sp" />
     </LinearLayout>
 
 
@@ -61,7 +55,7 @@
 
     <ScrollView
         android:id="@+id/ruoli_x_inquilino_scroll"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -69,24 +63,24 @@
         app:layout_constraintTop_toBottomOf="@+id/ruoli_x_inquilino_date_bar"
         android:background="@color/background_view_color">
 
-    </ScrollView>
-
-    <LinearLayout
-        android:id="@+id/ruoli_x_inquilino_linear"
-        android:layout_width="match_parent"
-        android:layout_height="378dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ruoli_x_inquilino_date_bar">
-
-        <ListView
-            android:id="@+id/ruoli_x_inquilino_list"
+        <LinearLayout
+            android:id="@+id/ruoli_x_inquilino_linear"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="519dp">
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+           >
 
-        </ListView>
-    </LinearLayout>
+            <ListView
+                android:id="@+id/ruoli_x_inquilino_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </ListView>
+        </LinearLayout>
+
+    </ScrollView>
+
+
 
 </android.support.constraint.ConstraintLayout>

@@ -22,7 +22,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.121"
-        app:srcCompat="@drawable/attendi_invito_imagetext" />
+        app:srcCompat="@drawable/attendi_invito" />
 
     <Button
         android:id="@+id/attendi_invito_log_in"

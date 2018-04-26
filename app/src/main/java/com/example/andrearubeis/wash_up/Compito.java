@@ -3,11 +3,6 @@ package com.example.andrearubeis.wash_up;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by nicolo on 09/04/18.
- */
-
-
 
 public class Compito implements Parcelable {
 

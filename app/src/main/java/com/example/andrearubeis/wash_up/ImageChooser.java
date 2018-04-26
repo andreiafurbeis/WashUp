@@ -68,6 +68,20 @@ public class ImageChooser {
         builder.show();
     }
 
+    public void noValidMail() {
+        final CharSequence[] items = { context.getString(R.string.ok)};
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(context.getString(R.string.attenzione));
+        builder.setMessage(R.string.email_non_corretta);
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.show();
+    }
+
 
 
     /*public void selectImageRoom() {

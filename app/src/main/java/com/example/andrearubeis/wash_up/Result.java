@@ -24,14 +24,14 @@ public class Result {
     }
 
     /**
-     * @return The result
+     * @return la risposta del server
      */
     public String getResult() {
         return result;
     }
 
     /**
-     * @param result The result
+     * @param result il risultato del caricamento
      */
     public void setResult(String result) {
         this.result = result;

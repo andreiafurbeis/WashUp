@@ -9,34 +9,6 @@
 
 
     <Button
-        android:id="@+id/aggiungi_stanza_button_aggiungi"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button"
-        android:fontFamily="@font/lovelo_black"
-        android:text="@string/aggiungi"
-        android:textColor="@android:color/white"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/aggiungi_stanza_button_compiti"
-        android:layout_width="256dp"
-        android:layout_height="70dp"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/button_compiti"
-        android:fontFamily="@font/lovelo_black"
-        android:text="@string/gestione_compiti"
-        android:textColor="@android:color/white"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/aggiungi_stanza_nome_stanza" />
-
-
-    <Button
         android:id="@+id/aggiungi_stanza_title_bar"
         android:layout_width="match_parent"
         android:layout_height="76dp"
@@ -53,6 +25,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+    <ImageView
+        android:id="@+id/aggiungi_stanza_profile_image"
+        android:layout_width="match_parent"
+        android:layout_height="104dp"
+        android:clickable="true"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/pulizia"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/aggiungi_stanza_title_bar"
+        app:layout_constraintBottom_toTopOf="@id/aggiungi_stanza_nome_stanza"/>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="18dp"
+        android:text="@string/modifica"
+        android:textColor="@android:color/holo_green_light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/aggiungi_stanza_profile_image" />
+
     <EditText
         android:id="@+id/aggiungi_stanza_nome_stanza"
         android:layout_width="0dp"
@@ -68,34 +64,28 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@id/aggiungi_stanza_profile_image"
+        app:layout_constraintBottom_toTopOf="@id/aggiungi_stanza_button_compiti"/>
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="18dp"
-        android:text="@string/modifica"
-        android:textColor="@android:color/holo_green_light"
+    <Button
+        android:id="@+id/aggiungi_stanza_button_compiti"
+        android:layout_width="256dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/button_compiti"
+        android:fontFamily="@font/lovelo_black"
+        android:text="@string/gestione_compiti"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/aggiungi_stanza_profile_image" />
+        app:layout_constraintTop_toBottomOf="@+id/aggiungi_stanza_nome_stanza"
+        app:layout_constraintBottom_toTopOf="@id/aggiungi_stanza_elimina_stanza"/>
 
-    <ImageView
-        android:id="@+id/aggiungi_stanza_profile_image"
-        android:layout_width="match_parent"
-        android:layout_height="104dp"
-        android:clickable="true"
-        android:adjustViewBounds="true"
-        android:scaleType="centerCrop"
-        android:src="@drawable/pulizia"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/aggiungi_stanza_title_bar" />
+
 
     <Button
         android:id="@+id/aggiungi_stanza_elimina_stanza"
-
-
         android:layout_width="216dp"
         android:layout_height="70dp"
         android:layout_marginEnd="8dp"
@@ -108,7 +98,21 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/aggiungi_stanza_button_compiti" />
+        app:layout_constraintTop_toBottomOf="@+id/aggiungi_stanza_button_compiti"
+        app:layout_constraintBottom_toTopOf="@id/aggiungi_stanza_button_aggiungi"/>
+
+    <Button
+        android:id="@+id/aggiungi_stanza_button_aggiungi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button"
+        android:fontFamily="@font/lovelo_black"
+        android:text="@string/aggiungi"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </android.support.constraint.ConstraintLayout>

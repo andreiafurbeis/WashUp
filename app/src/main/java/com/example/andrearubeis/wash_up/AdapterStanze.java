@@ -95,7 +95,7 @@ public class AdapterStanze extends ArrayAdapter<Stanza> {
                     Intent intent = new Intent(context,
                             AggiungiStanzaActivity.class);
                     Bundle bundle = new Bundle();
-                    Log.d("AdapterStanze" , "Sono dentro all'OnClick della ListView di ConfigurazioneStanze");
+                    //Log.d("AdapterStanze" , "Sono dentro all'OnClick della ListView di ConfigurazioneStanze");
                     bundle.putString("nome_stanza",data.get(position).getNameStanza());
                     bundle.putString("home_id",g.getIdString());
                     bundle.putInt("update",1);
@@ -107,10 +107,10 @@ public class AdapterStanze extends ArrayAdapter<Stanza> {
                     Globals g = Globals.getInstance();
                     Intent intent = new Intent(context,
                             RuoliStanza.class);
-                    Log.d("AdapterStanze" , "Sono dentro all'OnClick della ListView di HomeFragment");
+                    //Log.d("AdapterStanze" , "Sono dentro all'OnClick della ListView di HomeFragment");
 
                     Bundle bundle = new Bundle();
-                    Log.d("AdapterStanze","il vettore compiti di " + data.get(position).getNameStanza() + " ha " + data.get(position).getCompiti().size());
+                    //Log.d("AdapterStanze","il vettore compiti di " + data.get(position).getNameStanza() + " ha " + data.get(position).getCompiti().size());
                     bundle.putParcelable("stanza",data.get(position));
                     bundle.putString("home_id",g.getIdString());
                     intent.putExtras(bundle);

@@ -143,7 +143,7 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("immagine_back" , "Sono nell'OnResume");
+        //Log.d("immagine_back" , "Sono nell'OnResume");
         inizializationInterface();
     }
 
@@ -183,7 +183,7 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
         Globals g = Globals.getInstance();
 
         String temp_url = g.getDomain()+"starting_rooms.php"+data;
-        Log.d("ConfigurazioneStanza", "Questo é l'URL per l'inizializzazione : " + temp_url);
+        //Log.d("ConfigurazioneStanza", "Questo é l'URL per l'inizializzazione : " + temp_url);
         try {
             url = new URL(temp_url);
         } catch (IOException e) {
@@ -245,7 +245,7 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
 
 
                 String result = reader_json.getStringFromInputStream((InputStream) resp);
-                Log.d("ConfigurazioneStanze" , "La stringa JSON é " + result);
+                //Log.d("ConfigurazioneStanze" , "La stringa JSON é " + result);
 
                 temp_persona.setStanze(reader_json.readJSONStanze(result));
 
@@ -293,6 +293,8 @@ public class ConfigurazioneStanzaActivity extends AppCompatActivity{
 
         listview.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+        Utility.setListViewHeightBasedOnChildren(listview);
+
     }
 
 

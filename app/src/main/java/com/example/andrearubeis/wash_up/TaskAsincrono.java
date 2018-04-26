@@ -27,7 +27,7 @@ public class TaskAsincrono extends AsyncTask {
     //private final String domain_url = "http://192.168.0.24/";   //dominio portatile
     //private final String domain_url = "http://192.168.1.100/";  //dominio fisso
     //private final String domain_url = "http://rubeisandrea.myqnapcloud.com/"; //domanio nas
-    private final String domain_url = "http://washit.dek4.net/";
+    //private final String domain_url = "http://washit.dek4.net/";  //dominio server
 
 
     public TaskAsincrono (Context contesto, URL url , TaskCompleted delegate ) {
@@ -62,7 +62,7 @@ public class TaskAsincrono extends AsyncTask {
     /**
      *
      * @param objects
-     * @return risposta http ricevuta dal db utenti eseguita in background
+     * @return risposta http ricevuta dal db eseguita in background
      */
     @Override
     protected Object doInBackground(Object[] objects)  {
@@ -70,7 +70,7 @@ public class TaskAsincrono extends AsyncTask {
         URL url = this.url;
         HttpURLConnection urlConnection = null;
         InputStream in = null;
-        Log.d("AsyncTask" , "Sono dentro al doInBackground");
+        //Log.d("AsyncTask" , "Sono dentro al doInBackground");
         try {
             //url = new URL(domain_url + "login.php?usr=" + this.search.getMail() + "&psw=" + this.search.getPassword());
             urlConnection = (HttpURLConnection) url.openConnection();

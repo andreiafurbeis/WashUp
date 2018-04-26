@@ -17,28 +17,57 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Registrazione" />
+
+        <activity android:name=".Registrazione"
+            android:screenOrientation="portrait" />
+
         <activity
             android:name=".bottom_activity"
-            android:label="@string/title_activity_bottom_activity" />
-        <activity android:name=".NewHome" />
-        <activity android:name=".AggiungiStanzaActivity" />
-        <activity android:name=".ConfigurazioneStanzaActivity" />
-        <activity android:name=".RuoliStanza" />
-        <activity android:name=".ModificaCompitiActivity" />
-        <activity android:name=".AggiungiInquilinoActivity" />
-        <activity android:name=".RuoliInquilino" />
-        <activity android:name=".AggiungiStanzaTutorial" />
-        <activity android:name=".ModificaCompitiTutorial" />
-        <activity android:name=".ConfigurazioneStanzaTutorial"></activity>
-        <activity android:name=".AttendiInvitoActivity"></activity>
+            android:label="@string/title_activity_bottom_activity"
+            android:screenOrientation="portrait" />
+
+        <activity android:name=".NewHome"
+                  android:screenOrientation="portrait" />
+
+        <activity android:name=".AggiungiStanzaActivity"
+                  android:screenOrientation="portrait" />
+
+        <activity android:name=".ConfigurazioneStanzaActivity"
+                  android:screenOrientation="portrait" />
+
+        <activity android:name=".RuoliStanza"
+                  android:screenOrientation="portrait" />
+
+        <activity android:name=".ModificaCompitiActivity"
+                  android:screenOrientation="portrait" />
+
+        <activity android:name=".AggiungiInquilinoActivity"
+                  android:screenOrientation="portrait" />
+
+        <activity android:name=".RuoliInquilino"
+                  android:screenOrientation="portrait" />
+
+        <activity android:name=".AggiungiStanzaTutorial"
+                  android:screenOrientation="portrait" />
+
+        <activity android:name=".ModificaCompitiTutorial"
+                  android:screenOrientation="portrait" />
+
+        <activity android:name=".ConfigurazioneStanzaTutorial"
+                  android:screenOrientation="portrait" />
+
+        <activity android:name=".AttendiInvitoActivity"
+                  android:screenOrientation="portrait" />
+
     </application>
 
 </manifest>

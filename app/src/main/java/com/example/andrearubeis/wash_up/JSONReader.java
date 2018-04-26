@@ -60,7 +60,7 @@ public class JSONReader {
             }
 
         }catch (Exception e){
-            Log.d("ConfigurazioneStanze" , "Eccezione catturata nel ReadJSONCompiti ");
+            //Log.d("ConfigurazioneStanze" , "Eccezione catturata nel ReadJSONCompiti ");
         }
 
 
@@ -81,7 +81,7 @@ public class JSONReader {
         try {
 
             jsonString = "{\"stanze\":"+ jsonString + "}";
-            Log.w("JSONReader", jsonString);
+            //Log.w("JSONReader", jsonString);
             JSONObject jsonObj = new JSONObject(jsonString);
             JSONArray stanze = jsonObj.getJSONArray("stanze");
 
@@ -96,7 +96,7 @@ public class JSONReader {
 
             }
 
-            if(vectorStanze == null) {
+            /*if(vectorStanze == null) {
 
                 Toast.makeText(this.context,"JSONReader : il vettore è NULL ",Toast.LENGTH_SHORT).show();
 
@@ -104,7 +104,7 @@ public class JSONReader {
 
                 Log.d("JSONReader" ,  vectorStanze.toString());
 
-            }
+            }*/
 
         }catch (Exception e){
 
@@ -129,7 +129,7 @@ public class JSONReader {
             try {
 
                 jsonString = "{\"info\":" + jsonString + "}";
-                Log.w("JSONReader", jsonString);
+                //Log.w("JSONReader", jsonString);
                 JSONObject jsonObj = new JSONObject(jsonString);
                 JSONArray info = jsonObj.getJSONArray("info");
                 JSONObject c = info.getJSONObject(0);
@@ -137,7 +137,7 @@ public class JSONReader {
 
             } catch (Exception e) {
 
-                Log.w("Exception", "Eccezione durante lettura JSON Login");
+                //Log.w("Exception", "Eccezione durante lettura JSON Login");
 
             }
 
@@ -160,7 +160,7 @@ public class JSONReader {
         try {
 
             jsonString = "{\"ruoliXstanza\":"+ jsonString + "}";
-            Log.w("JSONReader", jsonString);
+            //Log.w("JSONReader", jsonString);
             JSONObject jsonObj = new JSONObject(jsonString);
             JSONArray json_coinquilini = jsonObj.getJSONArray("ruoliXstanza");
 
@@ -178,7 +178,7 @@ public class JSONReader {
 
         }catch (Exception e){
 
-            Log.d("ConfigurazioneStanze" , "Eccezione catturata nel ReadJSON");
+            //Log.d("ConfigurazioneStanze" , "Eccezione catturata nel ReadJSON");
 
         }
         return null;
@@ -201,7 +201,7 @@ public class JSONReader {
         try {
 
             jsonString = "{\"persona\":"+ jsonString + "}";
-            Log.w("JSONReader", jsonString);
+            //Log.w("JSONReader", jsonString);
             JSONObject jsonObj = new JSONObject(jsonString);
             JSONArray info = jsonObj.getJSONArray("persona");
             JSONObject c = info.getJSONObject(0);
@@ -212,20 +212,20 @@ public class JSONReader {
             temp.setNome(c.getString("nome"));
             temp.setProfileImage(c.getString("profile_image"));
             temp.setCompiti(readJSONCompiti(c.getString("compiti")));
-            if(temp.getCompiti() != null) {
+            /*if(temp.getCompiti() != null) {
                 Log.d("JSONReader","il vettore compiti é lungo " + temp.getCompiti().size());
             }else{
                 Log.d("JSONReader","il vettore compiti é null");
 
-            }
+            }*/
 
-            Log.d("JSONReader", "ProfileImage é : " + temp.getProfileImage());
+            //Log.d("JSONReader", "ProfileImage é : " + temp.getProfileImage());
 
             return temp;
 
         }catch (Exception e){
 
-            Log.w("Exception" , "Eccezione durante lettura JSON Login");
+            //Log.w("Exception" , "Eccezione durante lettura JSON Login");
 
         }
 
@@ -249,16 +249,16 @@ public class JSONReader {
         Gson gson = new Gson();
         String json = pref.getString("persona", "");
         temp_persona = gson.fromJson(json, Persona.class);
-        Log.d("BottomActivity" , "Aggiorno TEMP_PERSONA");
+        /*Log.d("BottomActivity" , "Aggiorno TEMP_PERSONA");
         if(temp_persona == null) {
             Log.d("ConfigurazioneStanze" , "L'oggetto appena scaricato dalle SharedPreference é NULL");
-        }
+        }*/
 
 
         try {
 
             jsonString = "{\"coinquilini\":"+ jsonString + "}";
-            Log.w("JSONReader", jsonString);
+            //Log.w("JSONReader", jsonString);
             JSONObject jsonObj = new JSONObject(jsonString);
             JSONArray json_coinquilini = jsonObj.getJSONArray("coinquilini");
 
@@ -295,7 +295,7 @@ public class JSONReader {
 
         }catch (Exception e){
 
-            Log.d("ConfigurazioneStanze" , "Eccezione catturata nel ReadJSON");
+            //Log.d("ConfigurazioneStanze" , "Eccezione catturata nel ReadJSON");
 
         }
 
@@ -317,7 +317,7 @@ public class JSONReader {
 
 
             jsonString = "{\"info\":"+ jsonString + "}";
-            Log.w("INFORMATION", jsonString);
+            //Log.w("INFORMATION", jsonString);
             JSONObject jsonObj = new JSONObject(jsonString);
             JSONArray info = jsonObj.getJSONArray("info");
             JSONObject c = info.getJSONObject(0);

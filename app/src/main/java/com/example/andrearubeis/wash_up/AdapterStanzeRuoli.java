@@ -31,11 +31,6 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-/**
- * Created by nicolo on 12/04/18.
- */
-
-
 
 
 
@@ -107,7 +102,7 @@ public class AdapterStanzeRuoli extends ArrayAdapter<Compito> {
                 }
 
             });
-            Log.d("AdapterStanzeRuoli", "sono nel getview di " + data.get(position).getId_casa());
+            //Log.d("AdapterStanzeRuoli", "sono nel getview di " + data.get(position).getId_casa());
             title.setText(data.get(position).getId_casa());
             return vi;
         }

@@ -159,7 +159,7 @@ public class ModificaCompitiTutorial extends AppCompatActivity{
 
         private void createDialog() {
 
-            Log.d("ModificaCompiti" , "Sono denro alla crezione della Dialog");
+            //Log.d("ModificaCompiti" , "Sono denro alla crezione della Dialog");
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             // Get the layout inflater
@@ -176,10 +176,10 @@ public class ModificaCompitiTutorial extends AppCompatActivity{
                             // aggiungi compito
                             EditText descrizione = dialogView.findViewById(R.id.compiti_dialog_descrizione);
                             String testo = descrizione.getText().toString();
-                            Log.d("ModificaCompiti" , "La decrizione é : " + testo);
+                            //Log.d("ModificaCompiti" , "La decrizione é : " + testo);
 
                             if(temp_persona == null) {
-                                Log.d("ModificaCompiti" , "La persona é NULL" );
+                                //Log.d("ModificaCompiti" , "La persona é NULL" );
 
                             }
 
@@ -258,7 +258,7 @@ public class ModificaCompitiTutorial extends AppCompatActivity{
 
 
     private void addCompitiToListView() {
-        Log.d("ModificaCompiti" , "imposto nuovo Adapter" );
+        //Log.d("ModificaCompiti" , "imposto nuovo Adapter" );
 
         //adapter = new AdapterCompiti(this , compiti);
         listview.setAdapter(adapter);

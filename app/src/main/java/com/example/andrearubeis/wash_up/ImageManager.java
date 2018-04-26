@@ -16,9 +16,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * Created by andrearubeis on 01/04/18.
- */
 
 public class ImageManager {
 

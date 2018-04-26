@@ -7,6 +7,8 @@ package com.example.andrearubeis.wash_up;
         import android.graphics.drawable.Drawable;
         import android.os.AsyncTask;
         import android.os.Bundle;
+        import android.support.annotation.Nullable;
+        import android.support.design.widget.BottomNavigationView;
         import android.support.v4.app.Fragment;
         import android.util.Log;
         import android.view.LayoutInflater;
@@ -39,6 +41,8 @@ public class HomeFragmentActivity extends Fragment {
     LinearLayout linear;
     ListView listview;
     Persona temp_persona;
+    LayoutInflater inflater_global;
+    ArrayList<Stanza> vectorStanze;
 
 
 
@@ -74,11 +78,13 @@ public class HomeFragmentActivity extends Fragment {
 
         rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
+        inflater_global = inflater;
+
         listview = (ListView) rootView.findViewById(R.id.fragment_home_listview);
 
         linear = (LinearLayout) rootView.findViewById(R.id.fragment_home_linear);
 
-        ArrayList<Stanza> vectorStanze = getArguments().getParcelableArrayList("stanze");
+        vectorStanze = getArguments().getParcelableArrayList("stanze");
 
         /*if(vectorStanze == null) {
             Toast.makeText(getActivity(),"Home Fragment : Il vettore delle stanze è NULL" ,Toast.LENGTH_SHORT).show();
@@ -93,9 +99,6 @@ public class HomeFragmentActivity extends Fragment {
         return rootView;
 
     }
-
-
-
 
 
     public void creaInterfaccia(ArrayList<Stanza> vectorStanze){
@@ -122,6 +125,9 @@ public class HomeFragmentActivity extends Fragment {
 
         listview.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+        //Log.d("HomeFragment","La bottomNavigation è alta : " + getArguments().getInt("bottom_height"));
+        Utility.setListViewHeightBasedOnChildren(listview , getArguments().getInt("bottom_height"));
+
 
 
     }

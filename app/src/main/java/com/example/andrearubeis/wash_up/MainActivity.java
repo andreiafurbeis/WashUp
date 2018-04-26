@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Environment;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
@@ -23,7 +24,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -32,6 +35,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.Provider;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Vector;
 import java.util.concurrent.ExecutionException;
 
@@ -61,11 +65,13 @@ public class MainActivity extends AppCompatActivity  {
     Persona temp_persona;
     View parentView;
     JSONReader json_reader;
+    public static BufferedWriter out;
+
 
     //private final String domain_url = "http://192.168.0.24/";   //dominio portatile
     //private final String domain_url = "http://192.168.1.100/";  //dominio fisso
     //private final String domain_url = "http://rubeisandrea.myqnapcloud.com/"; //domanio nas
-    //private final String domain_url = "http://washit.dek4.net/";
+    //private final String domain_url = "http://washit.dek4.net/"; //dominio server
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +95,20 @@ public class MainActivity extends AppCompatActivity  {
         invia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loginRequest();
+                try {
+                    //throw new Exception("eccezione");
+                    loginRequest();
+                    //throw new Exception("eccezione");
+                    //createFileOnDevice(true);
+
+                }
+                catch (Exception e) {
+
+                    RemoteLogCat logcat = new RemoteLogCat("5ae232f6b38cb");
+                    logcat.log("WashUpLog",e.toString());
+
+
+                }
             }
         });
 
@@ -129,6 +148,8 @@ public class MainActivity extends AppCompatActivity  {
                 url = new URL(url_temp);
             }catch(IOException e){
                 Toast.makeText(getApplicationContext(),"Creazione URL non riuscita",Toast.LENGTH_SHORT).show();
+                RemoteLogCat logcat = new RemoteLogCat("5ae232f6b38cb");
+                logcat.log("WashUpLog",e.toString());
             }
 
             g.setMail(usr.toString());
@@ -146,7 +167,8 @@ public class MainActivity extends AppCompatActivity  {
 
                         String[] parts = result.split("<br>");
 
-                        //Log.d("MainActivity" , "La stringa risultante é : " + result);
+                        RemoteLogCat logcat = new RemoteLogCat("5ae232f6b38cb");
+                        logcat.log("MainActivity" , "La stringa risultante é : " + result);
 
                         Globals g = Globals.getInstance();
 
@@ -199,8 +221,14 @@ public class MainActivity extends AppCompatActivity  {
                                 temp_persona.setStanze(json_reader.readJSONStanze(parts[2]));
 
                                 //AGGIUNGO TUTTI I COINQUILINI AI DATI DELLA CASA E PROCEDO CON IL LOGIN
-                                getCoinquilini();
 
+                                try {
+                                    getCoinquilini();
+                                }
+                                catch (Exception e) {
+                                    logcat = new RemoteLogCat("5ae232f6b38cb");
+                                    logcat.log("WashUpLog",e.toString());
+                                }
 
                             }else {
 
@@ -261,9 +289,13 @@ public class MainActivity extends AppCompatActivity  {
                 //Toast.makeText(getApplicationContext(),result,Toast.LENGTH_SHORT).show();
 
                 temp_persona.setCoinquilini(json_reader.readJSONCoinquilini(result , temp_persona.getIdHome()));
-
-                getLogged();
-
+                try {
+                    getLogged();
+                }
+                catch (Exception e) {
+                    RemoteLogCat logcat = new RemoteLogCat("5ae232f6b38cb");
+                    logcat.log("WashUpLog",e.toString());
+                }
             }
         }).execute();
 
@@ -288,9 +320,14 @@ public class MainActivity extends AppCompatActivity  {
         editor.commit(); // commit changes
 
 
-
-        Intent intent = new Intent(MainActivity.this, bottom_activity.class);
-        startActivity(intent);
+        try {
+            Intent intent = new Intent(MainActivity.this, bottom_activity.class);
+            startActivity(intent);
+        }
+        catch (Exception e) {
+            RemoteLogCat logcat = new RemoteLogCat("5ae232f6b38cb");
+            logcat.log("WashUpLog",e.toString());
+        }
     }
 
 
@@ -319,6 +356,7 @@ public class MainActivity extends AppCompatActivity  {
             e.printStackTrace(); }
         return null;
     }
+
 
 
 

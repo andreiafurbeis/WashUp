@@ -120,6 +120,7 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
         }else{
             title_bar.setText("Aggiungi Stanza");
             elimina_stanza.setVisibility(View.GONE);
+            gestisci_compiti.setVisibility(View.GONE);
         }
 
 
@@ -140,10 +141,10 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
 
         if(intent.hasExtra("indice_stanza")) {
             int indice = intent.getIntExtra("indice_stanza", -2);
-            if(temp_persona.getCompitiStanza(indice) == null) {
+            /*if(temp_persona.getCompitiStanza(indice) == null) {
                 Log.d("AggiungiStanza", "Il vettore compiti é NULL e l'indice é : " + indice);
 
-            }
+            }*/
         }
 
 
@@ -185,9 +186,9 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
                 bundle.putString("nome_stanza" , edit_nome_stanza.getText().toString());
 
                 intent_compiti.putExtras(bundle);
-                if(temp_persona == null) {
+                /*if(temp_persona == null) {
                     Log.d("AggiungiStanza" , "La persona é NULL" );
-                }
+                }*/
                 startActivity(intent_compiti);
                 finish();
 
@@ -345,7 +346,7 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
 
         String imageString = manager_image.getImagePath()+"/"+manager_image.getImageName();
 
-        Log.d("AggiungiStanzaUpload" , "il path dell' immagine è : " + imageString);
+        //Log.d("AggiungiStanzaUpload" , "il path dell' immagine è : " + imageString);
 
         File file = new File(imageString);
 
@@ -356,14 +357,14 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
                 MultipartBody.Part.createFormData("uploaded_file", file.getName(), requestFile);
 
         Call<Result> resultCall = service.uploadImage(body);
-        Log.d("MainActivity","Sto provando a fare l'upload");
+        //Log.d("MainActivity","Sto provando a fare l'upload");
         resultCall.enqueue(new Callback<Result>() {
             @Override
             public void onResponse(Call<Result> call, Response<Result> response) {
 
 
 
-                if (response.isSuccessful()) {
+                /*if (response.isSuccessful()) {
                     if (response.body().getResult().equals("success")) {
                         Log.d("RegistrazioneUpload", "Upload Success , il path sul server è : " + response.body().getValue());
 
@@ -374,7 +375,7 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
                 } else {
                     Log.d("RegistrazioneUpload" , "Upload Fail");
 
-                }
+                }*/
 
 
 
@@ -484,7 +485,7 @@ public class AggiungiStanzaActivity extends AppCompatActivity {
     private void removeStanzaFromDB(Stanza stanza_da_rimuovere) {
         Globals g = Globals.getInstance();
         String temp_url = g.getDomain()+"remove_stanza.php?id_home=" + g.getIdString() + "&nome_stanza=" + stanza_da_rimuovere.getNameStanza();
-        Log.d("AggiungiStanza","L'URL é : " + temp_url);
+        //Log.d("AggiungiStanza","L'URL é : " + temp_url);
         URL url = null;
         try {
             url = new URL(temp_url);

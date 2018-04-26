@@ -58,7 +58,7 @@
         android:background="@android:color/holo_green_dark"
         android:fontFamily="@font/lovelo_black"
         android:gravity="center"
-        android:text="Questo tutorial ti mostrerà come aggiungere una stanza alla tua casa e aggiungerervi una lista di compiti da svolgere"
+        android:text="Questo tutorial ti mostrerà come aggiungere una stanza alla tua casa e come impostare una lista di compiti da svolgere"
         android:textAlignment="center"
         android:textColor="@android:color/white"
         android:textSize="16sp"
